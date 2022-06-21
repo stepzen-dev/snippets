@@ -1,7 +1,7 @@
 This repo contains `.graphql` (and in some case, config.yaml files) for various "self-contained" example code for doing simple operations in StepZen
 
 To run these examples, 
-- `git clone git@github.com:https://...`
+- `git clone` this repo
 - Change to the right working directory.
 - run `stepzen start`
 
