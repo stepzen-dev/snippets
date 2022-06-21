@@ -26,7 +26,7 @@ In `/protection`, you will find several subdirectories. Each contains a `.graphq
 
 - `/makeAllPublic` shows how you can easily make all queries public.
 - `/makeSomePublic` shows how you can make some public, and some private (which can still be accessed using your `admin` or `service` keys)
-- `/checkQueryParameters` shows how private queries can still be accessed publicly provided some specific conditions are met. This allows you to get extremely granular.
+
 
 ## rest calls and responses
 Where possible, we use [httpbin.org](http://httpbin.org) as our REST endpoint, since it allows us to mimic lots of REST capabilities.
