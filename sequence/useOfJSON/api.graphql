@@ -1,0 +1,50 @@
+# The second query in a sequence that has say arguments arg1, arg2, arg3 gets data for these:
+# (i) the arguments explicitly passed to it from the enclosing query (see arguments.graphql)
+# (ii) output of the first query as a type, and all the fields of that type
+# Here we give example of (ii)
+# However, what that means is that you have to define types for intermediate steps
+# A simple trick is to use JSON as the return type of all but the last step
+# keeping your type system simple
+type Weather {
+    temp: Float
+}
+type Query {
+    # An ecmascript return of weather by lat/lon as a JSON as opposed to an explicit type
+    # of course, in real life you will call a weather api
+    weatherByJSON (input: JSON): Weather
+        @rest (endpoint: "stepzen:empty"
+            ecmascript: """
+            function transformREST(s) {
+                var input = get('input')
+                var lat = input['lat']
+                var lon = input['lon']
+                var temp
+                if (lat=='25.76' && lon=='-80.19')
+                    temp = 100.0
+                else
+                    temp = 60.4
+                return (JSON.stringify({"temp":temp}))
+            }
+            """
+        )
+    # An ecmascript converter from cityOrLocale to its lat/lon
+    # Of course in real-life you will either call and API, or make a database call
+    # Here, since this will be called first, we declare it to return JSON
+    convertCityOrLocaleToLatLon (cityOrLocale: String):JSON
+    @rest (endpoint: "stepzen:empty"
+            ecmascript: """
+            function transformREST(s) {
+                var city = get('city')
+                if (city == 'Miami')
+                    return (JSON.stringify({"lat":"25.76","lon":"-80.19"}))
+                else
+                    return (JSON.stringify({"lat":"37.2","lon":"-121.19"}))
+            }
+            """
+        )
+    # A sequence call that sequences converCityOrLocaleToLatLong and weather
+    # this allows for a cityOrLocale argument to be used to fetch weather data by lat/lon
+    weatherByCityOrLocale (cityOrLocale: String): Weather
+        @sequence(steps:[{query: "convertCityOrLocaleToLatLon"}, 
+            {query: "weatherByJSON"}])
+}

@@ -1,0 +1,30 @@
+# here we create a postbody from the query argument
+# the syntax is `{{.Get \"name-of-the-argumet\"}}`
+
+type Root {
+  args: JSON
+  data: String
+  files: JSON
+  form: JSON
+  headers: JSON
+  json: JSON
+  origin: String
+  url: String
+}
+type Query {
+    rest(name:String, city: String): Root
+    # sometimes when you are testing, it is easier to set a query return type to be JSON
+    # this avoids any type conflicts that you might have, so this is also acceptable
+    # of course, you cannot subselect fields this way
+    # rest(name:String, city: String): JSON
+    @rest (endpoint: "https://httpbin.org/post",
+            method: POST,
+            postbody: """
+            {"record":{"name":{{.Get "name"}}, "city":{{.Get "city"}}}}
+            """
+            headers: [{name: "Accept", value:"application/json"}
+                  {name: "Content-Type", value: "application/x-www-form-urlencoded"}
+                    ],
+          
+    )
+}

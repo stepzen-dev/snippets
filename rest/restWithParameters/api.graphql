@@ -1,0 +1,24 @@
+# this shows how query arguments are automatically substituted into the REST call
+# You can generate this entire code using 
+# `stepzen import curl "https://httpbin.org/get?q=a&q=b" -H "Accept:application/json"
+# We use `httpbin.org` because it allows us to show features without any real REST API behind it
+# The httpbin service returns some payload depending on the call
+# You should always try the curl call directly
+
+type Args {
+  q: [String]
+  v: String
+}
+type Root {
+  args: Args
+  headers: JSON
+  origin: String
+  url: String
+}
+type Query {
+    rest(q:[String], v:String): Root
+    @rest (endpoint: "https://httpbin.org/get",
+            method: GET,
+            headers: [{name: "Accept", value:"application/json"}]
+    )
+}

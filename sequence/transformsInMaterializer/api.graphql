@@ -1,0 +1,74 @@
+# @materializer is a great way to link two graphs together
+# it takes the data from one graph, feeds it into a query or mutation of a second graph
+# and takes the returned data and makes it a field in the original graph
+# However, sometimes the data cannot be directly fed. It needs to be transformed.
+# Assume that the weather information is returned by lat/lon
+# If customer data contains only city, then city has to be transformed to lat/lon before it can be used to fetch weather data
+# We use an intermediate type Coord to connect the two
+type Weather {
+    temp: Float
+}
+type Coord {
+    lat: String
+    lon: String
+}
+type Customer {
+    name: String
+    city: String
+}
+type Query {
+    # An ecmascript return of weather by lat/lon
+    # of course, in real life you will call a weather api
+    weather (lat: String, lon: String): Weather
+        @rest (endpoint: "stepzen:empty"
+            ecmascript: """
+            function transformREST(s) {
+                var lat = get('lat')
+                var lon = get('lon')
+                if (lat=='25.76' && lon=='-80.19')
+                    return (JSON.stringify({"temp":100.0}))
+                else
+                    return (JSON.stringify({"temp":60.4}))
+            }
+            """
+        )
+    # An ecmascript converter from city to its lat/lon
+    # Of course in real-life you will either call and API, or make a database call
+    convertCityToLatLon (city: String):Coord
+    @rest (endpoint: "stepzen:empty"
+            ecmascript: """
+            function transformREST(s) {
+                var city = get('city')
+                if (city == 'Miami')
+                    return (JSON.stringify({"lat":"25.76","lon":"-80.19"}))
+                else
+                    return (JSON.stringify({"lat":"37.2","lon":"-121.19"}))
+            }
+            """
+        )
+    # A sequence call that sequences converCityToLatLong and weather
+    # this allows for a city argument to be used to fetch weather data by lat/lon
+    weatherByCity (city: String): Weather
+        @sequence(steps:[{query: "convertCityToLatLon"}, {query: "weather"}])
+    
+    # An ecmascript generator of customer data
+    # Of course, in real life you will call an API or a database
+    customer (id: ID): Customer
+    @rest (endpoint: "stepzen:empty"
+            ecmascript: """
+            function transformREST(s) {
+                var id = get('id')
+                if (id==1)
+                    return (JSON.stringify({"name":"John Doe","city":"Miami"}))
+                else
+                    return (JSON.stringify({"name":"Jane Smith","city":"Santa Clara"}))
+            }
+            """
+    )
+}
+
+# As a final step, use @materializer to connect customer graph with weather graph
+extend type Customer {
+    weather: Weather
+    @materializer (query: "weatherByCity")
+}

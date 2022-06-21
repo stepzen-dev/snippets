@@ -1,0 +1,23 @@
+# ecmascript is great for quickly writing filters
+
+type Customer {
+    id: ID
+    name: String
+}
+type Query {
+    customer(name: String): [Customer]
+    @rest (endpoint: "https://json2api-customers-zlwadjbovq-uc.a.run.app/customers",
+    ecmascript: """
+    function transformREST(s) {
+        var name = get('name')
+        var data = JSON.parse(s)
+        var output = []
+        for (var i=0; i < data.length; i++) {
+            if (data[i]['name']==name)
+                output.push(data[i])
+        }
+        return JSON.stringify(output)
+    }
+    """
+    )
+}

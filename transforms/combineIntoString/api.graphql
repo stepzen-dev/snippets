@@ -1,0 +1,28 @@
+# Some data might be returned as "street", "city", "state" etc.
+# You might want to convert it into a string, either as final output
+# or to feed it into a sequence that requires strings (for example, google APIs expect the entire address as a string). 
+
+type Customer {
+    name: String
+    address: String
+}
+
+type Query {
+    customer: Customer
+    @rest (
+        # we are not calling a real endpoint, we will use ecmascript to create data right here
+        endpoint: "stepzen:empty" 
+        # return the right JSON
+        ecmascript: """
+        function transformREST(s) {
+            return(JSON.stringify({"name":"John Doe", "street": "111 Main Street", "city": "Miami", "state": "Florida", "country": "US"}))
+        }
+        """
+        # and then transform it using jq
+        # here the empty pathpattern means that the jq expression is applied at the root
+        transforms: [{pathpattern: [], editor: """
+        jq:.|{name,address:(.street+", "+.city+", "+.state+", "+.country)}
+        """
+        }]
+    )
+}

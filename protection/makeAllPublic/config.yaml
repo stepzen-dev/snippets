@@ -1,0 +1,10 @@
+# this is a blanket way to make all endpoints public, i.e. not requiring an API Key or JWT
+# for example, you would typically do this for your product catalog queries
+# remember to try this not through the localhost proxy 
+# (that automatically sets the Apikey to be admin key, hence bypasses these permissions
+# but use separate GraphQL or API client to check these
+ruleset:
+  - query: "[ALL]"
+    rules:
+      - predicate: true
+        action: allow

@@ -1,0 +1,51 @@
+# Some data might be returned as an array, like coords:[37.7,-121.7]
+# The backend system might assume that you know what they mean.
+# But a subsequent call might need it to be broken into {"lat":37.7,"lon":-121.7}
+# In the first query, we transform an array at the root
+# In the second query, we transform the array deeper inside
+# We also show how you can always return the data as a JSON
+# This allows you to try your jq till you get it right
+# Then you can convert it to a real type.
+
+type Coord {
+    lat: Float
+    lon: Float
+}
+
+type Query {
+    coord: Coord
+    @rest (
+        # we are not calling a real endpoint, we will use ecmascript to create data right here
+        endpoint: "stepzen:empty" 
+        # return the right JSON
+        ecmascript: """
+        function transformREST(s) {
+            return(JSON.stringify([37.7, -121.7]))
+        }
+        """
+        # and then transform it using jq
+        # here the empty pathpattern means that the jq expression is applied at the root
+        transforms: [{pathpattern: [], editor: """
+        jq:{lat:.[0],lon:.[1]}
+        """
+        }]
+    )
+
+    deepCoord: JSON
+    @rest (
+        # we are not calling a real endpoint, we will use ecmascript to create data right here
+        endpoint: "stepzen:empty" 
+        # return the right JSON
+        ecmascript: """
+        function transformREST(s) {
+            return(JSON.stringify({"address":{"city":"Santa Clara","location":[37.7, -121.7]}}))
+        }
+        """
+        # and then transform it using jq
+        # here the empty pathpattern means that the jq expression is applied at the root
+        transforms: [{pathpattern: ["address","location"], editor: """
+        jq:{lat:.[0],lon:.[1]}
+        """
+        }]
+    )
+}

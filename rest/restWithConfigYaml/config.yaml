@@ -1,0 +1,4 @@
+configurationset:
+  - configuration:
+      name: httpbin
+      apikey: 56hdlks45reghunq

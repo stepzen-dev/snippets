@@ -1,0 +1,14 @@
+# query names are fields of type Query and Mutation
+# (currently access controls are only supported on type Query)
+# hence fieldbasedrules are used to set access controls to public or requiring keys or JWT
+# remember to try this not through the localhost proxy 
+# (that automatically sets the Apikey to be admin key, hence bypasses these permissions
+# but use separate GraphQL or API client to check these
+fieldbasedrules:
+  - rootoperationtype: Query
+    # in publicfields, we are not listing customers, which means that that query can only be accessed
+    # using keys or JQT
+    publicfields:
+      - customer
+    # ignore this setting for now
+    privatefieldspredicate: false

@@ -1,0 +1,31 @@
+# query names are fields of type Query and Mutation
+# (currently access controls are only supported on type Query)
+# hence fieldbasedrules are used to set access controls to public or requiring keys or JWT
+fieldbasedrules:
+  - rootoperationtype: Query
+    # publicfields is empty, which means that the query customer is not public
+    # It can still be accessed using Apikeys
+    # However, StepZen allows non-public queries to be stil accessed
+    # without a key, provided some condition is met
+    # typically that condition will work off some query variable and jwt
+    # in this case, only when id=1 is sent as a $variable, and its value is 1, then the query can be executed
+    # the following is going to be executed
+    # query MyQuery($id:ID) {
+    #    customer (id: $id) {
+    #        name
+    #    }
+    # }
+    # if and only if the variable is sent as 1
+    # {"id": 1}
+    # any other value of variable will be denied
+    # any circumventing by calling the query without variables will be denied
+    # query MyQuery {
+    #    customer (id: 1) {
+    #       name
+    #    }
+    # }
+    # only way to execute the query is to pass id as a variable, and set it to 1
+    # remember to try this not through the localhost proxy 
+    # (that automatically sets the Apikey to be admin key, hence bypasses these permissions
+    # but use separate GraphQL or API client to check these
+    privatefieldspredicate: "$variables.id:Int==1"

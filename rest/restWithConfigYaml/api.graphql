@@ -1,0 +1,29 @@
+# this shows how query arguments are automatically substituted into the REST call
+# However, you can also get REST query parameters from config.yaml file
+# In this example, `apikey` is obtained from `config.yaml`
+# And wehave also removed `apikey` from the response, since you do not
+# want any chance of your apikey leakage
+# You can generate this entire code using 
+# `stepzen import curl "https://httpbin.org/get?q=a&q=b&apikey=56hdlks45reghunq" -H "Accept:application/json"`
+# You might have to do some editing to delete `apikey` entry in `type Args`
+# We use `httpbin.org` because it allows us to show features without any real REST API behind it
+# The httpbin service returns some payload depending on the call
+# You should always try the curl call directly
+
+type Args {
+  q: [String]
+}
+type Root {
+  args: Args
+  headers: JSON
+  origin: String
+  url: String
+}
+type Query {
+    rest(q:[String]): Root
+    @rest (endpoint: "https://httpbin.org/get?apikey=$apikey",
+            method: GET,
+            headers: [{name: "Accept", value:"application/json"}],
+            configuration: "httpbin"
+    )
+}
