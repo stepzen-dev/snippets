@@ -33,13 +33,13 @@ type Query {
                 var lon = get('lon')
                 var units = get('units')
                 var temp
-                if (lat=='25.76' && lon=='-80.19')
+                if (lat==25.76 && lon==-80.19)
                     temp = 100.0
                 else
                     temp = 60.4
                 if (units=='metric')
                     temp = (temp-32)*5/9
-                return (JSON.stringify({"temp":temp}))
+                return (JSON.stringify({temp:temp}))
             }
             """
         )
@@ -51,9 +51,9 @@ type Query {
             function transformREST(s) {
                 var city = get('city')
                 if (city == 'Miami')
-                    return (JSON.stringify({"lat":"25.76","lon":"-80.19"}))
+                    return (JSON.stringify({lat:25.76,lon:-80.19}))
                 else
-                    return (JSON.stringify({"lat":"37.2","lon":"-121.19"}))
+                    return (JSON.stringify({lat:37.2,lon:-121.19}))
             }
             """
         )
@@ -80,9 +80,9 @@ type Query {
             function transformREST(s) {
                 var id = get('id')
                 if (id==1)
-                    return (JSON.stringify({"name":"John Doe","city":"Miami"}))
+                    return (JSON.stringify({name:'John Doe',city:'Miami'}))
                 else
-                    return (JSON.stringify({"name":"Jane Smith","city":"Santa Clara"}))
+                    return (JSON.stringify({name:'Jane Smith',city:'Santa Clara'}))
             }
             """
     )
