@@ -34,7 +34,7 @@ type Query {
 
 """
 and as application/json, StepZen will automatically populate the body.  
-Note: if method POST is used, The default for Content-Type is application/body
+Note: if method POST is used, The default for Content-Type is application/json
 
 Here using the sample GraphQL query, data will show the contents of the postbody and json as transformed to JSON.
 [Try it without the name or city.  Yes, it will do the appropriate thing.]
