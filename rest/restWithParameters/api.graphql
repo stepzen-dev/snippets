@@ -1,6 +1,8 @@
 # this shows how query arguments are automatically substituted into the REST call
+# The default for method GET is to append the explode the arguments as query parameters
 # You can generate this entire code using 
-# `stepzen import curl "https://httpbin.org/get?q=a&q=b" -H "Accept:application/json"
+#   stepzen import curl "https://httpbin.org/get?q=a&q=b&v=c" -H "Accept:application/json"
+# though we have choosen to edit it for clarity.
 # We use `httpbin.org` because it allows us to show features without any real REST API behind it
 # The httpbin service returns some payload depending on the call
 # You should always try the curl call directly
@@ -15,8 +17,19 @@ type Root {
   origin: String
   url: String
 }
+
+"""
+Try the following sample query with and without q and v to see the effects
+Sample query:
+  query {rest(q: ["Joe Smith", "Jane Smith"] v:"New York")  { args { q v } url } }
+
+"""
 type Query {
     rest(q:[String], v:String): Root
+    # sometimes when you are testing, it is easier to set a query return type to be JSON
+    # this avoids any type conflicts that you might have, so this is also acceptable
+    # of course, you cannot subselect fields this way
+    # rest(q:[String], v:String): JSON
     @rest (endpoint: "https://httpbin.org/get",
             method: GET,
             headers: [{name: "Accept", value:"application/json"}]

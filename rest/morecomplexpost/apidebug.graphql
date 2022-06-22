@@ -1,0 +1,39 @@
+"""
+Intially exploring an rest API can be facilitated by using JSON as
+the return value as in restJSON below.  You can easily see what the
+rest API returned in context of how the StepZen services process the request.
+ 
+Try issuing the following with name and/or city removed to see the effects.
+```
+curl https://ACCOUNTNAME.stepzen.net/api/miscellaneous/__graphql \
+    --header "Authorization: Apikey $(stepzen whoami --apikey)" \
+    --header "Content-Type: application/json" \
+    --data '{"query": "{restJSON(name: \"Joe Smith\" city:\"New York\")}"}' 
+```
+
+StepZen services allow for diagnostics to be returned in the GraphQL response
+as extensions by adding a StepZen-Debug-Level header "1" and using your ADMIN key
+```
+curl https://ACCOUNTNAME.stepzen.net/api/miscellaneous/__graphql \
+    --header "Authorization: Apikey $(stepzen whoami --adminkey)" \
+    --header "Content-Type: application/json" \
+    --header "StepZen-Debug-Level: 1" \
+    --data '{"query": "{restJSON(name: \"Joe Smith\" city:\"New York\")}"}' 
+```
+"""
+type Query {
+    # sometimes when you are testing, it is easier to set a query return type to be JSON
+    # this avoids any type conflicts that you might have, so this is also acceptable
+    # of course, you cannot subselect fields this way
+    restJSON(name:String, city: String): JSON
+    @rest (endpoint: "https://httpbin.org/post",
+            method: POST,
+            postbody: """
+            {"record": { "name": {{.GetJSON "name"}}, "city": {{.GetJSON "city"}}} }
+            """
+            headers: [
+               {name: "Accept", value: "application/json"}
+               {name: "Content-Type", value: "application/json"}
+            ],
+    )
+}

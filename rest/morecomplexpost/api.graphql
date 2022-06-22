@@ -1,5 +1,13 @@
-# here we create a postbody from the query argument
-# the syntax is `{{.Get \"name-of-the-argumet\"}}`
+# here we create a postbody from the query argument 
+# using GetJSON which will return a JSON associated
+# with one of the inputs
+# GetJSON will return a null if the city or name was not specified
+# GetJSON is preferred for application/JSON 
+# The syntax is `{{.GetJSON "name-of-the-argument"}}`
+# 
+# You can also use Get which will return a string version
+# of the input--where possible--and is well suited for use in 
+# XML, forms, etc.   
 
 type Root {
   args: JSON
@@ -11,20 +19,21 @@ type Root {
   origin: String
   url: String
 }
+
+# rest is a straight-forward example of using the post body
+# that uses go language templates and the custom
+# stepzen function "Get" and "GetJSON"
+#
 type Query {
-    rest(name:String, city: String): Root
-    # sometimes when you are testing, it is easier to set a query return type to be JSON
-    # this avoids any type conflicts that you might have, so this is also acceptable
-    # of course, you cannot subselect fields this way
-    # rest(name:String, city: String): JSON
+    rest(name:String!, city: String!): Root
     @rest (endpoint: "https://httpbin.org/post",
             method: POST,
-            postbody: """
-            {"record":{"name":{{.Get "name"}}, "city":{{.Get "city"}}}}
-            """
-            headers: [{name: "Accept", value:"application/json"}
-                  {name: "Content-Type", value: "application/x-www-form-urlencoded"}
-                    ],
-          
+            postbody: """ {"record": { "name": {{.GetJSON "name"}}, 
+                                       "city": "{{.Get \"city\"}}"} } """
+            headers: [
+               {name: "Accept", value: "application/json"}
+               {name: "Content-Type", value: "application/json"}
+            ]
     )
 }
+

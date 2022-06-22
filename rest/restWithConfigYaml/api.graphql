@@ -1,8 +1,9 @@
-# this shows how query arguments are automatically substituted into the REST call
-# However, you can also get REST query parameters from config.yaml file
+# This shows how query arguments are automatically substituted into the REST call
+# including how you can also get REST query parameters from config.yaml file
 # In this example, `apikey` is obtained from `config.yaml`
-# And wehave also removed `apikey` from the response, since you do not
+# And we have also removed `apikey` from the response, since you do not
 # want any chance of your apikey leakage
+#
 # You can generate this entire code using 
 # `stepzen import curl "https://httpbin.org/get?q=a&q=b&apikey=56hdlks45reghunq" -H "Accept:application/json"`
 # You might have to do some editing to delete `apikey` entry in `type Args`
@@ -19,8 +20,18 @@ type Root {
   origin: String
   url: String
 }
+
+"""
+Example GraphQL query:
+query {rest(q: ["Joe Smith" "Jane Smith"]) { args { q  } url } }
+"""
+
 type Query {
     rest(q:[String]): Root
+    # sometimes when you are testing, it is easier to set a query return type to be JSON
+    # this avoids any type conflicts that you might have, so this is also acceptable
+    # of course, you cannot subselect fields this way
+    # rest(q:[String]): JSON
     @rest (endpoint: "https://httpbin.org/get?apikey=$apikey",
             method: GET,
             headers: [{name: "Accept", value:"application/json"}],
