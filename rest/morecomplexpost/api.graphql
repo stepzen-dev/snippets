@@ -7,8 +7,9 @@
 # 
 # You can also use Get which will return a string version
 # of the input--where possible--and is well suited for use in 
-# XML, forms, etc.   We have an example of Get below, as you can see,
-# it is a bit more complicated and requires careful escaping
+# XML, forms, etc.   However, Get gets more complicated
+# with careful escaping. Wherever possible, use GetJSON
+
 
 type Root {
   args: JSON
@@ -31,7 +32,7 @@ type Query {
             method: POST,
             postbody: """ 
             {"record": { "name": {{.GetJSON "name"}}, 
-                                       "city": "{{.Get \"city\"}}"} } 
+                                       "city": "{{.GetJSON "city"}}"} } 
             """
             headers: [
                {name: "Accept", value: "application/json"}
