@@ -28,8 +28,10 @@ type Query {
     rest(name:String!, city: String!): Root
     @rest (endpoint: "https://httpbin.org/post",
             method: POST,
-            postbody: """ {"record": { "name": {{.GetJSON "name"}}, 
-                                       "city": "{{.Get \"city\"}}"} } """
+            postbody: """ 
+            {"record": { "name": {{.GetJSON "name"}}, 
+                                       "city": "{{.Get \"city\"}}"} } 
+            """
             headers: [
                {name: "Accept", value: "application/json"}
                {name: "Content-Type", value: "application/json"}
