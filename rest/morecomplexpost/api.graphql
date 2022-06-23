@@ -7,7 +7,8 @@
 # 
 # You can also use Get which will return a string version
 # of the input--where possible--and is well suited for use in 
-# XML, forms, etc.   
+# XML, forms, etc.   We have an example of Get below, as you can see,
+# it is a bit more complicated and requires careful escaping
 
 type Root {
   args: JSON
