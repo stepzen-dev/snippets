@@ -19,7 +19,7 @@ type Root {
 
 """
 
-Try the following sample query for the imported schema with and without q and v to see the effects.
+Try the following sample query for the imported schema with and without either the q or v fields requested to see the effects.
 
 curl https://ACCOUNTNAME.stepzen.net/api/FOLDERNAME/__graphql\
    --header "Authorization: Apikey $(stepzen whoami --apikey)" \
