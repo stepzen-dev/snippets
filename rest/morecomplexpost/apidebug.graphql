@@ -1,31 +1,29 @@
 """
-Intially exploring an rest API can be facilitated by using JSON as
-the return value as in restJSON below.  You can easily see what the
-rest API returned in context of how the StepZen services process the request.
+Explore an rest API using JSON as the return value as in `restJSONquery` below, then see what the
+REST API returned in context of how the StepZen services process the request.
  
 Try issuing the following with name and/or city removed to see the effects.
 ```
 curl https://ACCOUNTNAME.stepzen.net/api/miscellaneous/__graphql \
     --header "Authorization: Apikey $(stepzen whoami --apikey)" \
     --header "Content-Type: application/json" \
-    --data '{"query": "{restJSON(name: \"Joe Smith\" city:\"New York\")}"}' 
+    --data '{"query": "{restJSONquery(name: \"Joe Smith\" city:\"New York\")}"}' 
 ```
 
-StepZen services allow for diagnostics to be returned in the GraphQL response
-as extensions by adding a StepZen-Debug-Level header "1" and using your ADMIN key
+StepZen services return diagnostics in the GraphQL response
+as extensions when you add a StepZen-Debug-Level header "1" and use your admin key.
 ```
 curl https://ACCOUNTNAME.stepzen.net/api/miscellaneous/__graphql \
     --header "Authorization: Apikey $(stepzen whoami --adminkey)" \
     --header "Content-Type: application/json" \
     --header "StepZen-Debug-Level: 1" \
-    --data '{"query": "{restJSON(name: \"Joe Smith\" city:\"New York\")}"}' 
+    --data '{"query": "{restJSONquery(name: \"Joe Smith\" city:\"New York\")}"}' 
 ```
 """
 type Query {
-    # sometimes when you are testing, it is easier to set a query return type to be JSON
-    # this avoids any type conflicts that you might have, so this is also acceptable
-    # of course, you cannot subselect fields this way
-    restJSON(name:String, city: String): JSON
+    # Set a JSON query return type to avoid any type conflicts that you might have during testing.
+    # You cannot subselect fields this way.
+    restJSONquery(name:String, city: String): JSON
     @rest (endpoint: "https://httpbin.org/post",
             method: POST,
             postbody: """

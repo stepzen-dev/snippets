@@ -1,4 +1,4 @@
-# here we automatially generate the postbodyfrom the query parameters
+# Here we automatically generate the postbody from the query parameters.
 
 type Root {
   args: JSON
@@ -12,17 +12,24 @@ type Root {
 }
 
 """
-Here, since we used application/x-www-form-urlencoded StepZen will
+Since we used `application/x-www-form-urlencoded` as a value for our `Content-Type` header, StepZen will
 encode the postbody as form-encoded and the httpbin.org/post will return 
-it in form.   You'll see that args, data, and json will all be empty.
-query {restJSON(name: "Joe Smith" city:"New York")} { data args form json  }
+it in form. You'll see that `args` and `data` will be empty, and `json` will be null, when you run the following query.
+query MyQuery {
+  restquery(name: "Joe Smith", city: "New York") {
+    args
+    data
+    files
+    form
+    json
+  }
+}
 """
 type Query {
-    rest(name:String, city: String): Root
-    # sometimes when you are testing, it is easier to set a query return type to be JSON
-    # this avoids any type conflicts that you might have, so this is also acceptable
-    # of course, you cannot subselect fields this way
-    # rest(name:String, city: String): JSON
+    restquery(name:String, city: String): Root
+    # Set a JSON query return type to avoid any type conflicts that you might have during testing.
+    # You cannot subselect fields this way.
+    # restquery(name:String, city: String): JSON
     @rest (endpoint: "https://httpbin.org/post",
             method: POST,
             headers: [{name: "Accept", value:"application/json"},
@@ -33,21 +40,29 @@ type Query {
 
 
 """
-and as application/json, StepZen will automatically populate the body.  
-Note: if method POST is used, The default for Content-Type is application/json
+When the 'Accept' header is `application/json`, StepZen will automatically populate the body.  
+Note: if method POST is used, The default for `Content-Type` is `application/json`.
 
-Here using the sample GraphQL query, data will show the contents of the postbody and json as transformed to JSON.
-[Try it without the name or city.  Yes, it will do the appropriate thing.]
+Using the sample GraphQL query, data will show the contents of the postbody and json as transformed to JSON.
+[Try it without the `name` or `city` and see it populate the values for `name` and `city` in a JSON object.]
+
 Sample GraphQL Query:
-query {restJSON(name: "Joe Smith" city:"New York")} { data args form json url }
+
+query MyQuery {
+  restjsonbodyquery(name: "Joe Smith", city: "New York") {
+    args
+    data
+    form
+    json
+  }
+}
 """
 
 type Query {
-    restjsonbody(name:String, city: String): Root
-    # sometimes when you are testing, it is easier to set a query return type to be JSON
-    # this avoids any type conflicts that you might have, so this is also acceptable
-    # of course, you cannot subselect fields this way
-    # rest(name:String, city: String): JSON
+    restjsonbodyquery(name:String, city: String): Root
+    # Set a JSON query return type to avoid any type conflicts that you might have during testing.
+    # You cannot subselect fields this way.
+    # restjsonbodyquery(name:String, city: String): JSON
     @rest (endpoint: "https://httpbin.org/post",
             method: POST,
             headers: [{name: "Accept", value:"application/json"}]
