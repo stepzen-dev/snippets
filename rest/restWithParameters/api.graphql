@@ -1,7 +1,5 @@
 # This example shows how query arguments are automatically substituted into the REST call.
 # The default for method GET is to explode the arguments as query parameters
-# You can follow along by generating a schema using the StepZen CLI command
-#   stepzen import curl "https://httpbin.org/get?q=a&q=b&v=c" -H "Accept:application/json"
 # We use `httpbin.org` because it is a helpful REST API built with documentation and samples in mind.
 # The httpbin service returns a payload depending on the call.
 # Use the curl call directly.
@@ -24,7 +22,7 @@ Try the following sample query for the imported schema with and without either t
 curl https://ACCOUNTNAME.stepzen.net/api/miscellaneous/__graphql\
    --header "Authorization: Apikey $(stepzen whoami --apikey)" \
    --header "Content-Type: application/json" \
-   --data '{"query": "{myQuery(q: [\"Joe Smith\", \"Jane Smith\"] v:\"New York\")  { args { q v } url } }"}'
+   --data '{"query": "{restquery(q: [\"Joe Smith\", \"Jane Smith\"] v:\"New York\")  { args { q v } url } }"}'
 """
 type Query {
     restquery(q:[String], v:String): Root

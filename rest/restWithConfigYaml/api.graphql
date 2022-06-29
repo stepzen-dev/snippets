@@ -1,11 +1,7 @@
 # This example shows how query arguments are automatically substituted into the REST call.
 # It includes how you can also get REST query parameters from config.yaml file.
 # In this example, `apikey` is obtained from `config.yaml`.
-# We have also removed `apikey` from the response to avoid a leak.
-#
-# You can generate this entire code sample using 
-# `stepzen import curl "https://httpbin.org/get?q=a&q=b&apikey=56hdlks45reghunq" -H "Accept:application/json"`
-# Delete the `apikey` entry in `type Args`.
+
 # We use `httpbin.org` because it is a helpful REST API built with documentation and samples in mind.
 # The httpbin service returns a payload depending on the call.
 # Use the curl call directly.
@@ -22,10 +18,10 @@ type Root {
 
 """
 Example curl call with GraphQL query:
-curl https://ACCOUNTNAME.stepzen.net/api/FOLDER_NAME/__graphql \
+curl https://ACCOUNTNAME.stepzen.net/api/miscellaneous/__graphql \
    --header "Authorization: Apikey $(stepzen whoami --apikey)" \
    --header "Content-Type: application/json" \
-   --data '{"query": "{myQuery(q: [\"Joe Smith\" \"Jane Smith\"]) { args { q  } url }}"}'
+   --data '{"query": "{rest(q: [\"Joe Smith\" \"Jane Smith\"]) { args { q  } url }}"}'
 """
 
 type Query {
