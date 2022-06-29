@@ -1,6 +1,6 @@
 # This example shows how query arguments are automatically substituted into the REST call.
 # The default for method GET is to explode the arguments as query parameters
-# You can generate a similar schema using the StepZen CLI command
+# You can follow along by generating a schema using the StepZen CLI command
 #   stepzen import curl "https://httpbin.org/get?q=a&q=b&v=c" -H "Accept:application/json"
 # We use `httpbin.org` because it is a helpful REST API built with documentation and samples in mind.
 # The httpbin service returns a payload depending on the call.
