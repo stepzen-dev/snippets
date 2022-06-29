@@ -21,16 +21,13 @@ type Root {
 
 Try the following sample query for the imported schema with and without either the q or v fields requested to see the effects.
 
-curl https://ACCOUNTNAME.stepzen.net/api/FOLDERNAME/__graphql\
+curl https://ACCOUNTNAME.stepzen.net/api/miscellaneous/__graphql\
    --header "Authorization: Apikey $(stepzen whoami --apikey)" \
    --header "Content-Type: application/json" \
    --data '{"query": "{myQuery(q: [\"Joe Smith\", \"Jane Smith\"] v:\"New York\")  { args { q v } url } }"}'
 """
 type Query {
     restquery(q:[String], v:String): Root
-    # Set a JSON query return type to avoid any type conflicts that you might have during testing.
-    # You cannot subselect fields this way.
-    # restquery(q:[String], v:String): JSON
     @rest (endpoint: "https://httpbin.org/get",
             method: GET,
             headers: [{name: "Accept", value:"application/json"}]
