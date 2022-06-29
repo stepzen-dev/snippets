@@ -1,15 +1,10 @@
-# This shows how query arguments are automatically substituted into the REST call
-# including how you can also get REST query parameters from config.yaml file
-# In this example, `apikey` is obtained from `config.yaml`
-# And we have also removed `apikey` from the response, since you do not
-# want any chance of your apikey leakage
-#
-# You can generate this entire code using 
-# `stepzen import curl "https://httpbin.org/get?q=a&q=b&apikey=56hdlks45reghunq" -H "Accept:application/json"`
-# You might have to do some editing to delete `apikey` entry in `type Args`
-# We use `httpbin.org` because it allows us to show features without any real REST API behind it
-# The httpbin service returns some payload depending on the call
-# You should always try the curl call directly
+# This example shows how query arguments are automatically substituted into the REST call.
+# It includes how you can also get REST query parameters from config.yaml file.
+# In this example, `apikey` is obtained from `config.yaml`.
+
+# We use `httpbin.org` because it is a helpful REST API built with documentation and samples in mind.
+# The httpbin service returns a payload depending on the call.
+# Use the curl call directly.
 
 type Args {
   q: [String]
@@ -22,15 +17,17 @@ type Root {
 }
 
 """
-Example GraphQL query:
-query {rest(q: ["Joe Smith" "Jane Smith"]) { args { q  } url } }
+Example curl call with GraphQL query:
+curl https://ACCOUNTNAME.stepzen.net/api/miscellaneous/__graphql \
+   --header "Authorization: Apikey $(stepzen whoami --apikey)" \
+   --header "Content-Type: application/json" \
+   --data '{"query": "{rest(q: [\"Joe Smith\" \"Jane Smith\"]) { args { q  } url }}"}'
 """
 
 type Query {
     rest(q:[String]): Root
-    # sometimes when you are testing, it is easier to set a query return type to be JSON
-    # this avoids any type conflicts that you might have, so this is also acceptable
-    # of course, you cannot subselect fields this way
+    # Set a JSON query return type to avoid any type conflicts that you might have during testing.
+    # You cannot subselect fields this way.
     # rest(q:[String]): JSON
     @rest (endpoint: "https://httpbin.org/get?apikey=$apikey",
             method: GET,
