@@ -1,0 +1,53 @@
+type Address {
+  city: String
+  countryRegion: String
+  id: Int!
+  postalCode: String
+  stateProvince: String
+  street: String
+}
+
+type Customer {
+  email: String!
+  id: Int!
+  name: String!
+}
+
+type Order {
+  carrier: String!
+  createdAt: Date!
+  customerId: Int!
+  id: Int!
+  shippingCost: Float
+  trackingId: String!
+}
+
+"""
+These are some examples of queries generated from the schema. Feel free to modify them or add your own.
+"""
+type Query {
+  getCustomerUsingCustomerAddress(id: Int!): [Customer]
+    @dbquery(
+      type: "mysql"
+      query: """
+      SELECT T.`email`, T.`id`, T.`name`
+        FROM `customer` T, `customerAddress` V
+        WHERE V.`addressId` = ?
+          AND V.`customerId` = T.`id`
+      """
+       configuration: "mysql_config"
+    )
+
+}
+"""
+These are some examples of mutations generated from the schema. Feel free to modify them or add your own.
+"""
+type Mutation {
+
+updateCustomerEmail(customer_id:Int! email:String): Customer
+  @dbquery(
+    type:"mysql"
+    query:"UPDATE customer SET email = ? WHERE customer.id = customer_id ?"
+    configuration: "mysql_config")
+
+}

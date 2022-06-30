@@ -43,6 +43,7 @@
     <li><a href="#transforms">`@transforms`</a></li>
     <li><a href="#sequence">`@sequence`</a></li>
     <li><a href="#protection">protection</a></li>
+      <li><a href="#dbquery">`@dbquery`</a></li>
     <li><a href="#rest-calls-and-responses">`@rest` calls and responses</a></li>
 
   </ol>
@@ -92,6 +93,9 @@ In `/protection`, you will find several subdirectories. Each contains a `.graphq
 - `/makeAllPublic` shows how you can easily make all queries public.
 - `/makeSomePublic` shows how you can make some public, and some private (which can still be accessed using your `admin` or `service` keys)
 
+## @dbquery
+
+View the StepZen [documentation](https://stepzen.com/docs/custom-graphql-directives/directives#-dbquery) on the custom directive `@dbquery`. 
 
 ## @rest calls and responses
 
