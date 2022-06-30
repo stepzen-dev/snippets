@@ -84,17 +84,17 @@ These are available in `/sequence`:
 
 ## protection
 
+For more information on protecting your API, [see our documentation](https://stepzen.com/docs/access-control). 
+
 In `/protection`, you will find several subdirectories. Each contains a `.graphql` file, and `index.graphql` file and a `config.yaml` settings (which enables you to get extremely granular (or coarse) with protecting who can call what query/mutation). 
 
 - `/makeAllPublic` shows how you can easily make all queries public.
 - `/makeSomePublic` shows how you can make some public, and some private (which can still be accessed using your `admin` or `service` keys)
 
 
-## rest calls and responses
+## @rest calls and responses
 
 Where possible, we use [httpbin.org](http://httpbin.org) as our REST endpoint, since it allows us to mimic lots of REST capabilities.
-
-In the repos below, we have given the code that you will likely not handwrite, you will just use `stepzen import curl` but it is worthwhile to look at the generated code, which is what we will use to show different ways in which REST calls can be made, and the responses be modified.
 
 - `/restWithParameters` shows how GraphQL query arguments are automatically added to the REST call--there is nothing for you to do!
 - `/restWithConfigYaml` shows how REST query parameters can also be fetched from `config.yaml`--this allows you to keep your SDL code separate from your secrets.
