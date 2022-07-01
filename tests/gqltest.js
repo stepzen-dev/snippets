@@ -46,6 +46,9 @@ function runGqlOk(endpoint, query, variables, operationName) {
       return response;
     });
 }
+
+// tests that the data key in a GraphQL response
+// is equal to value.
 function expectData(response, value) {
   expect(response.data).to.eql(value);
 }

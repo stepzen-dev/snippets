@@ -1,8 +1,3 @@
-// import { runGqlOk, expectData } from "../../../tests/gqltest.js";
-
-// const fetch = require("node-fetch");
-// import { runGqlOk, expectData } from "../../../tests/gqltest.js";
-
 const {
   runGqlOk,
   expectData,
