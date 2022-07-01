@@ -6,7 +6,7 @@ const {
 
 const endpoint = process.env.STEPZEN_ENDPOINT;
 
-describe("sequence/arguments", function () {
+describe("rest/restWithParameters", function () {
   it("deploy", function () {
     this.timeout(10000);
     return deployEndpoint(endpoint, __dirname);
