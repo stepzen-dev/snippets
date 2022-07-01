@@ -15,6 +15,7 @@ Must be logged into your StepZen account (matching `$STEPZEN_ENDPOINT`)
 Execute at the root of the snippets repo.
 
 ```
+npm install
 npm test
 ```
 
