@@ -2,12 +2,14 @@ const fetch = require("node-fetch");
 const { expect } = require("chai");
 const { execSync } = require("child_process");
 const { URL } = require("url");
-const KeyType = {
-  admin: 1,
-  api: 2, 
-  jwt: 3
+const { NONAME } = require("dns");
+const AuthType = {
+  adminKey: 1,
+  apiKey: 2, 
+  jwt: 3, 
+  noAuth: 4
 }
-Object.freeze(KeyType);
+Object.freeze(AuthType);
 
 // We use admin key to test because there is a cache optimization for apikey's that is not conducive
 // to rapid deploy and run cycles that occur with this type of testing
@@ -35,25 +37,28 @@ function deployEndpoint(endpoint, dirname) {
 // as a test returning the response.
 // The test will fail if the request does not
 // have status 200 or has any GraphQL errors.
-function runGqlOk(keyType, endpoint, fieldSelection, variables, operationName) {
-  switch (keyType) {
-    case KeyType.admin:
-      key = adminKey;
+function runGqlOk(authType, endpoint, query, variables, operationName) {
+  switch (authType) {
+    case AuthType.adminKey:
+      authValue = adminKey;
       break;
-    case KeyType.api:
-      key = apiKey;
+    case AuthType.apiKey:
+      authValue = apiKey;
       break;
+//  Have not  implemented jwt and noAuth yet
+    case AuthType.jwt:
+    case AuthType.noAuth:
     default:
-      key = ""
+      authValue = ""
   }
   return fetch(endpoint, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: key,
+      Authorization: authValue,
     },
     body: JSON.stringify({
-      query: fieldSelection,
+      query: query,
       variables: variables,
       operationName: operationName,
     }),
@@ -83,9 +88,9 @@ it("deploy", function () {
   return deployEndpoint(endpoint, dirname);
 });
 
-tests.forEach(({label, fieldSelection, expected, keyType}) => {
+tests.forEach(({label, query, expected, authType}) => {
   it(label, function () {
-    return runGqlOk(keyType, endpoint, fieldSelection).then(
+    return runGqlOk(authType, endpoint, query).then(
       function (response) {
         expectData(response, expected);
         });
@@ -93,5 +98,7 @@ tests.forEach(({label, fieldSelection, expected, keyType}) => {
   });
 }
 
+exports.runGqlOk = runGqlOk;
+exports.expectData = expectData;
 exports.deployAndRun = deployAndRun;
-exports.KeyType = KeyType;
+exports.AuthType = AuthType;
