@@ -2,6 +2,9 @@ const fetch = require("node-fetch");
 const { expect } = require("chai");
 const { execSync } = require("child_process");
 const { URL } = require("url");
+
+// We use admin key to test because there is a cache optimization for apikey's that is not conducive
+// to rapid deploy and run cycles that occur with this type of testing
 const adminKey = `apikey ` + execSync(`stepzen whoami --adminkey`).toString().trim();
 
 // deploys the schema in a directory to a StepZen endpoint.
