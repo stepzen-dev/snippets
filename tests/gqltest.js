@@ -35,7 +35,7 @@ function deployEndpoint(endpoint, dirname) {
 // as a test returning the response.
 // The test will fail if the request does not
 // have status 200 or has any GraphQL errors.
-function runGqlOk(keyType, endpoint, query, variables, operationName) {
+function runGqlOk(keyType, endpoint, fieldSelection, variables, operationName) {
   switch (keyType) {
     case KeyType.admin:
       key = adminKey;
@@ -53,7 +53,7 @@ function runGqlOk(keyType, endpoint, query, variables, operationName) {
       Authorization: key,
     },
     body: JSON.stringify({
-      query: query,
+      query: fieldSelection,
       variables: variables,
       operationName: operationName,
     }),
