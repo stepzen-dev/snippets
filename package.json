@@ -1,0 +1,16 @@
+{
+  "name": "stepzen-snippets-test",
+  "version": "0.0.1",
+  "type": "commonjs",
+  "scripts": {
+    "test": "mocha **/tests/*Test.js"
+  },
+  "dependencies": {
+    "node-fetch":"~2.6.1",
+    "chai": "^4.3.6",
+    "chain": "^0.2.1",
+    "mocha": "^10.0.0"
+  },
+  "keywords": [],
+  "author": ""
+}
