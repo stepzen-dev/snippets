@@ -2,7 +2,7 @@ const fetch = require("node-fetch");
 const { expect } = require("chai");
 const { execSync } = require("child_process");
 const { URL } = require("url");
-const apiKey = `apikey ` + execSync(`stepzen whoami --apikey`).toString().trim();
+const adminKey = `apikey ` + execSync(`stepzen whoami --adminkey`).toString().trim();
 
 // deploys the schema in a directory to a StepZen endpoint.
 // endpoint is the full URL.
@@ -28,7 +28,7 @@ function runGqlOk(endpoint, query, variables, operationName) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: apiKey,
+      Authorization: adminKey,
     },
     body: JSON.stringify({
       query: query,
