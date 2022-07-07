@@ -2,14 +2,15 @@ const fetch = require("node-fetch");
 const { expect } = require("chai");
 const { execSync } = require("child_process");
 const { URL } = require("url");
-const { NONAME } = require("dns");
-const AuthType = {
+const path = require('node:path');
+
+const authTypes = {
   adminKey: 1,
   apiKey: 2, 
   jwt: 3, 
   noAuth: 4
 }
-Object.freeze(AuthType);
+Object.freeze(authTypes);
 
 // We use admin key to test because there is a cache optimization for apikey's that is not conducive
 // to rapid deploy and run cycles that occur with this type of testing
@@ -39,15 +40,15 @@ function deployEndpoint(endpoint, dirname) {
 // have status 200 or has any GraphQL errors.
 function runGqlOk(authType, endpoint, query, variables, operationName) {
   switch (authType) {
-    case AuthType.adminKey:
+    case authTypes.adminKey:
       authValue = adminKey;
       break;
-    case AuthType.apiKey:
+    case authTypes.apiKey:
       authValue = apiKey;
       break;
 //  Have not  implemented jwt and noAuth yet
-    case AuthType.jwt:
-    case AuthType.noAuth:
+    case authTypes.jwt:
+    case authTypes.noAuth:
     default:
       authValue = ""
   }
@@ -98,7 +99,14 @@ tests.forEach(({label, query, expected, authType}) => {
   });
 }
 
+function getTestDescription(testRoot, fullDirName) {
+  segments = fullDirName.split(path.sep);
+  rootIndex = segments.findIndex(element => element == testRoot);
+  return segments.slice(rootIndex+1, -1).join(path.sep);
+}
+
 exports.runGqlOk = runGqlOk;
 exports.expectData = expectData;
 exports.deployAndRun = deployAndRun;
-exports.AuthType = AuthType;
+exports.authTypes = authTypes;
+exports.getTestDescription = getTestDescription;
