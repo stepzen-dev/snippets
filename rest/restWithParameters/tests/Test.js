@@ -5,7 +5,7 @@ const {
 
 const endpoint = process.env.STEPZEN_ENDPOINT;
 
-describe(__dirname, function () {
+describe("rest/restWithParameters", function () {
   const tests = [
     { label: "restquery(q,v)", 
       query: '{restquery(q: ["Joe Smith", "Jane Smith"] v:"New York")  { args { q v } url } }', 

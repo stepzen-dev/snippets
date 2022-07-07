@@ -3,7 +3,7 @@ const {
   AuthType,
 } = require("../../../tests/gqltest.js");
 
-describe(__dirname, function () {
+describe("sequence/arguments", function () {
   const tests = [
     { label: "customer(1)", 
       query: "{customer(id:1){name city weather{temp}}}", 
