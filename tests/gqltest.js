@@ -102,7 +102,9 @@ tests.forEach(({label, query, expected, authType}) => {
 function getTestDescription(testRoot, fullDirName) {
   segments = fullDirName.split(path.sep);
   rootIndex = segments.findIndex(element => element == testRoot);
-  return segments.slice(rootIndex+1, -1).join(path.sep);
+  // Construct the test description from the unique path from testRoot, which is likely the root of the git repo.  
+  // Intentionally not using `path.sep` as this is not a path to a file now, but a test description.
+  return segments.slice(rootIndex+1, -1).join("/");
 }
 
 exports.runGqlOk = runGqlOk;
