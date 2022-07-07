@@ -2,10 +2,21 @@ const fetch = require("node-fetch");
 const { expect } = require("chai");
 const { execSync } = require("child_process");
 const { URL } = require("url");
+const { NONAME } = require("dns");
+const AuthType = {
+  adminKey: 1,
+  apiKey: 2, 
+  jwt: 3, 
+  noAuth: 4
+}
+Object.freeze(AuthType);
 
 // We use admin key to test because there is a cache optimization for apikey's that is not conducive
 // to rapid deploy and run cycles that occur with this type of testing
 const adminKey = `apikey ` + execSync(`stepzen whoami --adminkey`).toString().trim();
+const apiKey = `apikey ` + execSync(`stepzen whoami --apikey`).toString().trim();
+
+const endpoint = process.env.STEPZEN_ENDPOINT;
 
 // deploys the schema in a directory to a StepZen endpoint.
 // endpoint is the full URL.
@@ -26,12 +37,25 @@ function deployEndpoint(endpoint, dirname) {
 // as a test returning the response.
 // The test will fail if the request does not
 // have status 200 or has any GraphQL errors.
-function runGqlOk(endpoint, query, variables, operationName) {
+function runGqlOk(authType, endpoint, query, variables, operationName) {
+  switch (authType) {
+    case AuthType.adminKey:
+      authValue = adminKey;
+      break;
+    case AuthType.apiKey:
+      authValue = apiKey;
+      break;
+//  Have not  implemented jwt and noAuth yet
+    case AuthType.jwt:
+    case AuthType.noAuth:
+    default:
+      authValue = ""
+  }
   return fetch(endpoint, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: adminKey,
+      Authorization: authValue,
     },
     body: JSON.stringify({
       query: query,
@@ -56,6 +80,25 @@ function expectData(response, value) {
   expect(response.data).to.eql(value);
 }
 
+// deploys graphql schema located in dirname to the test endpoint provided by the environment (process.env.STEPZEN_ENDPOINT), 
+// and then runs through all fo the field selection tests.
+function deployAndRun(dirname, tests) {
+it("deploy", function () {
+  this.timeout(10000);
+  return deployEndpoint(endpoint, dirname);
+});
+
+tests.forEach(({label, query, expected, authType}) => {
+  it(label, function () {
+    return runGqlOk(authType, endpoint, query).then(
+      function (response) {
+        expectData(response, expected);
+        });
+      });
+  });
+}
+
 exports.runGqlOk = runGqlOk;
 exports.expectData = expectData;
-exports.deployEndpoint = deployEndpoint;
+exports.deployAndRun = deployAndRun;
+exports.AuthType = AuthType;
