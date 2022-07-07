@@ -1,5 +1,6 @@
-# This example shows how query arguments are automatically substituted into the REST call.
-# The default for method GET is to explode the arguments as query parameters
+# This example shows how the GraphQL query arguments are automatically appended as query parameters to
+# the endpoint argument of the @rest directive. This is the default behavior or the GET method for the @rest directive.
+# 
 # We use `httpbin.org` because it is a helpful REST API built with documentation and samples in mind.
 # The httpbin service returns a payload depending on the call.
 # Use the curl call directly.
