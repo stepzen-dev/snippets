@@ -63,8 +63,7 @@ type Query {
     # Below is a sequence call that sequences `convertCityOrLocaleToLatLong` and `weather`.
     # Now the `cityOrLocale` argument can fetch weather data by lat/lon.
     # In the first step, the arguments are assigned directly from the sequence field's arguments.
-    # We have to use an `arguments` setting for the second step, because   
-    # the sequence field arguments are only directly accessible from the first step in the sequence,
+    # We have to use an `arguments` setting for the second step.
     # but we need `units` in the second step.
     # The argument named `units` in the `weather` step
     # gets its value from the argument `units` in the sequence field
@@ -72,6 +71,7 @@ type Query {
     # and it also receives the output of the first step by default.
     # In this case, the first step returns a type `Coord`, and therefore `Coord`'s' fields `lat` and `lon` are
     # available to the second step `weather`.
+    # For more information, see https://stepzen.com/docs/features/sequencing-queries
     
     weatherByCityOrLocale (cityOrLocale: String, units: String): Weather
         @sequence(steps:[{query: "convertCityOrLocaleToLatLon"}, 
