@@ -71,7 +71,7 @@ type Query {
     # and it also receives the output of the first step by default.
     # In this case, the first step returns a type `Coord`, and therefore `Coord`'s' fields `lat` and `lon` are
     # available to the second step `weather`.
-    # For more information, see https://stepzen.com/docs/features/sequencing-queries
+    # For more information including examples, see https://stepzen.com/docs/features/sequencing-queries
     
     weatherByCityOrLocale (cityOrLocale: String, units: String): Weather
         @sequence(steps:[{query: "convertCityOrLocaleToLatLon"}, 
