@@ -62,15 +62,16 @@ type Query {
         )
     # Below is a sequence call that sequences `convertCityOrLocaleToLatLong` and `weather`.
     # Now the `cityOrLocale` argument can fetch weather data by lat/lon.
-    # We have to use an `arguments` setting for the second query, because   
-    # enclosing query arguments are only directly accessible from the first query in the sequence,
-    # but we need `units` in the second query.
-    # The argument named `units` in the query `weather` 
-    # gets its value from the argument `units` in the enclosing query
-    # The second query receives the arguments passed down to it,
-    # and it also receives the output of the first query by default.
-    # In this case, the first query returns a type `Coord`, and therefore `Coord`'s' fields `lat` and `lon` are
-    # available to the second query `weather`.
+    # In the first step, the arguments are assigned directly from the sequence field's arguments.
+    # We have to use an `arguments` setting for the second step, because   
+    # the sequence field arguments are only directly accessible from the first step in the sequence,
+    # but we need `units` in the second step.
+    # The argument named `units` in the `weather` step
+    # gets its value from the argument `units` in the sequence field
+    # The second step receives the arguments passed down to it,
+    # and it also receives the output of the first step by default.
+    # In this case, the first step returns a type `Coord`, and therefore `Coord`'s' fields `lat` and `lon` are
+    # available to the second step `weather`.
     
     weatherByCityOrLocale (cityOrLocale: String, units: String): Weather
         @sequence(steps:[{query: "convertCityOrLocaleToLatLon"}, 
