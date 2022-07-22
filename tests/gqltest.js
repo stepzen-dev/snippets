@@ -93,6 +93,7 @@ function deployAndRun(dirname, tests) {
 
   tests.forEach(({ label, query, expected, authType }) => {
     it(label, function () {
+      this.timeout(4000); // Occasional requests take > 2s
       return runGqlOk(authType, endpoint, query).then(function (response) {
         expectData(response, expected);
       });
