@@ -1,0 +1,24 @@
+deployment:
+  identity:
+    keys:
+      - algorithm: HS256
+        key: development-only
+access:
+  policies:
+    - type: Query
+      policyDefault:
+        condition: true
+      rules:
+      - name: "history-related"
+        fields: ["histories", "historiesResult", "history"]
+        condition: "?$jwt && $jwt.roles:String has \"history-viewer\""
+      - name: "launch-related"
+        fields: ["launches", "launchesPast", "launchesPastResult", "launchesUpcoming", "launch"]
+        condition: "?$jwt && $jwt.roles:String has \"launch-viewer\""
+      - name: "roadster access"
+        fields: ["roadster"]
+        condition: "?$jwt && $jwt.CUSTOM_CLAIM.level:Int > 40"
+    - type: Mutation
+      policyDefault:
+        condition: "?$jwt && $jwt.allow_mutations:Boolean == true"
+
