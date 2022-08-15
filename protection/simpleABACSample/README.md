@@ -57,6 +57,9 @@ Your API url is https://chico.stepzen.net/dev/spacex/__graphql
 }
 ```
 Enter `development-only` (the secret specified in the config.yaml) into the `secret` field to generate a JWT.
+
 7. Test your API with the JWT you created. Notice that more fields are accessible than before.
+
 8. Modify the claims in the JWT and try again with different tokens to see the different behavior.
+
 9. Experiment with different rules in the config.yaml.
