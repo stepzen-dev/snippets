@@ -45,7 +45,7 @@ Your API url is https://chico.stepzen.net/dev/spacex/__graphql
 ➔
 ```
 5. Using your preferred GraphQL client, test your API. Notice that mutations, history-related entry point fields, launch-related entry point fields, and the roadster entry point fields are not accessible.
-6. Visit (jwt.io)[https://jwt.io/#debugger-io] and create a JWT token for the API you just deployed, starting with the example payload below:
+6. Visit [jwt.io](https://jwt.io/#debugger-io) and create a JWT token for the API you just deployed, starting with the example payload below:
 ```
 {
   "sub": "1234567890",
