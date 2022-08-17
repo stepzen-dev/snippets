@@ -1,13 +1,13 @@
-# When a query is called, either in a sequence step, or in an @materializer, how does it get the values of its arguments?
+# When a query is called, either in an `@sequence` step, or in an `@materializer` argument, how does it get the values of its arguments?
 
-# In a sequence, the first query has access to all the arguments of the enclosing query
-# Subsequent queries in the sequence have access to the output of the previous step
-# and if it needs an argument from the enclosing query, then it needs to explicitly ask for it, using
+# In an `@sequence` step, the first query has access to all the arguments of the enclosing query.
+# Subsequent queries in the steps have access to the output of the previous step.
+# If a step needs an argument from the enclosing query, then it needs to explicitly ask for it, using
 # arguments.
 
-# In an @materializer, the query/mutation gets the values of its arguments from the enclosing type
-# It defaults to the name of the field matching the name of the argument
-# You can override it by explicitly using arguments
+# In an `@materializer` directive, the query/mutation gets the values of its arguments from the enclosing type.
+# It defaults to the name of the field matching the name of the argument.
+# You can override this default behavior by using arguments.
 
 # We provide both examples below
 
@@ -23,8 +23,13 @@ type Customer {
     city: String
 }
 type Query {
-    # An ecmascript return of weather by lat/lon and units (imperial or metric)
-    # of course, in real life you will call a weather api
+
+    # Queries `weather`,`convertCityOrLocaleToLatLon`, and `weatherByCityOrLocale` use an ecmascript return of weather by lat/lon and units (imperial or metric)
+    # which is included in the `@rest` directive. 
+    # See https://stepzen.com/docs/custom-graphql-directives/directives#ecmascript for more information on `ecmascript`.
+    # We are picturing a real-life scenario in which you call a weather API using the `endpoint` argument. 
+    # See https://stepzen.com/docs/connecting-backends/how-to-connect-a-rest-service for more information on `@rest`. 
+
     weather (lat: String, lon: String, units: String): Weather
         @rest (endpoint: "stepzen:empty"
             ecmascript: """
@@ -43,8 +48,6 @@ type Query {
             }
             """
         )
-    # An ecmascript converter from cityOrLocale to its lat/lon
-    # Of course in real-life you will either call and API, or make a database call
     convertCityOrLocaleToLatLon (cityOrLocale: String):Coord
     @rest (endpoint: "stepzen:empty"
             ecmascript: """
@@ -57,23 +60,22 @@ type Query {
             }
             """
         )
-    # A sequence call that sequences converCityOrLocaleToLatLong and weather
-    # this allows for a cityOrLocale argument to be used to fetch weather data by lat/lon
-    # we have to use an arguments setting for the second query, because   
-    # query arguments only flow to the first query in the sequence
-    # but we need units to flow to the second query
-    # we are saying that the argument named units in the query weather 
-    # gets its value from the argument units in the enclosing query
-    # In addition to the arguments explictly passed down to the second query,
-    # it also gets the output of the first query
-    # in this case, the first query returns a type Coord, and therefore its fields lat and lon are
-    # available to the second query.
+    # Below is a sequence call that sequences `convertCityOrLocaleToLatLong` and `weather`.
+    # Now the `cityOrLocale` argument can fetch weather data by lat/lon.
+    # In the first step, the arguments are assigned directly from the sequence field's arguments.
+    # We have to use an `arguments` setting for the second step.
+    # but we need `units` in the second step.
+    # The argument named `units` in the `weather` step
+    # gets its value from the argument `units` in the sequence field
+    # The second step receives the arguments passed down to it,
+    # and it also receives the output of the first step by default.
+    # In this case, the first step returns a type `Coord`, and therefore `Coord`'s' fields `lat` and `lon` are
+    # available to the second step `weather`.
+    # For more information including examples, see https://stepzen.com/docs/features/sequencing-queries
     
     weatherByCityOrLocale (cityOrLocale: String, units: String): Weather
         @sequence(steps:[{query: "convertCityOrLocaleToLatLon"}, 
             {query: "weather", arguments: [{name: "units", argument: "units"}]}])
-    # An ecmascript generator of customer data
-    # Of course, in real life you will call an API or a database
     customer (id: ID): Customer
     @rest (endpoint: "stepzen:empty"
             ecmascript: """
@@ -88,13 +90,13 @@ type Query {
     )
 }
 
-# As a final step, use @materializer to connect customer graph with weather graph
-# However, we need another arguments here for two reasons
-# One, the Customer type has city
-# whereas the query weatherByCityOrLocale expects cityOrLocale
-# so we are saying that the argument cityOrLocale in the query weatherByCityOrLocale
-# gets its value from the field city in the enclosing type Customer
-# Second, because units is not a field in the enclosing type, it needs to be explicitly added
+# As a final step, use @materializer to connect the customer graph with the weather graph.
+# However, we need an `arguments` argument here for two reasons.
+# First, the `Customer` type has a `city` field,
+# whereas the query `weatherByCityOrLocale` expects `cityOrLocale`.
+# So the argument `cityOrLocale` in the query `weatherByCityOrLocale`
+# gets its value from the field `city` in the enclosing type `Customer`.
+# Second, because units is not a field in the enclosing type, it needs to be added in the `arguments` argument.
 
 extend type Customer {
     weather (units: String): Weather

@@ -1,11 +1,11 @@
-# A sequence is not exactly linear
-# If at any stage, it produces N records, then the next stage is called once for every record
-# In the following, a Customer has a list of order ids in the field orderList
-# We will use materializer to generate the order details for each of the ids in the list
-# We do that by using sequence
-# The first query in the sequence echoes back the id list (basically a no-op, but it helps drive the next stage)
+# A `@sequence` directive's behavior is not exactly linear.
+# If at any stage, it produces N records, then the next stage is called once for every record in N.
+# In the following, a Customer has a list of order ids in the field `orderList`.
+# We will use `@materializer` to generate the order details for each of the ids in the list.
+# We do that by using `@sequence`.
+# The first query in the sequence echoes back the id list to help drive the next stage.
 # The second query gets order details for each of these ids
-# We also have fun stuff in 1+N optimization, but that is subject to other snippets
+
 type Customer {
     name: String
     city: String
@@ -16,8 +16,12 @@ type Order {
     product: ID
 }
 type Query {
-    # An ecmascript generator of customer data
-    # Of course, in real life you will call an API or a database
+
+    # Queries `customer`,`orderDetail`, and `echo` use an ecmascript return.
+    # See https://stepzen.com/docs/custom-graphql-directives/directives#ecmascript for more information on `ecmascript`.
+    # We are picturing a real-life scenario in which you call a customer datasource using the `endpoint` argument. 
+    # See https://stepzen.com/docs/connecting-backends/how-to-connect-a-rest-service for more information on `@rest`. 
+
     customer (id: ID): Customer
     @rest (endpoint: "stepzen:empty"
             ecmascript: """
@@ -30,8 +34,6 @@ type Query {
             }
             """
     )
-    # An ecmascript generator of order data
-    # Of course, in real life you will call an API or a database
     orderDetail(id: ID): Order
     @rest (endpoint: "stepzen:empty"
             ecmascript: """
@@ -41,13 +43,13 @@ type Query {
             }
             """
     )
-    # This is a sequence. The first query in the sequence is just an echo, generating a for loop
-    # The second query gets called for each entry in the for loop
-    # Over time, we will be providing more controls, but this should suffice for now
+    # This is a sequence. The first query in the sequence is an echo, generating a 'for loop'.
+    # The second query gets called for each entry in the 'for loop'.
+
     allOrders(ids: [ID]): [Order]
     @sequence (steps:[{query: "echo"}, {query: "orderDetail"}])
 
-    # This is simply an echo
+
     echo(ids:[ID]):[ID]
     @rest (endpoint: "stepzen:empty"
             ecmascript: """
@@ -61,7 +63,8 @@ type Query {
 
 # Now that we have a query that can generate order details for all order ids in the list,
 # we can use an @materializer to connect Order to Customer
-# We need to map the argument, as shown below
+# We need to map the argument, as shown below.
+
 extend type Customer {
     orderDetails: [Order]
     @materializer (query: "allOrders", arguments:[{name:"ids", field:"orderList"}])
