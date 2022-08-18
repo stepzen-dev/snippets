@@ -1,4 +1,4 @@
-`@materializer` is allows the developer to seamlessly extend a type with data by executing an operation, sometimes with arguments supplied by the extended type. 
+`@materializer` allows the developer to seamlessly extend a type with data by executing an operation, sometimes with arguments supplied by the extended type. 
 
 Sometimes for schema curation or celanliness the desried value of the field is from a nested value of the operation, for example, just picking a `city` from an `Address`  type.  The @materializer directive provides the ability to 
 specify a single field selection path.  This snippet demonstrates how to do this.
