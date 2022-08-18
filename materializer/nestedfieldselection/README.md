@@ -1,6 +1,6 @@
-`@materializer` is a great way to seamlessly extend a type with data from another type by executing an operation, sometimes wiht arguments supplied by the extended type. 
+`@materializer` is a great way to seamlessly extend a type with data from another type by executing an operation, sometimes with arguments supplied by the extended type. 
 
-Sometimes the data needed is nested, so @materialier provides the ability to 
+Sometimes the data needed is nested, so @materializer provides the ability to 
 specify a single field selection path.
 
 Assume that an original graph `G` (this is the second graph as described above) contains documents of type `document` with `content` and `author`, and that `content` has a required identifier provided by any request.  `G` only exposes direct access to the document, and not to the individaul `content` and `author`:
