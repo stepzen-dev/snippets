@@ -1,6 +1,6 @@
 `@materializer` allows the developer to seamlessly extend a type with data by executing an operation, sometimes with arguments supplied by the extended type. 
 
-Sometimes for schema curation or celanliness the desried value of the field is from a nested value of the operation, for example, just picking a `city` from an `Address`  type.  The @materializer directive provides the ability to 
+Sometimes for schema curation or cleanliness the desried value of the field is from a nested value of the operation, for example, just picking a `city` from an `Address`  type.  The @materializer directive provides the ability to 
 specify a single field selection path.  This snippet demonstrates how to do this.
 
 Assume that the schema contains documents of type `Document` with `content` and `author`, and that `content` has a required identifier provided by any request, and that the query operation only exposes direct access to the document, and not to the individual `content` and `author`:
