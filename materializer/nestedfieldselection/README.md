@@ -1,7 +1,6 @@
-`@materializer` is a great way to link two graphs together
-it takes the data from one graph, feeds it into a query of a second graph
-and takes the returned data and makes it a field in the original graph
-Sometimes the data needed from the second graph is nested, so @materialier provides the ability to 
+`@materializer` is a great way to seamlessly extend a type with data from another type by executing an operation, sometimes wiht arguments supplied by the extended type. 
+
+Sometimes the data needed is nested, so @materialier provides the ability to 
 specify a single field selection path.
 
 Assume that an original graph `G` (this is the second graph as described above) contains documents of type `document` with `content` and `author`, and that `content` has a required identifier provided by any request.  `G` only exposes direct access to the document, and not to the individaul `content` and `author`:
