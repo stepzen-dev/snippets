@@ -83,7 +83,7 @@ extend type Book {
 
 Note that since the `author` field of a `document` type does not take arguments, there are no arguments specified.  If they did take arguments, since there is no `arguments` specified for the `@materializer`, they would implicitly map to any field of `Book` with the same name.   For `content` the `@materializer` directive expliclty maps the argument `id` of the referenced `{document {content}}` field to the `{book {refId}}` field.  
 
-Now, to use this information, the developer does not need to know that their `book` information comes from different graphs, they can simpliy issue the following query to get the desired result:
+Now, to use this information, the developer does not need to know that their `book` information comes from different backends, they can simpliy issue the following query to get the desired result:
 
 ```
 query MyQuery {
