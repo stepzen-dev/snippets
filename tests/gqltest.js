@@ -2,20 +2,22 @@ const fetch = require("node-fetch");
 const { expect } = require("chai");
 const { execSync } = require("child_process");
 const { URL } = require("url");
-const path = require('node:path');
+const path = require("node:path");
 
 const authTypes = {
   adminKey: 1,
-  apiKey: 2, 
-  jwt: 3, 
-  noAuth: 4
-}
+  apiKey: 2,
+  jwt: 3,
+  noAuth: 4,
+};
 Object.freeze(authTypes);
 
 // We use admin key to test because there is a cache optimization for apikey's that is not conducive
 // to rapid deploy and run cycles that occur with this type of testing
-const adminKey = `apikey ` + execSync(`stepzen whoami --adminkey`).toString().trim();
-const apiKey = `apikey ` + execSync(`stepzen whoami --apikey`).toString().trim();
+const adminKey =
+  `apikey ` + execSync(`stepzen whoami --adminkey`).toString().trim();
+const apiKey =
+  `apikey ` + execSync(`stepzen whoami --apikey`).toString().trim();
 
 const endpoint = process.env.STEPZEN_ENDPOINT;
 
@@ -29,7 +31,7 @@ function deployEndpoint(endpoint, dirname) {
     .replace(/\/__graphql$/, "");
 
   const stdout = execSync(
-    `stepzen start --no-dashboard --no-console --no-watcher --endpoint=${endpointPath} --dir=${dirname}`
+    `stepzen deploy ${endpointPath} --dir=${dirname}`
   ).toString();
   console.log(stdout);
 }
@@ -46,11 +48,11 @@ function runGqlOk(authType, endpoint, query, variables, operationName) {
     case authTypes.apiKey:
       authValue = apiKey;
       break;
-//  Have not  implemented jwt and noAuth yet
+    //  Have not  implemented jwt and noAuth yet
     case authTypes.jwt:
     case authTypes.noAuth:
     default:
-      authValue = ""
+      authValue = "";
   }
   return fetch(endpoint, {
     method: "POST",
@@ -81,28 +83,30 @@ function expectData(response, value) {
   expect(response.data).to.eql(value);
 }
 
-// deploys graphql schema located in dirname to the test endpoint provided by the environment (process.env.STEPZEN_ENDPOINT), 
+// deploys graphql schema located in dirname to the test endpoint provided by the environment (process.env.STEPZEN_ENDPOINT),
 // and then runs through all fo the field selection tests.
 function deployAndRun(dirname, tests) {
-it("deploy", function () {
-  this.timeout(10000);
-  return deployEndpoint(endpoint, dirname);
-});
+  it("deploy", function () {
+    this.timeout(10000);
+    return deployEndpoint(endpoint, dirname);
+  });
 
-tests.forEach(({label, query, expected, authType}) => {
-  it(label, function () {
-    return runGqlOk(authType, endpoint, query).then(
-      function (response) {
+  tests.forEach(({ label, query, expected, authType }) => {
+    it(label, function () {
+      this.timeout(4000); // Occasional requests take > 2s
+      return runGqlOk(authType, endpoint, query).then(function (response) {
         expectData(response, expected);
-        });
       });
+    });
   });
 }
 
 function getTestDescription(testRoot, fullDirName) {
   segments = fullDirName.split(path.sep);
-  rootIndex = segments.findIndex(element => element == testRoot);
-  return segments.slice(rootIndex+1, -1).join(path.sep);
+  rootIndex = segments.findIndex((element) => element == testRoot);
+  // Construct the test description from the unique path from testRoot, which is likely the root of the git repo.
+  // Intentionally not using `path.sep` as this is not a path to a file now, but a test description.
+  return segments.slice(rootIndex + 1, -1).join("/");
 }
 
 exports.runGqlOk = runGqlOk;
