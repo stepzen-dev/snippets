@@ -3,7 +3,7 @@
 Sometimes the data needed is nested, so @materializer provides the ability to 
 specify a single field selection path.
 
-Assume that an original graph `G` (this is the second graph as described above) contains documents of type `document` with `content` and `author`, and that `content` has a required identifier provided by any request.  `G` only exposes direct access to the document, and not to the individaul `content` and `author`:
+Assume that the original schema contains documents of type `document` with `content` and `author`, and that `content` has a required identifier provided by any request, and that the query operation only exposes direct access to the document, and not to the individaul `content` and `author`:
 
 ```
 type Document {
@@ -46,7 +46,7 @@ type Query {
 }
 ```
 
-Another graph, `K`, represents books with names and a reference to the document content stored in `G`. 
+The schema evolves to represent books with names and a reference to the document content from the previous types. Perhaps these types come from different backends. 
 
 ```
 type Book {
@@ -81,7 +81,7 @@ extend type Book {
 }
 ```
 
-Note that since the `author` field of a `document` in `G` do not take arguments, there are no arguments specified.  If they did take arguments, since there is no `arguments` specified for the `@materializer`, they would implicitly map to any field of `Book` with the same name.   For `content` the `@materializer` directive expliclty maps the argument `id` of the referenced `{document {content}}` field to the `{book {refId}}` field.  
+Note that since the `author` field of a `document` type does not take arguments, there are no arguments specified.  If they did take arguments, since there is no `arguments` specified for the `@materializer`, they would implicitly map to any field of `Book` with the same name.   For `content` the `@materializer` directive expliclty maps the argument `id` of the referenced `{document {content}}` field to the `{book {refId}}` field.  
 
 Now, to use this information, the developer does not need to know that their `book` information comes from different graphs, they can simpliy issue the following query to get the desired result:
 
