@@ -1,12 +1,11 @@
 const {
   deployAndRun,
   authTypes,
-  getTestDescription,
 } = require("../../../tests/gqltest.js");
 
-testDescription = getTestDescription("snippets", __dirname);
+const endpoint = process.env.STEPZEN_ENDPOINT;
 
-describe(testDescription, function () {
+describe("rest/restWithParameters", function () {
   const tests = [
     { label: "restquery(q,v)", 
       query: '{restquery(q: ["Joe Smith", "Jane Smith"] v:"New York")  { args { q v } url } }', 
@@ -16,11 +15,6 @@ describe(testDescription, function () {
     { label: "restquery(v)",
       query:  '{restquery(v:"New York")  { args { q v } url } }',
       expected: {restquery: {args: {q: null,v: "New York",}, url: "https://httpbin.org/get?v=New+York",},},
-      authType: authTypes.adminKey,
-    },
-    { label: "restquery(q)",
-      query:  '{restquery(q:["Mike Jones", "Sally Jones"])  { args { q v } url } }',
-      expected: {restquery: {args: {q: ["Mike Jones", "Sally Jones"],v: null,}, url: "https://httpbin.org/get?q=Mike+Jones&q=Sally+Jones",},},
       authType: authTypes.adminKey,
     },
   ]
