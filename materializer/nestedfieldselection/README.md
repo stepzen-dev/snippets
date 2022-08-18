@@ -97,5 +97,5 @@ With our mocked up data, you should get the following result:
 `stepzen start` in this directory and take it for a spin!
 
 Note: 
-In order to make this snippet self-contained, you will see in the `api.graphql` we have added fields to the `query` just to materialize instances of `content` and `author`, but in a live system with data, these fields would likely not be exposed.
+In order to make this snippet self-contained, you will see in the `api.graphql` we have added fields to the `query` just to materialize an instance of `content`, but in a live system with data, these fields would likely not be exposed.
 
