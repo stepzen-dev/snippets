@@ -49,6 +49,7 @@ type Query {
 
 Another graph, `K`, represents books with names and a reference to the document content stored in `G`. 
 
+```
 type Book {
   refId: String!
   name: String
@@ -70,6 +71,7 @@ type Query {
      """
     )
 }
+```
 
 But the `book` information with only `title` and a `refID` is rather meaningless, and any application will also want to see `author` and `content` from `G` as first class citizens of type `book`.  With @materializer we can do this naturally using nested selection sets: 
 
