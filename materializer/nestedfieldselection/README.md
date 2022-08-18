@@ -1,4 +1,4 @@
-`@materializer` is a great way to seamlessly extend a type with data from another type by executing an operation, sometimes with arguments supplied by the extended type. 
+`@materializer` is allows the developer to seamlessly extend a type with data from another type by executing an operation, sometimes with arguments supplied by the extended type. 
 
 Sometimes the data needed is nested, so @materializer provides the ability to 
 specify a single field selection path.
