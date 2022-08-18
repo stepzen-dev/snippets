@@ -1,0 +1,84 @@
+# See preamble in README.md
+
+# Original graph G
+type Document {
+   docId: String
+   content(id: String!): Content
+     @materializer(query: "content", arguments:[{name: "id" argument:"id"}])
+   author: Author 
+     @materializer(query: "author")
+   lastUpdate: Date
+}
+
+type Content @mock {
+  id: String!
+  text: String!
+  summary: String!
+}
+
+type Query {
+  document:  Document
+       @rest(
+       endpoint: "stepzen:empty"
+       ecmascript: """
+        function transformREST() { 
+            const data = {
+                author: {
+                            name: 'Roy Derks',
+                            country: 'Netherlands'
+                        }
+                        };
+                const resp = JSON.stringify(data);
+                return resp
+            }
+     """
+       )
+  # Content and author are exposed here to keep the snippet self-contained, but would otherwise not be exposed in graph G     
+  content(id: String!): Content 
+      @connector(type:"echo")
+  author: Author
+     @rest(
+       endpoint: "stepzen:empty"
+       ecmascript: """
+        function transformREST() { 
+            const data = {
+                name: 'Roy Derks',
+                          country: 'Netherlands'
+                };
+                const resp = JSON.stringify(data);
+                return resp
+            }
+     """
+    )
+}
+
+type Author {
+    name: String!
+    country: String
+}
+
+
+
+type Query {
+  book: Book
+    @rest(
+       endpoint: "stepzen:empty"
+       ecmascript: """
+        function transformREST() { 
+            const data = {
+                refId: '27',
+                name: 'Fullstack GraphQL'
+                };
+                const resp = JSON.stringify(data);
+                return resp
+            }
+     """
+    )
+}
+
+type Book {
+  refId: String!
+  name: String
+  author: Author @materializer (query: "document {author}")
+  content: Content @materializer (query: "document {content}", arguments: {name: "id", field: "refId"})
+} 
