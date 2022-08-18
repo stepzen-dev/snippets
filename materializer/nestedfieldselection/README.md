@@ -1,17 +1,15 @@
-`@materializer` is allows the developer to seamlessly extend a type with data from another type by executing an operation, sometimes with arguments supplied by the extended type. 
+`@materializer` is allows the developer to seamlessly extend a type with data by executing an operation, sometimes with arguments supplied by the extended type. 
 
-Sometimes the data needed is nested, so @materializer provides the ability to 
-specify a single field selection path.
+Sometimes for schema curation or celanliness the desried value of the field is from a nested value of the operation, for example, just picking a `city` from an `Address`  type.  The @materializer directive provides the ability to 
+specify a single field selection path.  This snippet demonstrates how to do this.
 
-Assume that the original schema contains documents of type `document` with `content` and `author`, and that `content` has a required identifier provided by any request, and that the query operation only exposes direct access to the document, and not to the individaul `content` and `author`:
+Assume that the schema contains documents of type `Document` with `content` and `author`, and that `content` has a required identifier provided by any request, and that the query operation only exposes direct access to the document, and not to the individual `content` and `author`:
 
 ```
 type Document {
    docId: String
    content(id: String!): Content
-     @materializer(query: "content", arguments:[{name: "id" argument:"id"}])
    author: Author 
-     @materializer(query: "author")
    lastUpdate: Date
 }
 
@@ -28,25 +26,9 @@ type Author {
 
 type Query {
   document:  Document
-       @rest(
-       endpoint: "stepzen:empty"
-       ecmascript: """
-        function transformREST() { 
-            const data = {
-                author: {
-                            name: 'Roy Derks',
-                            country: 'Netherlands'
-                        }
-                        };
-                const resp = JSON.stringify(data);
-                return resp
-            }
-     """
-       )
-}
 ```
 
-The schema evolves to represent books with names and a reference to the document content from the previous types. Perhaps these types come from different backends. 
+The schema evolves to represent books with names and a reference to the Document content from the previous types. Perhaps these types come from different backends. 
 
 ```
 type Book {
@@ -56,23 +38,10 @@ type Book {
 
 type Query {
   book: Book
-    @rest(
-       endpoint: "stepzen:empty"
-       ecmascript: """
-        function transformREST() { 
-            const data = {
-                refId: '27',
-                name: 'Fullstack GraphQL'
-                };
-                const resp = JSON.stringify(data);
-                return resp
-            }
-     """
-    )
 }
 ```
 
-But the `book` information with only `title` and a `refID` is rather meaningless, and any application will also want to see `author` and `content` from `G` as first class citizens of type `book`.  With @materializer we can do this naturally using nested selection sets: 
+But the `book` information with only `title` and a `refID` is rather meaningless, and any application will also want to see `author` and `content` from `{document {content}}` as first class citizens of type `book`.  With @materializer we can do this naturally using selection sets: 
 
 ```
 extend type Book {
@@ -81,9 +50,9 @@ extend type Book {
 }
 ```
 
-Note that since the `author` field of a `document` type does not take arguments, there are no arguments specified.  If they did take arguments, since there is no `arguments` specified for the `@materializer`, they would implicitly map to any field of `Book` with the same name.   For `content` the `@materializer` directive expliclty maps the argument `id` of the referenced `{document {content}}` field to the `{book {refId}}` field.  
+Note that since the `author` field of a `Document` type does not take arguments, there are no arguments specified.  If they did take arguments, since there is no `arguments` specified for the `@materializer`, they would implicitly map to any field of `Book` with the same name.   For `content` the `@materializer` directive expliclty maps the argument `id` of the referenced `{document {content}}` field to the `{book {refId}}` field.  
 
-Now, to use this information, the developer does not need to know that their `book` information comes from different backends, they can simpliy issue the following query to get the desired result:
+Now, to use this information, the developer does not need to know that their `book` information comes from different backends, they can simplify issue the following query to get the desired result:
 
 ```
 query MyQuery {
