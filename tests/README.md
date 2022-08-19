@@ -20,7 +20,7 @@ stepzen login
 Execute at the root of the snippets repo.
 
 ```
-npm install
+npm ci
 npm test
 ```
 
