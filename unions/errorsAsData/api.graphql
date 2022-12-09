@@ -38,10 +38,6 @@ type Mutation {
 }
 
 type Query {
-    # The Query `me` use an ecmascript return, which is included in the `@rest` directive.
-    # See https://stepzen.com/docs/custom-graphql-directives/directives#ecmascript for more information on `ecmascript`.
-    # We are picturing a real-life scenario in which you call an authentication API using the `endpoint` argument.
-    # See https://stepzen.com/docs/connecting-backends/how-to-connect-a-rest-service for more information on `@rest
-
-    me(token: String): String
+  # GraphQL spec requires at least one Query field
+  dummy: String
 }

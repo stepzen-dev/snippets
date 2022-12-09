@@ -105,7 +105,7 @@ Where possible, we use [httpbin.org](http://httpbin.org) as our REST endpoint, s
 
 Union types are valuable when you have a field that can return one of several types.
 
-- `/dataAsErrors` shows how to implement the "data as errors" pattern. This is useful when you want to return a field that can return either a value or an error.
+- `/errorsAsData` shows how to implement the "errors as data" pattern. This is useful when you want to return a field that can return either a value or an error.
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
