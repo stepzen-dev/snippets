@@ -1,0 +1,109 @@
+# This example shows how @rest is configured for pagination.
+#
+# @rest supports three styles of pagination for REST responses:
+#
+# PAGE_NUMBER - pages by requesting a specific page number
+# OFFSET - pages by reqesting a starting record offset
+# NEXT_CURSOR - pages by opaque cursors returned by the REST API
+#
+# In each case @rest allows the backend REST API to be exposed
+# in the GraphQL schema as a field using
+# GraphQL Cursor Connections Specification.
+# https://relay.dev/graphql/connections.htm
+
+"""
+Sample customer type.
+"""
+type Customer {
+  id: ID!
+  name: String
+  email: String
+}
+
+"""
+`CustomerConnection` is the connection type for `Customer` pagination.
+A field returning a connection type must have arguments
+`first` (number of nodes to fetch) and `after` (opaque cursor indicating
+the starting point).
+"""
+type CustomerConnection {
+  edges: [CustomerEdge]
+  pageInfo: PageInfo!
+}
+
+"""
+`CustomerEdge` provides access to the node and its cursor.
+"""
+type CustomerEdge {
+  node: Customer
+  cursor: String
+}
+
+type Query {
+  """
+  `customersPageNumber` pages through twenty three generated `Customer` objects.
+  The data is supplied by a simulated REST API using page number pagination
+  but is exposed using standard GraphQL pagination.
+
+  Typically the `endpoint` argument of `@rest` would have query
+  parameters that set the pagination arguments expected by the
+  REST API from the field arguments `first` and `after` (page number),
+  for example: `?limt=$first&page=$after`.
+  """
+  customersPageNumber(first: Int!, after: String = ""): CustomerConnection
+    @rest(
+      endpoint: "stepzen:empty"
+      pagination: {
+        type: PAGE_NUMBER
+        setters: { field: "total", path: "meta.totalPages" }
+      }
+      resultroot: "values[]"
+      # Ecmascript is used to mimic the response from a REST api.
+      ecmascript: """
+      function transformREST() {
+        // A total of 23 items will be returned
+        const totalItems = 23;
+
+        // Pagination field arguments
+        // Since this is PAGE_NUMBER pagination
+        // "after" is decoded by StepZen from the opaque string value
+        // and passed into @rest as a integer page number value,
+        // with the first page being 1.
+        const first = get('first');
+        const pageNumber = get('after');
+
+        // metadata - total number of pages
+        const totalPages = Math.ceil(totalItems / first)
+
+        // generate customers for nodes
+        const startOffset = ((pageNumber - 1) * first) + 1;
+        const endOffset = startOffset + first;
+        var customers = []
+        for (let i = startOffset; i < endOffset && i <= totalItems; i++) {
+            customers.push({
+              id: i,
+              name: 'name-' + i,
+              email: 'user-' + i + '@example.com'
+            });
+        }
+
+        // This returns a typical layout of a REST response
+        // when pagination is through a page number.
+        // @rest must be configured to match the REST response layout.
+        //
+        // pagination setters defines that the total page count
+        // is taken from meta.totalPages
+        //
+        // resultroot corresponds to the location that contains the
+        // data values. Note the REST API returns the customer objects,
+        // StepZen automatically creates the connection/edges structure
+        // for the values.
+        return ({
+           meta: { 'totalPages': totalPages },
+           values: customers
+        }
+        );
+      }
+      """
+    )
+}
