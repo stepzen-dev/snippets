@@ -1,0 +1,47 @@
+type Token {
+  id: ID!
+  token: String!
+}
+
+type AuthError {
+  message: String!
+}
+
+union Auth = Token | AuthError
+
+type Mutation {
+  # The Mutation `auth` use an ecmascript return, which is included in the `@rest` directive.
+  # See https://stepzen.com/docs/custom-graphql-directives/directives#ecmascript for more information on `ecmascript`.
+  # We are picturing a real-life scenario in which you call an authentication API using the `endpoint` argument.
+  # See https://stepzen.com/docs/connecting-backends/how-to-connect-a-rest-service for more information on `@rest`.
+  auth(email: String!, password: String!): Token!
+    @rest(
+      endpoint: "stepzen:empty"
+      ecmascript: """
+      function transformREST(s) {
+        var email = get('email')
+        var password = get('password')
+
+        if (email === 'demo' && password === 'demo') {
+            return ({
+                id: '1',
+                token: '1234567890'
+            })
+        } else {
+            return ({
+                message: 'Invalid credentials'
+            })
+        }
+      }
+      """
+    )
+}
+
+type Query {
+    # The Query `me` use an ecmascript return, which is included in the `@rest` directive.
+    # See https://stepzen.com/docs/custom-graphql-directives/directives#ecmascript for more information on `ecmascript`.
+    # We are picturing a real-life scenario in which you call an authentication API using the `endpoint` argument.
+    # See https://stepzen.com/docs/connecting-backends/how-to-connect-a-rest-service for more information on `@rest
+
+    me(token: String): String
+}
