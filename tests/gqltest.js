@@ -1,3 +1,4 @@
+require('dotenv').config()
 const fetch = require("node-fetch");
 const { expect } = require("chai");
 const { execSync } = require("child_process");
