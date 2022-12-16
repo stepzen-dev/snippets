@@ -1,15 +1,15 @@
 # This example shows how @rest is configured for pagination.
 #
-# @rest supports three styles of pagination for REST responses:
+# @rest supports three REST API styles of pagination and
+# the directive maps REST responses to a consistent standard
+# GraphQL pagination approach, specifically
+# GraphQL Cursor Connections Specification
+# https://relay.dev/graphql/connections.htm
 #
 # PAGE_NUMBER - pages by requesting a specific page number
 # OFFSET - pages by reqesting a starting record offset
 # NEXT_CURSOR - pages by opaque cursors returned by the REST API
 #
-# In each case @rest allows the backend REST API to be exposed
-# in the GraphQL schema as a field using
-# GraphQL Cursor Connections Specification.
-# https://relay.dev/graphql/connections.htm
 
 """
 Sample customer type.

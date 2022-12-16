@@ -70,9 +70,9 @@ The easiest way to use paginated fields is with a GraphQL operation
 that has variables for the arguments `first` and `after`. Examples
 are show in `requests.graphql`.
 
-To retrieve the first page of a result, the operation is called with `after` omitted or set to the empty string (`""`), and `first`, and for all calls, is set to the number of  results to return in a page.
+To retrieve the first page of a result, the operation is called with `after` omitted or set to the empty string (`""`), and `first`, and for all calls, is set to the number of results to return in a page.
 
-Subsequent pages can then be retrieved by setting `after` to the value of `endCursor` from `pageInfo` from the previous request.  In most cases, the value of `first` will remain the same for all pagination calls.
+Subsequent pages can then be retrieved by setting `after` to the value of `endCursor` from `pageInfo` from the previous request.
 
 This is continued until `hasNextPage` is `false`.
 
