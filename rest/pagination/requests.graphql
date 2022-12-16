@@ -1,0 +1,16 @@
+# Page through customers from a REST API using page numbers
+query CustomersPageNumber($first:Int! $after:String) {
+  customersPageNumber(first: $first after:$after) {
+    edges {
+      node {
+        id
+        name
+        email
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}

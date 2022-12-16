@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require("node:path");
 const {
   deployAndRun,
   authTypes,
@@ -6,23 +8,8 @@ const {
 
 testDescription = getTestDescription("snippets", __dirname);
 
-const cpn = `
-query ($first:Int! $after:String) {
-  customersPageNumber(first: $first after:$after) {
-    edges {
-      node {
-        id
-        name
-        email
-      }
-    }
-    pageInfo {
-      endCursor
-      hasNextPage
-    }
-  }
-}
-`;
+const requestsFile = path.join(path.dirname(__dirname), 'requests.graphql');
+const requests = fs.readFileSync(requestsFile, 'utf8').toString();
 
 function generateNodes(start, end) {
   nodes = [];
@@ -42,7 +29,8 @@ describe(testDescription, function () {
   const tests = [
     {
       label: "customerPageNumber-1-10",
-      query: cpn,
+      query: requests,
+      operationName: 'CustomersPageNumber',
       variables: { first: 10 },
       expected: {
         customersPageNumber: {
@@ -58,7 +46,8 @@ describe(testDescription, function () {
     },
     {
       label: "customerPageNumber-11-20",
-      query: cpn,
+      query: requests,
+      operationName: 'CustomersPageNumber',
       variables: {
         first: 10,
         after:
@@ -78,7 +67,8 @@ describe(testDescription, function () {
     },
     {
       label: "customerPageNumber-21-23",
-      query: cpn,
+      query: requests,
+      operationName: 'CustomersPageNumber',
       variables: {
         first: 10,
         after:

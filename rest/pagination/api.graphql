@@ -52,13 +52,22 @@ type Query {
   """
   customersPageNumber(first: Int!, after: String = ""): CustomerConnection
     @rest(
-      endpoint: "stepzen:empty"
+      # pagination sets the type of pagination the REST API uses
+      # and for PAGE_NUMBER requires a setter that declares
+      # where the total number of pages is in the JSON response.
       pagination: {
         type: PAGE_NUMBER
         setters: { field: "total", path: "meta.totalPages" }
       }
+
+      # resultroot indicates where root in the JSON response
+      # for the values that will populate the nodes.
+      # Note this does not affect pagination setters, they
+      # are always relative to the root of the response.
       resultroot: "values[]"
-      # Ecmascript is used to mimic the response from a REST api.
+
+      # Ecmascript (with empty endpoint) is used to mimic the response from a REST api.
+      endpoint: "stepzen:empty"
       ecmascript: """
       function transformREST() {
         // A total of 23 items will be returned
