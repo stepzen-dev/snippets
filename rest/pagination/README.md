@@ -1,6 +1,6 @@
 # Pagination with `@rest`
 
-The snippet shows how `@rest` fields are configured to support pagination.
+This snippet shows how `@rest` fields are configured to support pagination.
 
 ## GraphQL pagination
 
