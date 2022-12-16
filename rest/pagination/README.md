@@ -7,8 +7,8 @@ This snippet shows how `@rest` fields are configured to support pagination.
 StepZen supports pagination through the standard
 [GraphQL Cursor Connection Specification](https://relay.dev/graphql/connections.htm).
 
-This allows clients consuming a StepZen GraphQL endpoint to page through values
-regardless of backend type (e.g. GraphQL endpoint, database, REST API) where the data originates.
+This allows clients consuming a StepZen GraphQL endpoint to page through results
+regardless of the originating backend type (e.g. GraphQL endpoint, database, REST API).
 
  For the `@rest` directive, StepZen supports three styles of pagination to match the typical REST API approaches:
 
