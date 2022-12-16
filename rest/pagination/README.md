@@ -18,10 +18,11 @@ regardless of the originating backend type (e.g. GraphQL endpoint, database, RES
 
 This snippet demonstrates the typical REST API response and `@rest` directive configuration for each of the three styles. 
 
-Query fields that return a connection type must have two field arguments, `first` for
-the number of nodes to fetch and `after` an opaque cursor. With StepZen these
-arguments are available in the context of the `@rest` configuration with the values
-converted to the correct value for the REST API.
+In StepZen, Query fields that return a connection type must have two field arguments, 
+- `first` which specifies the number of nodes to fetch
+- `after` which is an opaque cursor. 
+
+With the StepZen's `@rest` directive, these arguments are available in the context of the directive's configuration and are converted to the correct value required by the REST API.
 
 For example with `PAGE_NUMBER` the `after` opaque cursor value the client uses
 is converted to a integer page number in the context of `@rest`. So if the
