@@ -7,6 +7,7 @@ type AuthError {
   message: String!
 }
 
+# The union type can resolve to either Token or AuthError depending on the response of the operation
 union Auth = Token | AuthError
 
 type Mutation {

@@ -19,10 +19,16 @@ You can use the following query to explore the data:
 ```graphql
 mutation {
   auth(email: "demo", password: "demo") {
+    # client can optionally request the type name instead of figuring it out from the returned keys
+    __typename
+
+    # requested fields when response is of type Token
     ... on Token {
       id
       token
     }
+
+    # requested fields when response is of type AuthError
     ... on AuthError {
       message
     }
