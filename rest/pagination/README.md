@@ -67,7 +67,7 @@ TODO
 # Using paginated fields
 
 The easiest way to use paginated fields is with a GraphQL operation
-that has variables for the `first` and `after` arguments. Examples
+that has variables for the arguments `first` and `after`. Examples
 are show in `requests.graphql`.
 
 For the first call (to get the first page) the operation is called
