@@ -34,7 +34,7 @@ endpoint: "https://api.example.com/customers?pageSize=$first&pageNumber=$after"
 
 ## PAGE_NUMBER pagination
 
-A REST API using PAGE_NUMBER pagination typically takes arguments of a page size and page number
+A REST API using the PAGE_NUMBER style pagination typically takes two arguments,  page size and page number, 
 and returns a list of values and metadata indicating the total number of pages. The response layout
 varies, but is similar to:
 ```json
