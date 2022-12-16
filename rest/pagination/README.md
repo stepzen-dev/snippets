@@ -10,7 +10,7 @@ StepZen supports pagination through the standard
 This allows clients consuming a StepZen GraphQL endpoint to page through values
 regardless of backend type (e.g. GraphQL endpoint, database, REST API) where the data originates.
 
-For `@rest` StepZen supports three styles of pagination matching typical REST API approaches:
+ For the `@rest` directive, StepZen supports three styles of pagination to match the typical REST API approaches:
 
  - PAGE_NUMBER - pages by requesting a specific page number
  - OFFSET - pages by reqesting a starting record offset
