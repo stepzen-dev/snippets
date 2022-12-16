@@ -16,8 +16,7 @@ regardless of backend type (e.g. GraphQL endpoint, database, REST API) where the
  - OFFSET - pages by reqesting a starting record offset
  - NEXT_CURSOR - pages by opaque cursors returned by the REST API
 
-This snippet demonstrates how the REST API response typically looks for each style
-and how `@rest` is configured for that style.
+This snippet demonstrates the typical REST API response and `@rest` directive configuration for each of the three styles. 
 
 Query fields that return a connection type must have two field arguments, `first` for
 the number of nodes to fetch and `after` an opaque cursor. With StepZen these
