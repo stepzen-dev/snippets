@@ -73,8 +73,7 @@ For the first call (to get the first page) the operation is called
 with a value of `first` to set the number of nodes in a page
 and either an empty string (`""`) for `after` or the `after` variable is omitted.
 
-Then to fetch subsequent pages keep the value of `first` fixed and set
-`after` to the value of `endCursor` from `pageInfo` from the previouse request.
+Subsequent pages can then be retrieved by setting `after` to the value of `endCursor` from `pageInfo` from the previous request.  In most cases, the value of `first` will remain the same for all pagination calls.
 
 This is continued until `hasNextPage` is `false`.
 
