@@ -11,6 +11,7 @@ Must have one environment variable set:
    export STEPZEN_ENDPOINT=https://YOUR_ACCOUNT.stepzen.net/test/snippets/__graphql`
    ```
 
+You can also set this environment variable in a `.env` file in the root of the snippets repo. By copying the `.env.example` file.
 
 Must be logged into your StepZen account (matching `YOUR_ACCOUNT` in `STEPZEN_ENDPOINT`)
 ```

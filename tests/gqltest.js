@@ -1,3 +1,4 @@
+require('dotenv').config()
 const fetch = require("node-fetch");
 const { expect } = require("chai");
 const { execSync } = require("child_process");
@@ -91,10 +92,10 @@ function deployAndRun(dirname, tests) {
     return deployEndpoint(endpoint, dirname);
   });
 
-  tests.forEach(({ label, query, expected, authType }) => {
+  tests.forEach(({ label, query, variables, operationName, expected, authType }) => {
     it(label, function () {
       this.timeout(4000); // Occasional requests take > 2s
-      return runGqlOk(authType, endpoint, query).then(function (response) {
+      return runGqlOk(authType, endpoint, query, variables, operationName).then(function (response) {
         expectData(response, expected);
       });
     });

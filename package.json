@@ -6,10 +6,11 @@
     "test": "mocha **/tests/*Test.js"
   },
   "dependencies": {
-    "node-fetch":"~2.6.1",
     "chai": "^4.3.6",
     "chain": "^0.2.1",
-    "mocha": "^10.0.0"
+    "dotenv": "^16.0.3",
+    "mocha": "^10.0.0",
+    "node-fetch": "~2.6.1"
   },
   "keywords": [],
   "author": ""
