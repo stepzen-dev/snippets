@@ -22,7 +22,7 @@ type Customer {
 
 """
 `CustomerConnection` is the connection type for `Customer` pagination.
-A field returning a connection type must have arguments
+In StepZen, a field returning a connection type must have arguments
 `first` (number of nodes to fetch) and `after` (opaque cursor indicating
 the starting point).
 """
