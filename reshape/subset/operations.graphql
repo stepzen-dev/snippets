@@ -1,3 +1,12 @@
-query Human { human(id:1001) { name appearsIn }}
+query Human {
+  human(id: 1001) {
+    name
+    appearsIn
+  }
+}
 
-query Version { version {GitSha}}
+query Version {
+  version {
+    GitSha
+  }
+}
