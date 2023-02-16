@@ -15,7 +15,7 @@ This is achieved with a combination of:
 
 `Query.hominoid` is a simple rename of `Query.human` using `@materializer`:
 
-(exposed.graphql#L2-L5)
+https://github.com/stepzen-dev/snippets/blob/reshape-subset/reshape/fields/exposed.graphql#L2-L5
 
 You may want to rename a field when an existing field name is unclear or does not match your naming convention.
 
