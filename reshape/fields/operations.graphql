@@ -1,0 +1,4 @@
+query Hominoid { hominoid(id:1003) { name friends { name }}}
+query Luke { luke { name friends { name }}}
+query RobotDefault {robot { name friends { name }}}
+query Robot {robot(id:2000) { name friends { name }}}

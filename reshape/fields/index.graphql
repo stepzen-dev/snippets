@@ -1,0 +1,3 @@
+schema @sdl(files: ["exposed.graphql" "starwars/index.graphql"]) {
+  query: Query
+}

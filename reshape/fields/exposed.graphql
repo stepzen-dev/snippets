@@ -1,0 +1,17 @@
+extend type Query {
+   """
+   hominoid is a simple rename of Query.human
+   """
+   hominoid(id:ID!):Human @materializer(query:"human")
+
+   """
+   returns Luke Skywalker by using a constant argument mapping.
+   """
+   luke:Human @materializer(query:"human" arguments:{name:"id" const:1000})
+
+
+   """
+   robot is a call to `Query.droid` but with an argument default.
+   """
+   robot(id:ID! = 2001):Droid @materializer(query:"droid")
+}

@@ -1,0 +1,12 @@
+access:
+  policies:
+    - type: Query
+      rules:
+        - condition: true
+          name: api
+          fields: [hominoid, luke, robot]
+        - condition: true
+          name: introspection
+          fields: [__schema, __type, __typename]
+      policyDefault:
+        condition: false

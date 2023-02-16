@@ -2,4 +2,4 @@ access:
   policies:
     - type: Query
       policyDefault:
-        condition: "true"
+        condition: true
