@@ -33,6 +33,38 @@ type Version {
 ```
 but with the subsetting in `version.graphql` we just expose a single field `GitSha`.
 
+## `@dbquery`
+
+Similar to `@graphql` and `@rest` there is no requirement for the GraphQL type
+representing a table to represent all columns as fields.
+
+For example with an `Employees` table such as:
+```sql
+CREATE TABLE Employees (
+  id   VARCHAR(10) NOT NULL,
+  name VARCHAR(255),
+  ssn  CHAR(11),
+  pay  DECIMAL(8,2)
+)
+```
+
+the corresponding GraphQL type could just contain the non-sensitive columns:
+```graphql
+type Employee {
+   id: ID!
+   name: String
+}
+```
+
+Then this field:
+```graphql
+extend type Query {
+  employee(id:ID!): Employee @dbquery(type:"postgres" table:"Employees" configuration:"pgemps")
+}
+```
+when executed will only issue a `SELECT id, name FROM EMPLOYEES WHERE id = $1`
+thus not even accessing the sensitive columns.
+
 ## Try it out!
 
 Deploy the schema
