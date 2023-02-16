@@ -7,7 +7,7 @@ Snippets showing how a GraphQL API can be reshaped to expose subsets of the info
 When creating a GraphQL endpoint you may want to present a simple clean GraphQL API. In some cases this will
 require reshaping existing GraphQL schemas. Reshaping of existing schemas can be used when you:
 
- - want to create an GraphQL api that is indepdentent of the current backends
+ - want to create an GraphQL api that is independent of the current backends,
    for example, currently your data is in PostgreSQL but may move to a REST API in the future.
  - are federating or proxying an existing GraphQL endpoint that you have no control over
    - for example, the [GitHub GraphQL API](https://docs.github.com/en/graphql).
@@ -20,11 +20,11 @@ In general most of the follow techniques are independent of how GraphQL types ar
 populated, that is, it doesn't matter if a type is populated from an `@rest`, `@graphql` or `@dbquery` field.
 So the reshaping is happening at the GraphQL schema level.
 
-In most cases reshaping is combined with access control of GraphQL fields so that
+Reshaping is combined with access control of GraphQL fields so that
 "implementation" fields are not exposed. More information on access control can be found at:
 
   - [Policies for Access Control of GraphQL Fields](https://stepzen.com/docs/access-control/access-control-rules)
-  - [Snippets](https://github.com/stepzen-dev/snippets#protection)
+  - [Protection Snippets](https://github.com/stepzen-dev/snippets#protection)
 
 In all of the reshaping examples fields that are part of the reshaped api are accessible with no authorization.
 
