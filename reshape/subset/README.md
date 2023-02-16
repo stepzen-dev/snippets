@@ -76,7 +76,10 @@ stepzen deploy
 Run the [sample operations](operations.graphql):
 
 ```
-stepzen request -f operations.graphql Human
-stepzen request -f operations.graphql Version
+stepzen request -f operations.graphql Human -H Authorization:
+stepzen request -f operations.graphql Version -H Authorization:
 ```
+
+> **Note**
+> `-H Authorization:` removes the authorization header automatically added by `stepzen request` to demonstrate the fields are public.
 
