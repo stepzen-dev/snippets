@@ -67,7 +67,7 @@ thus not even accessing the sensitive columns.
 
 ## Try it out!
 
-Deploy the schema
+Deploy the schema from `reshape/subset` relative to the repository's root directory:
 
 ```
 stepzen deploy
