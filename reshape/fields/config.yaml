@@ -4,7 +4,7 @@ access:
       rules:
         - condition: true
           name: api
-          fields: [hominoid, luke, robot]
+          fields: [hominoid, person, defaultHero, luke, robot]
         - condition: true
           name: introspection
           fields: [__schema, __type, __typename]

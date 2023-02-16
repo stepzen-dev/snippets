@@ -14,21 +14,69 @@ const requests = fs.readFileSync(requestsFile, "utf8").toString();
 describe(testDescription, function () {
   const tests = [
     {
-      label: "human",
+      label: "hominoid",
       query: requests,
-      operationName: "Human",
+      operationName: "Hominoid",
       expected: {
-        human: {
-          name: "Darth Vader",
-          appearsIn: ["NEWHOPE", "EMPIRE", "JEDI"],
+        hominoid: {
+          name: "Leia Organa",
         },
       },
       authType: authTypes.adminKey,
     },
     {
-      label: "version",
-      query: "{version { __typename}}",
-      expected: { version: { __typename: "Version" } },
+      label: "person",
+      query: requests,
+      operationName: "Person",
+      expected: {
+        person: {
+          name: "Han Solo",
+        },
+      },
+      authType: authTypes.adminKey,
+    },
+    {
+      label: "defaultHero",
+      query: requests,
+      operationName: "DefaultHero",
+      expected: {
+        defaultHero: {
+          name: "R2-D2",
+        },
+      },
+      authType: authTypes.adminKey,
+    },
+    {
+      label: "luke",
+      query: requests,
+      operationName: "Luke",
+      expected: {
+        luke: {
+          name: "Luke Skywalker",
+        },
+      },
+      authType: authTypes.adminKey,
+    },
+    {
+      label: "robot",
+      query: requests,
+      operationName: "Robot",
+      expected: {
+        robot: {
+          name: "C-3PO",
+        },
+      },
+      authType: authTypes.adminKey,
+    },
+    {
+      label: "robotDefault",
+      query: requests,
+      operationName: "RobotDefault",
+      expected: {
+        robot: {
+          name: "R2-D2",
+        },
+      },
       authType: authTypes.adminKey,
     },
   ];
