@@ -28,6 +28,9 @@ In most cases reshaping is combined with access control of GraphQL fields so tha
 
 In all of the reshaping examples fields that are part of the reshaped api are accessible with no authorization.
 
+> **Note**
+> Any reshaped GraphQL schema can also be expanded with any StepZen GraphQL functionality, such as adding fields with `@materializer` or adding `@sequence` fields that invoked fields from reshaped and or original schema.
+
 ## Techniques
 
 ### Subsetting
@@ -35,3 +38,9 @@ In all of the reshaping examples fields that are part of the reshaped api are ac
 Subsetting is simply defining types that contain omit fields from a backend that you do not want to expose.
 
 See the sample schema in [subset](subset/README.md)
+
+### Fields
+
+Fields shows how root operation type fields can hidden and replaced with variants with renaming, constrained arguments, default arguments etc.
+
+See the sample schema in [fields](fields/README.md)
