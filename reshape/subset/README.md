@@ -76,8 +76,8 @@ stepzen deploy
 Run the [sample operations](operations.graphql):
 
 ```
-stepzen request -f operations.graphql Human -H Authorization:
-stepzen request -f operations.graphql Version -H Authorization:
+stepzen request -f operations.graphql --operation-name=Human -H Authorization:
+stepzen request -f operations.graphql --operation-name=Version -H Authorization:
 ```
 
 > **Note**
