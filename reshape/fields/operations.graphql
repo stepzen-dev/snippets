@@ -1,0 +1,30 @@
+query Hominoid {
+  hominoid(id: 1003) {
+    name
+  }
+}
+query Person {
+  person(personId: 1002) {
+    name
+  }
+}
+query DefaultHero {
+  defaultHero {
+    name
+  }
+}
+query Luke {
+  luke {
+    name
+  }
+}
+query Robot {
+  robot(id: 2000) {
+    name
+  }
+}
+query RobotDefault {
+  robot {
+    name
+  }
+}

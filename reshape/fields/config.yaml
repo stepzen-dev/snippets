@@ -1,0 +1,22 @@
+access:
+  policies:
+    - type: Query
+      rules:
+        - condition: true
+          # this rule exposes all the fields that are the
+          # reshape variants of the original fields.
+          # condition true means the fields are accessible
+          # without any authentication
+          name: api
+          fields: [hominoid, person, defaultHero, luke, robot]
+        - condition: true
+          # this rule exposes the standard fields for GraphQL introspection
+          name: introspection
+          fields: [__schema, __type, __typename]
+      policyDefault:
+        # this default ensures that any fields not mentioned in the
+        # rules for this type (Query) are not accessible and thus
+        # they remain hidden to unauthenticated users.
+        # This is a typical pattern for reshaping where one
+        # is exposing a reshaped version of the api and hiding the original api.
+        condition: false

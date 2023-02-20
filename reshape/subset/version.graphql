@@ -1,0 +1,13 @@
+type Version {
+  """
+  The Git SHA value of the branch from which the release was built.
+  """
+  GitSha: String
+}
+
+type Query {
+  """
+  Fetch the StepZen version.
+  """
+  version: Version @rest(endpoint: "https://perftest.stepzen.net/version")
+}
