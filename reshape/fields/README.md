@@ -16,9 +16,9 @@ This is achieved with a combination of:
 
 ## Rename
 
-[`Query.hominoid`](reshape/fields/exposed.graphql#L2-L5) is a simple rename of `Query.human` using `@materializer`.
+[`Query.hominoid`](exposed.graphql#L2-L5) is a simple rename of `Query.human` using `@materializer`.
 
-[`Query.person`](reshape/fields/exposed.graphql#L7-L14) calls `Query.human` by changes the argument name to `personId` from `id` using an argument mapping in `@materializer`.
+[`Query.person`](exposed.graphql#L7-L14) calls `Query.human` by changes the argument name to `personId` from `id` using an argument mapping in `@materializer`.
 
 You may want to rename a field name or argument name when an existing name is unclear or does not match your naming convention.
 
