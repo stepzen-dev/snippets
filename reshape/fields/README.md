@@ -29,8 +29,8 @@ the field that constrains the arguments that a client of your api can supply.
 
 This is achieved by not including the field argument in the exposed defintion and then either:
 
-- not providing an argument mapping for `@materializer` so that the default value or `null` is used, see `Query.defaultHero` which does not expose a `episode` argument, thus using the default from `Query.hero`.
-- providing a constant value in the argument mapping, see `Query.luke` which invokes `Query.human` but providing the constant 1000 for the `id` argument which corresponds to Luke Skywalker.
+- not providing an argument mapping for `@materializer` so that the default value or `null` is used, see [`Query.defaultHero`](exposed.graphql#L16-L19) which does not expose a `episode` argument, thus using the default from `Query.hero`.
+- providing a constant value in the argument mapping, see [`Query.luke`](exposed.graphql#L21-L25) which invokes `Query.human` but providing the constant 1000 for the `id` argument which corresponds to Luke Skywalker.
 
 ## Add defaults
 
@@ -39,7 +39,7 @@ the field that sets different or new defaults for arguments to better match the 
 For example a language based API may have a default language argument set to `en` for English, but you could expose
 a endpoint specifically for a German speaking market where the default is `de`.
 
-The field `Query.robot` has its `id` argument being optional by providing a default that maps to the identifier for R2-D2.
+The field [`Query.robot`](exposed.graphql#L27-L31) has its `id` argument being optional by providing a default that maps to the identifier for R2-D2.
 
 ## Try it out!
 
