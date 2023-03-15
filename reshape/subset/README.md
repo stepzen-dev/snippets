@@ -3,7 +3,7 @@
 ## `@graphql`
 
 [`starwars.graphql`](starwars.graphql) is a strict subset of the schema exposed by the example endpoint
-`https://chester.stepzen.net/examples/starwars` demonstrating that there's no need
+`https://chester.stepzen.net/examples/starwars/__graphql` demonstrating that there's no need
 to include all the types and fields of the backend endpoint.
 
 In this case only information about human characters (type `Human`) is exposed
@@ -15,6 +15,7 @@ through the root operation type field `Query.human`.
 service version REST API `https://account.stepzen.net/version`.
 
 A GraphQL type matching the **full** REST API is:
+
 ```graphql
 type Version {
   """
@@ -31,7 +32,8 @@ type Version {
   Version: String
 }
 ```
-but with the subsetting in `version.graphql` we just expose a single field `GitSha`.
+
+but with the subsetting in [`version.graphql`](version.graphql) we just expose a single field `GitSha`.
 
 ## `@dbquery`
 
@@ -39,6 +41,7 @@ Similar to `@graphql` and `@rest` there is no requirement for the GraphQL type
 representing a table to represent all columns as fields.
 
 For example with an `Employees` table such as:
+
 ```sql
 CREATE TABLE Employees (
   id   VARCHAR(10) NOT NULL,
@@ -49,19 +52,23 @@ CREATE TABLE Employees (
 ```
 
 the corresponding GraphQL type could just contain the non-sensitive columns:
+
 ```graphql
 type Employee {
-   id: ID!
-   name: String
+  id: ID!
+  name: String
 }
 ```
 
 Then this field:
+
 ```graphql
 extend type Query {
-  employee(id:ID!): Employee @dbquery(type:"postgres" table:"Employees" configuration:"pgemps")
+  employee(id: ID!): Employee
+    @dbquery(type: "postgres", table: "Employees", configuration: "pgemps")
 }
 ```
+
 when executed will only issue a `SELECT id, name FROM EMPLOYEES WHERE id = $1`
 thus not even accessing the sensitive columns.
 
@@ -80,6 +87,4 @@ stepzen request -f operations.graphql --operation-name=Human -H Authorization:
 stepzen request -f operations.graphql --operation-name=Version -H Authorization:
 ```
 
-> **Note**
-> `-H Authorization:` removes the authorization header automatically added by `stepzen request` to demonstrate the fields are public.
-
+> **Note** > `-H Authorization:` removes the authorization header automatically added by `stepzen request` to demonstrate the fields are public.
