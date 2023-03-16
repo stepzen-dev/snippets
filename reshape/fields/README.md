@@ -117,7 +117,7 @@ stepzen request -f operations.graphql --operation-name=Robot -H Authorization:
 stepzen request -f operations.graphql --operation-name=RobotDefault -H Authorization:
 stepzen request -f operations.graphql --operation-name=HumanName -H Authorization:
 stepzen request -f operations.graphql --operation-name=DroidFriends -H Authorization:
-stepzen request -f operations.graphql --operation-name=HumanFriendsName -H Authorization:
+stepzen request -f operations.graphql --operation-name=HumanFriendsNames -H Authorization:
 ```
 
 > **Note** > `-H Authorization:` removes the authorization header automatically added by `stepzen request` to demonstrate the fields are public.
