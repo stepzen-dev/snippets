@@ -28,4 +28,20 @@ extend type Query {
   robot is a call to `Query.droid` but with an argument default.
   """
   robot(id: ID! = 2001): Droid @materializer(query: "droid")
+
+  """
+  humanName uses a selection to pull up `Human.name` as a root operation type field.
+  """
+  humanName(id: ID!): String @materializer(query: "human {name}")
+
+  """
+  droidFriends uses a selection to pull up `Droid.friends` as a root operation type field.
+  """
+  droidFriends(id: ID!): [Character] @materializer(query: "droid {friends}")
+
+  """
+  humanFriendsNames uses a selection to pull up `Human.friends.name` as a root operation type field.
+  """
+  humanFriendsNames(id: ID!): [String]
+    @materializer(query: "human {friends {name}}")
 }
