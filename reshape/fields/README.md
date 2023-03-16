@@ -57,9 +57,9 @@ extend type SimplifiedCustomer {
 
 now `city` is a leaf `String` field, rather than being buried in a `Location` object.
 
-(`Query.humanName`](exposed.graphql#L32-L35) which selects just a `Human`'s name, is effectively executing `query ($id:ID!) {human(id:$id) { name }}` when `humanName` is selected in an operation.
+[`Query.humanName`](exposed.graphql#L32-L35) which selects just a `Human`'s name, is effectively executing `query ($id:ID!) {human(id:$id) { name }}` when `humanName` is selected in an operation.
 
-(`Query.droidFriends`](exposed.graphql#L37-L40) uses the selection `droid { friends }` where `friends` type is a composite type, `[Character]`. Even though the selected single field `friends` is a composite type, it has no selection. Instead when an operation is executed that selects `droidFriends` then the selection against that field is applied to the selection of friends. For example the execution of this operation
+[`Query.droidFriends`](exposed.graphql#L37-L40) uses the selection `droid { friends }` where `friends` type is a composite type, `[Character]`. Even though the selected single field `friends` is a composite type, it has no selection. Instead when an operation is executed that selects `droidFriends` then the selection against that field is applied to the selection of friends. For example the execution of this operation
 
 ```graphql
 query DroidFriends {
@@ -96,7 +96,7 @@ query DroidFriends {
 > **Note** > The selection in the client's operation (`DroidFriends` in this example) against an annotated field with a selection in its `@materializer` can be **any valid selection** against the type of the annotated field, which include selections of nested fields that themseleves have `@materializer`, with or without selections.
 
 If anywhere in the selection any field is a list then the annotated field must have a type that is a list of the single field.
-For example (`Query.humanFriendsNames`](exposed.graphql#L42-L46) uses the selection `human { friends { name }}` even though the single field `name` has type `String` the field `humanFriendsNames` must have type `[String]` since `friends` is a list (`[Character]`).
+For example [`Query.humanFriendsNames`](exposed.graphql#L42-L46) uses the selection `human { friends { name }}` even though the single field `name` has type `String` the field `humanFriendsNames` must have type `[String]` since `friends` is a list (`[Character]`).
 
 ## Try it out!
 
