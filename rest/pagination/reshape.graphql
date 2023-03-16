@@ -1,0 +1,22 @@
+extend type Query {
+  """
+  firstCustomer extracts a single customer from a paginated field.
+  A sequence is used to convert a list `[Customer]` into a singleton `Customer`.
+  This will select an arbitrary value from the list, but in this case it is known
+  the list will have a single element as the selection of the paginated field
+  has first set to a constant `1`.
+  """
+  firstCustomer: Customer @sequence(steps: { query: "_firstCustomer" })
+
+  """
+  _firstCustomer uses a selection in `@materializer` to pull up
+  the nodes of `CustomerEdge` into a simple list of `[Customer]`.
+  `first` is set to the constant `1` so that only a single customer
+  is returned (or none) and thus `firstCustomer` becomes determinstic.
+  """
+  _firstCustomer: [Customer]
+    @materializer(
+      query: "customersPageNumber {edges {node}}"
+      arguments: { name: "first", const: 1 }
+    )
+}
