@@ -1,4 +1,4 @@
-require('dotenv').config()
+require("dotenv").config();
 const fetch = require("node-fetch");
 const { expect } = require("chai");
 const { execSync } = require("child_process");
@@ -31,8 +31,12 @@ function deployEndpoint(endpoint, dirname) {
     .replace(/^\//, "")
     .replace(/\/__graphql$/, "");
 
+  const cmd = `stepzen deploy ${endpointPath} --dir=${dirname}`;
+  // simple retry with backoff to avoid a deploy error
+  // when another client (typically a test) has deployed
+  // causing a 'Conflict: content has changed' error.
   const stdout = execSync(
-    `stepzen deploy ${endpointPath} --dir=${dirname}`
+    `${cmd} || (sleep 1; ${cmd}) || (sleep 3; ${cmd})`
   ).toString();
   console.log(stdout);
 }
@@ -92,14 +96,22 @@ function deployAndRun(dirname, tests) {
     return deployEndpoint(endpoint, dirname);
   });
 
-  tests.forEach(({ label, query, variables, operationName, expected, authType }) => {
-    it(label, function () {
-      this.timeout(4000); // Occasional requests take > 2s
-      return runGqlOk(authType, endpoint, query, variables, operationName).then(function (response) {
-        expectData(response, expected);
+  tests.forEach(
+    ({ label, query, variables, operationName, expected, authType }) => {
+      it(label, function () {
+        this.timeout(4000); // Occasional requests take > 2s
+        return runGqlOk(
+          authType,
+          endpoint,
+          query,
+          variables,
+          operationName
+        ).then(function (response) {
+          expectData(response, expected);
+        });
       });
-    });
-  });
+    }
+  );
 }
 
 function getTestDescription(testRoot, fullDirName) {
