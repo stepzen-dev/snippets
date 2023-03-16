@@ -93,7 +93,7 @@ query DroidFriends {
 }
 ```
 
-> **Note** > The selection in the client's operation (`DroidFriends` in this example) against an annotated field with a selection in its `@materializer` can be **any valid selection** against the type of the annotated field, which include selections of nested fields that themseleves have `@materializer`, with or without selections.
+> **Note** > The selection in the client's operation (`DroidFriends` in this example) against an annotated field with a selection in its `@materializer` can be **any valid selection** against the type of the annotated field, which include selections of nested fields that themselves have `@materializer`, with or without selections.
 
 If anywhere in the selection any field is a list then the annotated field must have a type that is a list of the single field.
 For example [`Query.humanFriendsNames`](exposed.graphql#L42-L46) uses the selection `human { friends { name }}` even though the single field `name` has type `String` the field `humanFriendsNames` must have type `[String]` since `friends` is a list (`[Character]`).
