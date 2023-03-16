@@ -12,7 +12,7 @@ This is achieved with a combination of:
 - [Field based access control](config.yaml) to only expose the new fields.
 
 > **Note**
-> Even though this schema uses `@graphql` the techniques are independent of the data coming from a backend GraphQL endpoint, the reshaping is just against fields in `Query`regardless of their source.
+> Even though this schema uses `@graphql` the techniques are independent of the data coming from a backend GraphQL endpoint, the reshaping is just against fields in the schema regardless of their source.
 
 ## Rename
 
