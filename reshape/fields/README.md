@@ -55,7 +55,7 @@ extend type SimplifiedCustomer {
 }
 ```
 
-now `city` is a leaf `String` field, rather than being buried in a `Location` object.
+the `city` field is a leaf `String`, rather than being buried in a `Location` object.
 
 [`Query.humanName`](exposed.graphql#L32-L35) uses the selection `human { name }` which selects just a `Human`'s name. It is effectively executing `query ($id:ID!) {human(id:$id) { name }}` when `humanName` is selected in an operation.
 
