@@ -59,7 +59,7 @@ the `city` field is a leaf `String`, rather than being buried in a `Location` ob
 
 [`Query.humanName`](exposed.graphql#L32-L35) uses the selection `human { name }` which selects just a `Human`'s name. It is effectively executing `query ($id:ID!) {human(id:$id) { name }}` when `humanName` is selected in an operation.
 
-[`Query.droidFriends`](exposed.graphql#L37-L40) uses the selection `droid { friends }` where `friends` type is a composite type, `[Character]`. Even though the selected single field `friends` is a composite type, it has no selection in its `@materializer`. Instead when an operation is executed that selects `droidFriends` then the selection against that field is applied to the selection of `friends`. For example the execution of this operation
+[`Query.droidFriends`](exposed.graphql#L37-L40) uses the selection `droid { friends }` where `friends` type is a composite type, `[Character]`. Even though the selected single field `friends` is a composite type, it has no selection in its `@materializer`. Instead, when an operation is executed that selects `droidFriends`,  the selection against that field is applied to the selection of `friends`. For example the execution of this operation
 
 ```graphql
 query DroidFriends {
