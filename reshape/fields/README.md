@@ -43,7 +43,7 @@ The field [`Query.robot`](exposed.graphql#L27-L30) has its `id` argument being o
 
 ## Nested field selection
 
-The `query` argument of `@materializer` is typically a reference to a single field in `Query`, for example `@materializer(query: "human")` indicates the annotated field will be materialized (or resolved) by execution of `Query.human`.
+In its simplest form, the `query` argument of `@materializer` is a reference to a single field in `Query`, for example `@materializer(query: "human")` indicates the annotated field will be materialized (or resolved) by execution of `Query.human`.
 
 However, the argument can include a selection, for example `@materializer(query: "human {name}")` which now indicates the annotated field will be materialized by execution of `Query.human` and the selection of `name` from the resulting `Human` object. The selection must only select a single field, but the selected field can be of **any type** that is assignable to the annotated field, and at **any depth**.
 
