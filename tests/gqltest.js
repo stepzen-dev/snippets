@@ -92,7 +92,10 @@ function expectData(response, value) {
 // and then runs through all fo the field selection tests.
 function deployAndRun(dirname, tests) {
   it("deploy", function () {
-    this.timeout(10000);
+    // deployEndpoint will try up to three times to deploy
+    // the schema with a backoff that can total four seconds.
+    // So set the timeout to be (3*10)+4 seconds to cover a worst case scenario.
+    this.timeout(34000);
     return deployEndpoint(endpoint, dirname);
   });
 
