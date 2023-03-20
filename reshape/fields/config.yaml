@@ -8,7 +8,15 @@ access:
           # condition true means the fields are accessible
           # without any authentication
           name: api
-          fields: [hominoid, person, defaultHero, luke, robot]
+          fields:
+            - hominoid
+            - person
+            - defaultHero
+            - luke
+            - robot
+            - humanName
+            - droidFriends
+            - humanFriendsNames
         - condition: true
           # this rule exposes the standard fields for GraphQL introspection
           name: introspection
