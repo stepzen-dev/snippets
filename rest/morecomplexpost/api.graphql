@@ -27,7 +27,7 @@ type Root {
 # stepzen function "Get" and "GetJSON".
 type Query {
     restquery(name:String!, city: String!): Root
-    @rest (endpoint: "https://httpbin.org/post",
+    @rest (endpoint: "https://httpbingo.org/post",
             method: POST,
             postbody: """ 
             {"record": { "name": {{.GetJSON "name"}}, 

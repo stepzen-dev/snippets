@@ -24,7 +24,7 @@ type Query {
     # Set a JSON query return type to avoid any type conflicts that you might have during testing.
     # You cannot subselect fields this way.
     restJSONquery(name:String, city: String): JSON
-    @rest (endpoint: "https://httpbin.org/post",
+    @rest (endpoint: "https://httpbingo.org/post",
             method: POST,
             postbody: """
             {"record": { "name": {{.GetJSON "name"}}, "city": {{.GetJSON "city"}}} }
