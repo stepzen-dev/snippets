@@ -28,3 +28,20 @@ query RobotDefault {
     name
   }
 }
+query HumanName {
+  humanName(id: 1003)
+}
+query DroidFriends {
+  droidFriends(id: 2000) @sort {
+    name
+    ... on Human {
+      homePlanet
+    }
+    ... on Droid {
+      primaryFunction
+    }
+  }
+}
+query HumanFriendsNames {
+  humanFriendsNames(id: 1003) @sort
+}

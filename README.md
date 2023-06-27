@@ -61,7 +61,7 @@ To run these examples,
 - Change to the right working directory.
 - run `stepzen start`
 
-## @transforms
+## transforms
 
 For more on what `transforms` is and how it operates within the custom `@rest` directive, [see our documentation](https://stepzen.com/docs/custom-graphql-directives/directives#transforms).
 

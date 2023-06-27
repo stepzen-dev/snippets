@@ -79,6 +79,50 @@ describe(testDescription, function () {
       },
       authType: authTypes.adminKey,
     },
+    {
+      label: "humanName",
+      query: requests,
+      operationName: "HumanName",
+      expected: {
+        humanName: "Leia Organa",
+      },
+      authType: authTypes.adminKey,
+    },
+    {
+      label: "droidFriends",
+      query: requests,
+      operationName: "DroidFriends",
+      expected: {
+        droidFriends: [
+          {
+            name: "Han Solo",
+            homePlanet: null,
+          },
+          {
+            name: "Leia Organa",
+            homePlanet: "Alderaa",
+          },
+          {
+            name: "Luke Skywalker",
+            homePlanet: "Tatooine",
+          },
+          {
+            name: "R2-D2",
+            primaryFunction: "Astromech",
+          },
+        ],
+      },
+      authType: authTypes.adminKey,
+    },
+    {
+      label: "humanFriendsNames",
+      query: requests,
+      operationName: "HumanFriendsNames",
+      expected: {
+        humanFriendsNames: ["C-3PO", "Han Solo", "Luke Skywalker", "R2-D2"],
+      },
+      authType: authTypes.adminKey,
+    },
   ];
   return deployAndRun(__dirname, tests);
 });
