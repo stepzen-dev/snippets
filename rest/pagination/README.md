@@ -80,7 +80,7 @@ This is continued until `hasNextPage` is `false`.
 
 ## Reshaping paginated fields
 
-What is reshaping? See an [overview of reshaping](../reshape/README.md)
+What is reshaping? See an [overview of reshaping](../../reshape/README.md)
 
 GraphQL pagination is powerful, but in some cases you may want to reshape to simplify your schema.
 StepZen can easily simplify a paginated field to:
