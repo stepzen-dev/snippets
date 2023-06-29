@@ -94,7 +94,7 @@ In `/protection`, you will find several subdirectories. Each contains a `.graphq
 
 ## @rest calls and responses
 
-Where possible, we use [httpbin.org](http://httpbin.org) as our REST endpoint, since it allows us to mimic lots of REST capabilities.
+Where possible, we use [httpbingo.org](https://httpbingo.org) as our REST endpoint, since it allows us to mimic lots of REST capabilities.
 
 - `/restWithParameters` shows how GraphQL query arguments are automatically added to the REST call--there is nothing for you to do!
 - `/restWithConfigYaml` shows how REST query parameters can also be fetched from `config.yaml`--this allows you to keep your SDL code separate from your secrets.

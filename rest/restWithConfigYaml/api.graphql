@@ -2,7 +2,7 @@
 # It includes how you can also get REST query parameters from config.yaml file.
 # In this example, `apikey` is obtained from `config.yaml`.
 
-# We use `httpbin.org` because it is a helpful REST API built with documentation and samples in mind.
+# We use `httpbingo.org` because it is a helpful REST API built with documentation and samples in mind.
 # The httpbin service returns a payload depending on the call.
 # Use the curl call directly.
 
@@ -29,7 +29,7 @@ type Query {
     # Set a JSON query return type to avoid any type conflicts that you might have during testing.
     # You cannot subselect fields this way.
     # rest(q:[String]): JSON
-    @rest (endpoint: "https://httpbin.org/get?apikey=$apikey",
+    @rest (endpoint: "https://httpbingo.org/get?apikey=$apikey",
             method: GET,
             headers: [{name: "Accept", value:"application/json"}],
             configuration: "httpbin"
