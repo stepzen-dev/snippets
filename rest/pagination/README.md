@@ -83,7 +83,7 @@ This is continued until `hasNextPage` is `false`.
 What is reshaping? See an [overview of reshaping](../../reshape/README.md)
 
 GraphQL pagination is powerful, but in some cases you may want to reshape to simplify your schema.
-StepZen can easily simplify a paginated field to:
+StepZen can simplify a paginated field to:
 
 - only return the first N values as a simple list
 - only return the first value as a singular value, not a list
