@@ -1,13 +1,13 @@
 # This example shows how the GraphQL query arguments are automatically appended as query parameters to
 # the endpoint argument of the @rest directive. This is the default behavior or the GET method for the @rest directive.
-# 
-# We use `httpbin.org` because it is a helpful REST API built with documentation and samples in mind.
+#
+# We use `httpbingo.org` because it is a helpful REST API built with documentation and samples in mind.
 # The httpbin service returns a payload depending on the call.
 # Use the curl call directly.
 
 type Args {
   q: [String]
-  v: String
+  v: [String] # query parameters from httpbingo.org always come back as arrays
 }
 type Root {
   args: Args
@@ -17,7 +17,6 @@ type Root {
 }
 
 """
-
 Try the following sample query for the imported schema with and without either the q or v fields requested to see the effects.
 
 curl https://ACCOUNTNAME.stepzen.net/api/miscellaneous/__graphql\
@@ -26,9 +25,10 @@ curl https://ACCOUNTNAME.stepzen.net/api/miscellaneous/__graphql\
    --data '{"query": "{restquery(q: [\"Joe Smith\", \"Jane Smith\"] v:\"New York\")  { args { q v } url } }"}'
 """
 type Query {
-    restquery(q:[String], v:String): Root
-    @rest (endpoint: "https://httpbin.org/get",
-            method: GET,
-            headers: [{name: "Accept", value:"application/json"}]
+  restquery(q: [String], v: String): Root
+    @rest(
+      endpoint: "https://httpbingo.org/get"
+      method: GET
+      headers: [{ name: "Accept", value: "application/json" }]
     )
 }
