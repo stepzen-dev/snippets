@@ -1,0 +1,28 @@
+extend type Query {
+  """
+  nCustomers extracts a simple list of `Customer` objects from a paginated field,
+  thus hiding pagination. The first N customers are returned from the paginated field.
+
+  A selection in `@materializer` is used to pull up
+  the nodes of `CustomerEdge` into a simple list of `[Customer]`
+
+  This technique can be used with any paginated field, regardless of how its data is sourced.
+  """
+  nCustomers(first: Int! = 10): [Customer]
+    @materializer(
+      query: "customersPageNumber {edges {node}}"
+      arguments: { name: "first", argument: "first" }
+    )
+
+  """
+  firstCustomer extracts a single customer from a paginated field.
+  A sequence is used to convert a list `[Customer]` into a singleton `Customer`.
+  This will select an arbitrary value from the list, but in this case it is known
+  the list will have a single element as the selection of the paginated field
+  through `nCustomers` has `first` set to a constant `1`.
+  """
+  firstCustomer: Customer
+    @sequence(
+      steps: { query: "nCustomers", arguments: { name: "first", const: 1 } }
+    )
+}

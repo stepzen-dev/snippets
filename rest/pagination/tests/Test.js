@@ -86,6 +86,25 @@ describe(testDescription, function () {
       },
       authType: authTypes.adminKey,
     },
+    {
+      label: "firstCustomer",
+      query: requests,
+      operationName: 'FirstCustomer',
+      expected: {
+        firstCustomer: generateNodes(1, 1)[0].node,
+      },
+      authType: authTypes.adminKey,
+    },
+    {
+      label: "firstNCustomers",
+      query: requests,
+      operationName: 'FirstNCustomers',
+      variables: { first: 5 },
+      expected: {
+        nCustomers: generateNodes(1, 5).map(edge => edge.node),
+      },
+      authType: authTypes.adminKey,
+    },
   ];
   return deployAndRun(__dirname, tests);
 });

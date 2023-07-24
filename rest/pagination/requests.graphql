@@ -1,6 +1,6 @@
 # Page through customers from a REST API using page numbers
-query CustomersPageNumber($first:Int! $after:String) {
-  customersPageNumber(first: $first after:$after) {
+query CustomersPageNumber($first: Int!, $after: String) {
+  customersPageNumber(first: $first, after: $after) {
     edges {
       node {
         id
@@ -12,5 +12,23 @@ query CustomersPageNumber($first:Int! $after:String) {
       endCursor
       hasNextPage
     }
+  }
+}
+
+# Return the first customer (using a reshape version of a paginated field)
+query FirstCustomer {
+  firstCustomer {
+    id
+    name
+    email
+  }
+}
+
+# Return the first N customers (using a reshape version of a paginated field)
+query FirstNCustomers($first: Int!) {
+  nCustomers(first: $first) {
+    id
+    name
+    email
   }
 }
