@@ -76,8 +76,10 @@ function runGqlOk(authType, endpoint, query, variables, operationName) {
       return result;
     })
     .then(function (result) {
-      response = result.json();
-      expect(response.errors).to.be.undefined;
+      return result.json();
+    })
+    .then(function (response) {
+      expect(response.errors, `no errors should exist: ${JSON.stringify(response.errors)}`).to.be.undefined;
       return response;
     });
 }
