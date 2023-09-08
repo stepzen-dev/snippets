@@ -5,7 +5,7 @@
 An abstract `Query` or `Mutation` field with no backend annotations (e.g. no `@rest` etc.) can be resolved
 though supplying `Query` or `Mutation` fields that implement the abstract type.
 
-Without any routing all of the supplying fields are executed when the abstact field is selected and
+Without any routing all of the supplying fields are executed when the abstract field is selected and
 the result is derived from the set of results.
 
 Routing, using the `if` argument to `@supplies` allows a supplying field to only be invoked
@@ -36,7 +36,7 @@ are available as global variables.
 If the returned value is `true` (ECMAScript `ToBoolean` conversion) then
 the field is invoked, otherwise its value is `null`.
 
-Thus in this example if the tacking identifier starts with `FP-` a call
+Thus in this example if the tracking identifier starts with `FP-` a call
 is made to the FastPackage REST api, if it starts with `ROS-` a call to
 the `RainOrShine` REST api is called, otherwise no call is made.
 

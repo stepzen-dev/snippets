@@ -1,3 +1,14 @@
-fragment ROS on RainOrShine { weather }
-fragment FP on FastPackage { distance }
-query Expected ($id:ID!) {expected(id:$id) { when note ...FP ...ROS }}
+fragment ROS on RainOrShine {
+  weather
+}
+fragment FP on FastPackage {
+  distance
+}
+query Expected($id: ID!) {
+  expected(id: $id) {
+    when
+    note
+    ...FP
+    ...ROS
+  }
+}
