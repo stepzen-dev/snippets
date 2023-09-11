@@ -1,0 +1,71 @@
+"""
+Delivery interface.
+"""
+interface Delivery {
+  when: Date
+  note: String
+}
+
+"""
+Delivery by FastPackage.
+"""
+type FastPackage implements Delivery {
+  when: Date
+  note: String
+  distance: Int
+}
+
+"""
+Delivery by RainOrShine.
+"""
+type RainOrShine implements Delivery {
+  when: Date
+  note: String
+  weather: String
+}
+
+type Query {
+  """
+  expected is the "supplied" field that returns an abstract
+  type that will be populated by any field that "supplies" it.
+  """
+  expected(id: ID!): Delivery
+
+  """
+  fp supplies Query.expected but only if the tracking identifier starts with `FP-`.
+  """
+  fp(id: ID!): FastPackage
+    @supplies(query: "expected", if: { src: "id.startsWith('FP-')" })
+    # Simulating a call to a backend
+    @rest(
+      endpoint: "stepzen:empty"
+      ecmascript: """
+      function transformREST() {
+        return {
+            when: '2023-08-29',
+            note: `Package ${get('id')} is expected soon`,
+            distance: 17,
+        }
+      }
+      """
+    )
+
+  """
+  ros supplies Query.expected but only if the tracking identifier starts with `ROS-`.
+  """
+  ros(id: ID!): RainOrShine
+    @supplies(query: "expected", if: { src: "id.startsWith('ROS-')" })
+    # Simulating a call to a backend
+    @rest(
+      endpoint: "stepzen:empty"
+      ecmascript: """
+      function transformREST() {
+        return {
+            when: '2023-09-01',
+            note: `Package ${get('id')} is on its way`,
+            weather: 'dry and sunny',
+        }
+      }
+      """
+    )
+}
