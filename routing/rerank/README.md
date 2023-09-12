@@ -36,17 +36,17 @@ This snippet demonstrates the alternative execution paths.
 
 The abstract field in `Query` is:
 ```graphql
-_reRank (docs: JSON, type: String): JSONDocs
+reRank (docs: JSON, type: String): JSONDocs
 ```
 
 and it is supplied by the three fields in `Query`
 ```graphql
- _reRankAsc ( docs: JSON, type: String): Concrete
- _reRankDesc (docs: JSON, type: String): Concrete
- _reRankNoop (docs: JSON, type: String): Concrete
+ reRankAsc ( docs: JSON, type: String): Concrete
+ reRankDesc (docs: JSON, type: String): Concrete
+ reRankNoop (docs: JSON, type: String): Concrete
 ```
 
-The `@supplies` directive for each of these three fields specifies that the field *supplies* `_reRank`, and the `if:` argument specifies the condition of `type` that must be satisfied for this field to be executed when `_reRank` is requested.
+The `@supplies` directive for each of these three fields specifies that the field *supplies* `reRank`, and the `if:` argument specifies the condition of `type` that must be satisfied for this field to be executed when `reRank` is requested.
 
 So you can ask to have 10 elements created and put in ascending order according to the randomly generated distance:
 ```
