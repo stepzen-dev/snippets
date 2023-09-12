@@ -1,0 +1,5 @@
+query CreateAndSort($count: Int!, $type: String) {
+  createAndSort(count: $count, type: $type) {
+    docs
+  }
+}
