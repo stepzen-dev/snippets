@@ -1,0 +1,10 @@
+query CreateAndSort($count: Int!, $type: String) {
+  createAndSort(count: $count, type: $type) {
+    docs
+  }
+}
+query _reRank($docs: JSON, $type: String) {
+  _reRank(docs: $docs, type: $type) {
+    docs
+  }
+}
