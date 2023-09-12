@@ -119,7 +119,7 @@ describe(testDescription, function () {
       authType: authTypes.adminKey,
     },
     {
-      label: "privatefield",
+      label: "_reRank field",
       query: requests,
       variables: {
         docs: [

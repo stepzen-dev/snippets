@@ -47,11 +47,11 @@ type Query {
     }
     """)
   """
-  _reRank is a private field that reorders the elements in `docs` according to the requested `type` argument.  This fields is implemented by other fields that supply it based on the value of `type`.
+  _reRank is a field that reorders the elements in `docs` according to the requested `type` argument.  This fields is implemented by other fields that supply it based on the value of `type`.
   """    
   _reRank (docs: JSON, type: String): JSONDocs
   """
-  _reRankAsc is a private field that reorders the elements in `docs` in ascending order of their `distance` field.
+  _reRankAsc is a field that reorders the elements in `docs` in ascending order of their `distance` field.
   """  
   _reRankAsc ( docs: JSON, type: String): Concrete
     @supplies (query: "_reRank", if: {src: "type === 'asc'"})
@@ -68,7 +68,7 @@ type Query {
            }]
            )
   """
-  _reRankDesc is a private field that reorders the elements in `docs` in descending order of their `distance` field.
+  _reRankDesc is a field that reorders the elements in `docs` in descending order of their `distance` field.
   """
   _reRankDesc (docs: JSON, type: String): Concrete
     @supplies (query: "_reRank", if: {src: "type === 'desc'"})
@@ -85,7 +85,7 @@ type Query {
            }]
     )
   """
-  _reRankNoop is a private field that skips reordering
+  _reRankNoop is a field that skips reordering
   """
   _reRankNoop (docs: JSON, type: String): Concrete
     @supplies (query: "_reRank", if: {src: "type === 'noop'"})
