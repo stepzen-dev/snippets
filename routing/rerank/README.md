@@ -28,7 +28,7 @@ The main field in `Query` is:
 ```graphql
  createAndSort (count: Int, type: String): JSONDocs
 ```
-which uses `@sequence` to first creates an array of `count` elements and then optionally sorts the created array depending on the specified `type` an array of elements.
+which uses `@sequence` to first create an array of `count` elements and then optionally sort the created array depending on the specified `type` an array of elements.
 
 Note: See [these snippets](https://github.com/stepzen-dev/snippets/tree/main/sequence) for other uses of `@sequence`.
 
