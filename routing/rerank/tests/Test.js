@@ -119,7 +119,7 @@ describe(testDescription, function () {
       authType: authTypes.adminKey,
     },
     {
-      label: "_reRank field",
+      label: "reRank field",
       query: requests,
       variables: {
         docs: [
@@ -146,9 +146,9 @@ describe(testDescription, function () {
         ],
         type: "asc",
       },
-      operationName: "_reRank",
+      operationName: "reRank",
       expected: {
-        _reRank: {
+        reRank: {
           docs: [
             {
               content: "2",

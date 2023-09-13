@@ -20,7 +20,7 @@ type Query {
   createAndSort (count: Int!, type: String): JSONDocs
     @sequence (steps: [
         {query: "createDocs"}, 
-        {query: "_reRank", arguments: {name: "type", argument: "type"}} 
+        {query: "reRank", arguments: {name: "type", argument: "type"}} 
     ])
   """
   createDocs computes a JSON document that is an array of `count` elements with randomly generated `distance`.
@@ -47,14 +47,14 @@ type Query {
     }
     """)
   """
-  _reRank is a field that reorders the elements in `docs` according to the requested `type` argument.  This fields is implemented by other fields that supply it based on the value of `type`.
+  reRank is a field that reorders the elements in `docs` according to the requested `type` argument.  This fields is implemented by other fields that supply it based on the value of `type`.
   """    
-  _reRank (docs: JSON, type: String): JSONDocs
+  reRank (docs: JSON, type: String): JSONDocs
   """
-  _reRankAsc is a field that reorders the elements in `docs` in ascending order of their `distance` field.
+  reRankAsc is a field that reorders the elements in `docs` in ascending order of their `distance` field.
   """  
-  _reRankAsc ( docs: JSON, type: String): Concrete
-    @supplies (query: "_reRank", if: {src: "type === 'asc'"})
+  reRankAsc ( docs: JSON, type: String): Concrete
+    @supplies (query: "reRank", if: {src: "type === 'asc'"})
     @rest (endpoint: "stepzen:empty",
            transforms: [{
             editor: """jsonata:
@@ -68,10 +68,10 @@ type Query {
            }]
            )
   """
-  _reRankDesc is a field that reorders the elements in `docs` in descending order of their `distance` field.
+  reRankDesc is a field that reorders the elements in `docs` in descending order of their `distance` field.
   """
-  _reRankDesc (docs: JSON, type: String): Concrete
-    @supplies (query: "_reRank", if: {src: "type === 'desc'"})
+  reRankDesc (docs: JSON, type: String): Concrete
+    @supplies (query: "reRank", if: {src: "type === 'desc'"})
     @rest (endpoint: "stepzen:empty",
            transforms: [{
             editor: """jsonata:
@@ -85,10 +85,10 @@ type Query {
            }]
     )
   """
-  _reRankNoop is a field that skips reordering
+  reRankNoop is a field that skips reordering
   """
-  _reRankNoop (docs: JSON, type: String): Concrete
-    @supplies (query: "_reRank", if: {src: "type === 'noop'"})
+  reRankNoop (docs: JSON, type: String): Concrete
+    @supplies (query: "reRank", if: {src: "type === 'noop'"})
     @rest (endpoint: "stepzen:empty",
            transforms: [{
             editor: """jsonata:
