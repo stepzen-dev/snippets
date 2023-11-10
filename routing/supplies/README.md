@@ -32,7 +32,7 @@ It is supplied by three fields, each with a condition.
 > **Note**
 > Implementation of the fields (`@rest`) have been omitted for brevity.
 
-The script `src` must be ECMAScript 5.1 of JSONata and the field's arguments
+The script `src` must be ECMAScript 5.1 or JSONata and the field's arguments
 are available as global variables.
 
 If the returned value is `true` (ECMAScript `ToBoolean` conversion) then
