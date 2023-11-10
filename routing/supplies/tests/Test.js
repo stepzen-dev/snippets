@@ -40,7 +40,19 @@ describe(testDescription, function () {
       authType: authTypes.adminKey,
     },
     {
-      label: "neither",
+      label: "tyd",
+      query: requests,
+      variables: { id: "TYD-789" },
+      expected: {
+        expected: {
+          when: "2023-09-04",
+          note: "Package TYD-789 is heading your way",
+        },
+      },
+      authType: authTypes.adminKey,
+    },
+    {
+      label: "none",
       query: requests,
       variables: { id: "OTH-789" },
       expected: {

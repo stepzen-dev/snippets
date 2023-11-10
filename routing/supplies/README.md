@@ -19,18 +19,20 @@ expected(id:ID):Delivery
 ```
 which given a tracking identifier returns when a package is expected.
 
-It is supplied by two fields, each with a condition.
+It is supplied by three fields, each with a condition.
 
 ```graphql
   fp(id: ID!): FastPackage
     @supplies(query: "expected" if: { src: "id.startsWith('FP-')" })
   ros(id: ID!): RainOrShine
     @supplies(query: "expected", if: { src: "id.startsWith('ROS-')" })
+  tyd(id: ID!): ToYourDoor
+    @supplies(query: "expected" if: {src: "$contains(id, /^TYD-/)", language: JSONATA})
 ```
 > **Note**
 > Implementation of the fields (`@rest`) have been omitted for brevity.
 
-The script `src` must be ECMAScript 5.1 and the field's arguments
+The script `src` must be ECMAScript 5.1 of JSONata and the field's arguments
 are available as global variables.
 
 If the returned value is `true` (ECMAScript `ToBoolean` conversion) then
@@ -38,7 +40,7 @@ the field is invoked, otherwise its value is `null`.
 
 Thus in this example if the tracking identifier starts with `FP-` a call
 is made to the FastPackage REST api, if it starts with `ROS-` a call to
-the `RainOrShine` REST api is called, otherwise no call is made.
+the `RainOrShine` REST api is called, `TYD-` a call to the To Your Door API otherwise no call is made.
 
 > **Note**
 > The supplying fields can have any implementation, FastPackage could
@@ -52,5 +54,6 @@ stepzen deploy
 
 stepzen request -f operations.graphql --var id='FP-123'
 stepzen request -f operations.graphql --var id='ROS-456'
+stepzen request -f operations.graphql --var id='TYD-234'
 stepzen request -f operations.graphql --var id='OTH-789'
 ```

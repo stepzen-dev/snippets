@@ -24,6 +24,14 @@ type RainOrShine implements Delivery {
   weather: String
 }
 
+"""
+Delivery by ToYourDoor.
+"""
+type ToYourDoor implements Delivery {
+  when: Date
+  note: String
+}
+
 type Query {
   """
   expected is the "supplied" field that returns an abstract
@@ -64,6 +72,27 @@ type Query {
             when: '2023-09-01',
             note: `Package ${get('id')} is on its way`,
             weather: 'dry and sunny',
+        }
+      }
+      """
+    )
+
+  """
+  tyd supplies Query.expected but only if the tracking identifier starts with `TYD-`.
+  A JSONata expression is used as the routing condition.
+  """
+  tyd(id: ID!): ToYourDoor
+    @supplies(
+      query: "expected"
+      if: {src: "$contains(id, /^TYD-/)", language: JSONATA}
+    )
+    @rest(
+      endpoint: "stepzen:empty"
+      ecmascript: """
+      function transformREST() {
+        return {
+            when: '2023-09-04',
+            note: `Package ${get('id')} is heading your way`,
         }
       }
       """
