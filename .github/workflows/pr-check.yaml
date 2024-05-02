@@ -21,10 +21,18 @@ jobs:
         with:
           node-version: "20"
       - uses: stepzen-dev/stepzen-install@v1
-      - name: start stepzen service
+      - name: start service
         run: |
           stepzen service start
-      - name: stop stepzen service
+      - name: login
+        run: |
+          stepzen login --config ~/.stepzen/stepzen-config.local.yaml
+      - name: tests
+        run: |
+          cd tests
+          npm ci
+          npm test
+      - name: stop service
         if: ${{ !cancelled() }}
         run: |
           stepzen service stop
