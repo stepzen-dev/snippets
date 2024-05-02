@@ -13,7 +13,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  check-go-code:
+  run-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -32,6 +32,7 @@ jobs:
           cd tests
           npm ci
           npm test
+        env: STEPZEN_ENDPOINT=http://127.0.0.1:9000/test/snippets/graphql
       - name: stop service
         if: ${{ !cancelled() }}
         run: |
