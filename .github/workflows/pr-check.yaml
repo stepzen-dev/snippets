@@ -25,6 +25,6 @@ jobs:
         run: |
           stepzen service start
       - name: stop stepzen service
-        if: always
+        if: ${{ !cancelled() }}
         run: |
           stepzen service stop
