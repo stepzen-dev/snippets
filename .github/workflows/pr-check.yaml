@@ -33,7 +33,7 @@ jobs:
           npm ci
           npm test
         env:
-          STEPZEN_ENDPOINT: "http://127.0.0.1:9000/test/snippets/graphql"
+          STEPZEN_ENDPOINT: "http://127.0.0.1:9000/test/snippets/__graphql"
       - name: stop service
         if: ${{ !cancelled() }}
         run: |
