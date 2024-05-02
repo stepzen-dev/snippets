@@ -24,7 +24,7 @@ jobs:
       - name: start service
         run: |
           stepzen service start
-      - name: login
+      - name: login into local service
         run: |
           stepzen login --config ~/.stepzen/stepzen-config.local.yaml
       - name: tests
