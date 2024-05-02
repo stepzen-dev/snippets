@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "type": "commonjs",
   "scripts": {
-    "test": "mocha **/tests/*Test.js"
+    "test": "mocha ../**/tests/*Test.js"
   },
   "dependencies": {
     "chai": "^4.3.6",

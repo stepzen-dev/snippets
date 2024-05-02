@@ -8,7 +8,7 @@ Must have one environment variable set:
 
  * `STEPZEN_ENDPOINT` - StepZen endpoint all the tests will be deployed to (one at a time). For example:
    ```
-   export STEPZEN_ENDPOINT=https://YOUR_ACCOUNT.stepzen.net/test/snippets/__graphql`
+   export STEPZEN_ENDPOINT=https://YOUR_ACCOUNT.stepzen.net/test/snippets/graphql
    ```
 
 You can also set this environment variable in a `.env` file in the root of the snippets repo. By copying the `.env.example` file.
@@ -21,6 +21,7 @@ stepzen login
 Execute at the root of the snippets repo.
 
 ```
+cd tests
 npm ci
 npm test
 ```
