@@ -1,0 +1,40 @@
+name: PR Checker
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+# cancel a previous check if running
+# this avoids concurrent checks when multiple commits
+# are pushed to a PR branch in a short time frame
+# head_ref || ref_name ensures a value exists.
+concurrency:
+  group: cb-${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - uses: stepzen-dev/stepzen-install@v1
+      - name: start service
+        run: |
+          stepzen service start
+      - name: login into local service
+        run: |
+          stepzen login --config ~/.stepzen/stepzen-config.local.yaml
+      - name: tests
+        run: |
+          cd tests
+          npm ci
+          npm test
+        env:
+          STEPZEN_ENDPOINT: "http://127.0.0.1:9000/test/snippets/__graphql"
+      - name: stop service
+        if: ${{ !cancelled() }}
+        run: |
+          stepzen service stop
