@@ -22,7 +22,7 @@ Execute at the root of the snippets repo.
 
 ```
 cd tests
-npm ci
+npm i
 npm test
 ```
 

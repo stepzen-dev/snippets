@@ -1,0 +1,25 @@
+query FirstResults { 
+    paginatedCustomers(first: 2) {
+        edges {
+            node {
+                id
+                name
+            }
+        }
+        pageInfo {
+            hasNextPage
+            endCursor
+        }
+    }
+}
+
+query NextResults { 
+    paginatedCustomers(first: 2, after: "eyJjIjoiTDpRdWVyeTpwYWdpbmF0ZWRDdXN0b21lcnMiLCJvIjoxfQ==") {
+        edges {
+            node {
+                id
+                name
+            }
+        }
+    }
+}
