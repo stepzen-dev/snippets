@@ -83,11 +83,13 @@ These are available in `/sequence`:
 - `/transformsInMaterializer` shows how connecting two subgraphs can invoke transformations in between. For example, the `city` of a customer can be fed into a `weather` that takes `lat,lon` by calling some geocoding in the sequence
 - `/useOfJSON` shows how, in long sequences, a new type does not have to created for every step--treat everything as JSON up to the last step, and your type system stays clean.
 
-## pagination
+## @dbquery
 
-For more information on pagination for REST or Databases, [see our documentation](https://www.ibm.com/docs/en/api-connect/ace/saas?topic=service-paginating-rest-api-as-data-source).
+View the documentation for the [`@dbquery` custom directive](https://www.ibm.com/docs/en/api-connect/ace/saas?topic=directives-directive-dbquery) in the documentation.
 
-- `/cursor` shows how to implement cursor based pagination for a database.
+Uses a database filled with mock data.
+
+- `/pagination` shows how to implement connection model pagination for a database.
 
 ## protection
 

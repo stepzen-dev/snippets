@@ -1,0 +1,15 @@
+# Page through customers from a database connection based pagination
+query CustomersConnectionBased($first: Int!, $after: String = "") {    
+  customers(first: $first, after: $after) {
+    edges {
+      node {
+        id
+        name
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}
