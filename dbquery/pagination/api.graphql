@@ -1,0 +1,51 @@
+# This example shows how @dbquery is configured for pagination.
+#
+# @dbquery supports connection based pagination out of the box by
+# mapping database responses to a consistent standard
+# GraphQL pagination approach, specifically
+# GraphQL Cursor Connections Specification
+# https://relay.dev/graphql/connections.htm
+#
+#
+
+"""
+Sample customer type.
+"""
+type Customer {
+  id: ID!
+  name: String
+  email: String
+}
+
+"""
+`CustomerConnection` is the connection type for `Customer` pagination.
+In StepZen, a field returning a connection type must have arguments
+`first` (number of nodes to fetch) and `after` (opaque cursor indicating
+the starting point).
+"""
+type CustomerConnection {
+  edges: [CustomerEdge]
+  pageInfo: PageInfo!
+}
+
+"""
+`CustomerEdge` provides access to the node and its cursor.
+"""
+type CustomerEdge {
+  node: Customer
+  cursor: String
+}
+
+type Query {
+  """
+  `customers` pages through mock `Customer` objects in a demo PostgreSQL database.
+  The data is exposed using standard GraphQL pagination using the connection model.
+  """
+  customers(first: Int! = 10, after: String! = ""): CustomerConnection
+    @dbquery(
+      type: "postgresql"
+      table: "customer"
+      schema: "public"
+      configuration: "postgresql_config"
+    )
+}
