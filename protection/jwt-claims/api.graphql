@@ -5,6 +5,9 @@ type Customer {
 }
 
 type Query {
+  """
+  Fetch customer by identifier.
+  """
   customer(id: ID!): Customer
     @dbquery(
       type: "postgresql"
@@ -13,6 +16,10 @@ type Query {
       configuration: "postgresql_config"
     )
 
+  """
+  Fetch my customer information.
+  Customer identifier is pulled from the JWT subject claim.
+  """
   me: Customer @sequence(steps: [{ query: "_myid" }, { query: "customer" }])
 
   """
