@@ -23,7 +23,7 @@ from being executed by field visibility and access rules.
 Instead a field `Query.me` is exposed with no field arguments that invokes `Query.customer`
 with the customer identifier pulled from the `sub` claim in the request's JWT.
 
-This is implemented by an intermediate field (`Query._myid`) that is annotated with `@value` using an ECMAScript.
+This is implemented using `@sequence` with the first step an intermediate field (`Query._myid`) that is annotated with `@value` using an ECMAScript.
 This script has access to field arguments of its annotated field (in this case none) and JWT claims through `$jwt`.
 Thus it returns the `sub` claim which is then automatically mapped as a scalar value to the sole argument of
 the next step in the sequence (`Query.customer(id:)`).
