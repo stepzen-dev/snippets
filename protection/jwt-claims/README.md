@@ -29,7 +29,7 @@ Thus it returns the `sub` claim which is then automatically mapped as a scalar v
 the next step in the sequence (`Query.customer(id:)`).
 
 An alternate version of `Query._myid` exists `Query._my_id_jsonata` showing that scripts can be implemented in JSONata.
-The default langauge is ECMAScript.
+The default language is ECMAScript.
 
 Note these concepts could be combined with field access through ABAC rules (see `protection/simpleABACSample`)
 so that `Query.customer` could be exposed, but only customer service reps could call it
