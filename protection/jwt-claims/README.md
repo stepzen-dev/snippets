@@ -6,7 +6,7 @@ This examples demonstrates a number of StepZen capabilities:
 
 - Authorization using JWT
 - Field access rules
-- Field visibility rules
+- Field visibility patterns
 - `@value` directive with access to JWT claims
   - https://www.ibm.com/docs/en/api-connect/ace/saas?topic=directives-directive-value
 - Reshaping
