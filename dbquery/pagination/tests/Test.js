@@ -8,7 +8,7 @@ const {
 
 testDescription = getTestDescription("snippets", __dirname);
 
-const requestsFile = path.join(path.dirname(__dirname), "requests.graphql");
+const requestsFile = path.join(path.dirname(__dirname), "operations.graphql");
 const requests = fs.readFileSync(requestsFile, "utf8").toString();
 
 describe(testDescription, function () {
@@ -18,7 +18,7 @@ describe(testDescription, function () {
     {
       label: "first set of results",
       query: requests,
-      operationName: "CustomersConnectionBased",
+      operationName: "Customers",
       variables: { 
         first: 2 
       },
@@ -49,7 +49,7 @@ describe(testDescription, function () {
     {
       label: "next set of results",
       query: requests,
-      operationName: "CustomersConnectionBased",
+      operationName: "Customers",
       variables: {
         first: 2,
         after: CURSOR
