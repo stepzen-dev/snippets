@@ -1,0 +1,14 @@
+schema
+  @sdl(
+    files: ["paging.graphql"]
+    # visibilty controls how fields included through files in this directive
+    # are visible outside the scope of this directive to GraphQL introspection
+    # and field references through @materializer etc.
+    #
+    # types and fields are regular expressions that match type and field names.
+    # Like field access rules if aat least one visibility pattern is present then by default
+    # root operation type (Query, Mutation, Subscription) fields are not exposed.
+    visibility: [{ expose: true, types: "Query", fields: ".*" }]
+  ) {
+  query: Query
+}
