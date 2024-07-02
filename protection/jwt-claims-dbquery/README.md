@@ -1,5 +1,10 @@
 # Pulling field arguments from JWT claims
 
+Uses a SQL predicate to limit customer rows returned from a database
+to those matching the regions defined in a JWT claim.
+
+# Try it Out
+
 Run the [sample operations](operations.graphql):
 
 JWT with `regions: IN`.
