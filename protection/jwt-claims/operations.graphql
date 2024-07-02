@@ -1,6 +1,0 @@
-query Customer {
-  me {
-    id
-    name
-  }
-}
