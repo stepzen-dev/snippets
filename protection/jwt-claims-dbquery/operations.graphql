@@ -1,0 +1,8 @@
+query Customers($f:CustomerFilter) {
+  customers(filter:$f) {
+    id
+    name
+    city
+    region
+  }
+}
