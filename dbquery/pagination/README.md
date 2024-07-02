@@ -40,3 +40,27 @@ To retrieve the first page of a result, the operation is called with `after` omi
 Subsequent pages can then be retrieved by setting `after` to the value of `endCursor` from `pageInfo` from the previous request. `first` should be set to the value used in the first request.
 
 This is continued until `hasNextPage` is `false`.
+
+## Try it out!
+
+Deploy the schema from `dbquery/pagination` relative to the repository's root directory:
+
+```
+stepzen deploy
+```
+
+Run the [sample operations](operations.graphql):
+
+Fetch the first five records:
+
+```
+stepzen request -f operations.graphql --operation-name=Customers --var first=5
+```
+
+Fetch the next five, the value of `after` is taken from the `endCursor` field of the previous request:
+
+```
+stepzen request -f operations.graphql --operation-name=Customers --var first=5 --var after="eyJjIjoiTDpRdWVyeTpjdXN0b21lcnMiLCJvIjo0fQ=="
+```
+
+
