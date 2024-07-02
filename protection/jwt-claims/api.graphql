@@ -1,0 +1,34 @@
+type Customer {
+  id: ID!
+  name: String
+  email: String
+}
+
+type Query {
+  """
+  Fetch customer by identifier.
+  """
+  customer(id: ID!): Customer
+    @dbquery(
+      type: "postgresql"
+      table: "customer"
+      schema: "public"
+      configuration: "postgresql_config"
+    )
+
+  """
+  Fetch my customer information.
+  Customer identifier is pulled from the JWT subject claim.
+  """
+  me: Customer @sequence(steps: [{ query: "_myid" }, { query: "customer" }])
+
+  """
+  Extract the customer's identifier from a claim in a JWT.
+  """
+  _myid: ID! @value(script: { src: "$jwt.sub" })
+
+  """
+  Extract the customer's identifier from a claim in a JWT using JSONATA.
+  """
+  _myid_jsonata: ID! @value(script: { src: "`$jwt`.sub", language: JSONATA })
+}
