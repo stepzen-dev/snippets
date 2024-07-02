@@ -9,9 +9,6 @@ type Customer {
 
 """
 `CustomerConnection` is the connection type for `Customer` pagination.
-In StepZen, a field returning a connection type must have arguments
-`first` (number of nodes to fetch) and `after` (opaque cursor indicating
-the starting point).
 """
 type CustomerConnection {
   edges: [CustomerEdge]
@@ -40,10 +37,7 @@ input CustomerFilter {
 extend type Query {
   # customers is the exposed field that limits the caller to regions
   # based upon the regions claim in the request's JWT.
-  customers(
-    first: Int! = 10
-    filter: CustomerFilter
-  ): [Customer]
+  customers(first: Int! = 10, filter: CustomerFilter): [Customer]
     @sequence(
       steps: [
         { query: "_regions" }
@@ -76,7 +70,7 @@ extend type Query {
   _customers(
     first: Int! = 10
     after: String! = ""
-    filter: CustomerFilter # regions: [String]!
+    filter: CustomerFilter
     regions: [String]!
   ): CustomerConnection
     @dbquery(
