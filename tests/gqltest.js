@@ -46,6 +46,7 @@ function deployEndpoint(endpoint, dirname) {
 // The test will fail if the request does not
 // have status 200 or has any GraphQL errors.
 function runGqlOk(authType, endpoint, query, variables, operationName) {
+  let authValue;
   switch (authType) {
     case authTypes.adminKey:
       authValue = adminKey;
@@ -59,12 +60,18 @@ function runGqlOk(authType, endpoint, query, variables, operationName) {
     default:
       authValue = "";
   }
+
+  let headers = {
+    "Content-Type": "application/json",
+  };
+
+  if (authValue) {
+    headers.Authorization = authValue;
+  }
+  
   return fetch(endpoint, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: authValue,
-    },
+    headers: headers,
     body: JSON.stringify({
       query: query,
       variables: variables,
