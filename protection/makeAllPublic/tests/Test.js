@@ -1,3 +1,5 @@
+const fs = require("fs");
+const path = require("node:path");
 const {
   deployAndRun,
   authTypes,
@@ -17,7 +19,7 @@ describe(testDescription, function () {
       query: requests,
       operationName: "Customer",
       variables: {
-        id:1
+        id: 1,
       },
       expected: {
         customer: {
@@ -32,7 +34,7 @@ describe(testDescription, function () {
       query: requests,
       operationName: "Customer",
       variables: {
-        id:2
+        id: 2,
       },
       expected: {
         customer: {
@@ -42,6 +44,6 @@ describe(testDescription, function () {
       },
       authType: authTypes.noAuth,
     },
-  ]
+  ];
   return deployAndRun(__dirname, tests);
 });
