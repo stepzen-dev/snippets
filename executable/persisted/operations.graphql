@@ -1,0 +1,24 @@
+query Customer($id: ID!) {
+  customer(id: $id) {
+    id
+    name
+    email
+    phone
+    address {
+      city
+      zip
+    }
+  }
+}
+
+query CustomerName($id: ID!) {
+  customer(id: $id) {
+    name
+  }
+}
+
+query CustomerEmail($id: ID!) {
+  customer(id: $id) {
+    email
+  }
+}

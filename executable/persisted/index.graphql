@@ -1,0 +1,27 @@
+schema
+  @sdl(
+    files: []
+    # executables defines a list of GraphQL executable documents that
+    # are validated against the schema when deployed.
+    # If an executable document is marked as persist: true
+    # then it becomes a persisted document with the document identifier
+    # being tha SHA 256 hash of the document file.
+    executables: [{ document: "operations.graphql", persist: true }]
+  ) {
+  query: Query
+}
+
+type Query {
+  customer(id: ID!): Customer
+}
+type Customer @mock {
+  id: ID!
+  name: String! @mockfn(name: "LastName")
+  email: String @mockfn(name: "Email")
+  phone: String @mockfn(name: "Phone")
+  address: Address
+}
+type Address {
+  city: String @mockfn(name: "City")
+  zip: String @mockfn(name: "Zip")
+}
