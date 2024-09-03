@@ -58,7 +58,7 @@ In addition query requests can use HTTP GET while maintaining a reasonable sized
 that improves caching of URL requests. For example the above request can be a coded as an HTTP GET:
 
 ```
-https://london.us-east-a.ibm.stepzen.net/api/customer/graphql?documentId=sha256:ecf4edb46db40b5132295c0291d62fb65d6759a9eedfa4d5d612dd5ec54a6b38
+https://london.us-east-a.ibm.stepzen.net/api/customer/graphql?documentId=sha256%3Aecf4edb46db40b5132295c0291d62fb65d6759a9eedfa4d5d612dd5ec54a6b38
 ```
 
 ## Executable Documents
@@ -85,3 +85,51 @@ shasum -a 256 operations.graphql
 ```
 
 When _executable document_ are persisted using `@sdl(executables:)` the schema calculates the document identifiers automatically.
+
+## Example
+
+This example uses a simple mocked schema with a `Customer` type and a single `Query` field `customer`.
+
+`operations.graphql` contains three GraphQL query operations `Customer`, `CustomerEmail` and `CustomerName`
+each with a different selection against `Query.customer`.
+
+A client can execute them using these request parameters, shown as JavaScript:
+
+```
+{
+  documentId: "sha256:9d50d8e35b5882139e836a126f5d6d5a28cf41c5efd80a6e67f920d284b5f6d0",
+  operationName: "Customer",
+  variables: {
+    id: 1789,
+  },
+}
+```
+
+```
+{
+  documentId: "sha256:9d50d8e35b5882139e836a126f5d6d5a28cf41c5efd80a6e67f920d284b5f6d0",
+  operationName: "CustomerEmail",
+  variables: {
+    id: 2845,
+  },
+}
+```
+
+```
+{
+  documentId: "sha256:9d50d8e35b5882139e836a126f5d6d5a28cf41c5efd80a6e67f920d284b5f6d0",
+  operationName: "CustomerName",
+  variables: {
+    id: 3651,
+  },
+}
+```
+
+For example use `curl` and HTTP `GET` as follows:
+
+```
+curl \
+   --header "Authorization: Apikey $(stepzen whoami --apikey)" \
+   --header "Content-Type: application/json" \
+ 'https://london.us-east-a.ibm.stepzen.net/api/miscellaneous/graphql?documentId=sha256:9d50d8e35b5882139e836a126f5d6d5a28cf41c5efd80a6e67f920d284b5f6d0&operationName=Customer&variables=%7B%22id%22%3A%201789%7D'
+```
