@@ -56,11 +56,10 @@ async function runGqlOk(authType, endpoint, query, variables, operationName, exp
     case authTypes.apiKey:
       headers.withAPIKey(apiKey);
       break;
-    //  Have not  implemented jwt and noAuth yet
+    //  Have not  implemented jwt yet
     case authTypes.jwt:
     case authTypes.noAuth:
     default:
-      authValue = "";
   }
  await executeOK({
     test: this,
