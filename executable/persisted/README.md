@@ -84,7 +84,7 @@ for example on Linux/Unix systems this command can be used:
 shasum -a 256 operations.graphql
 ```
 
-When _executable document_ are persisted using `@sdl(executables:)` the schema calculates the document identifiers automatically.
+When _executable documents_ are persisted using `@sdl(executables:)` the schema calculates the document identifiers automatically.
 
 ## Example
 
