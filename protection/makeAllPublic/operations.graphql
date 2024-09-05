@@ -1,0 +1,6 @@
+query Customer($id: ID!) {
+  customer(id: $id) {
+    name
+    city
+  }
+}

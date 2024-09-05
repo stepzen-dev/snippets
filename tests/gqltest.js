@@ -1,9 +1,13 @@
 require("dotenv").config();
-const fetch = require("node-fetch");
-const { expect } = require("chai");
 const { execSync } = require("child_process");
 const { URL } = require("url");
 const path = require("node:path");
+
+const {
+  GQLHeaders,
+  executeOK,
+  logOnFail,
+} = require('gqltest/packages/gqltest/gqltest.js')
 
 const authTypes = {
   adminKey: 1,
@@ -15,10 +19,8 @@ Object.freeze(authTypes);
 
 // We use admin key to test because there is a cache optimization for apikey's that is not conducive
 // to rapid deploy and run cycles that occur with this type of testing
-const adminKey =
-  `apikey ` + execSync(`stepzen whoami --adminkey`).toString().trim();
-const apiKey =
-  `apikey ` + execSync(`stepzen whoami --apikey`).toString().trim();
+const adminKey = execSync(`stepzen whoami --adminkey`).toString().trim();
+const apiKey = execSync(`stepzen whoami --apikey`).toString().trim();
 
 const endpoint = process.env.STEPZEN_ENDPOINT;
 
@@ -45,50 +47,27 @@ function deployEndpoint(endpoint, dirname) {
 // as a test returning the response.
 // The test will fail if the request does not
 // have status 200 or has any GraphQL errors.
-function runGqlOk(authType, endpoint, documentId, query, variables, operationName) {
+async function runGqlOk(authType, endpoint, request, expected) {
+  let headers = new GQLHeaders();
   switch (authType) {
     case authTypes.adminKey:
-      authValue = adminKey;
+      headers.withAPIKey(adminKey);
       break;
     case authTypes.apiKey:
-      authValue = apiKey;
+      headers.withAPIKey(apiKey);
       break;
-    //  Have not  implemented jwt and noAuth yet
+    //  Have not  implemented jwt yet
     case authTypes.jwt:
     case authTypes.noAuth:
     default:
-      authValue = "";
   }
-  return fetch(endpoint, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: authValue,
-    },
-    body: JSON.stringify({
-      documentId: documentId,
-      query: query,
-      variables: variables,
-      operationName: operationName,
-    }),
+ await executeOK({
+    test: this,
+    endpoint,
+    headers,
+    request,
+    expected,
   })
-    .then(function (result) {
-      expect(result.status).to.equal(200);
-      return result;
-    })
-    .then(function (result) {
-      return result.json();
-    })
-    .then(function (response) {
-      expect(response.errors, `no errors should exist: ${JSON.stringify(response.errors)}`).to.be.undefined;
-      return response;
-    });
-}
-
-// tests that the data key in a GraphQL response
-// is equal to value.
-function expectData(response, value) {
-  expect(response.data).to.eql(value);
 }
 
 // deploys graphql schema located in dirname to the test endpoint provided by the environment (process.env.STEPZEN_ENDPOINT),
@@ -102,20 +81,30 @@ function deployAndRun(dirname, tests) {
     return deployEndpoint(endpoint, dirname);
   });
 
+  afterEach('log-failure', logOnFail)
   tests.forEach(
     ({ label, documentId, query, variables, operationName, expected, authType }) => {
-      it(label, function () {
+      it(label, async function () {
         this.timeout(4000); // Occasional requests take > 2s
-        return runGqlOk(
+        let request = {}
+        if (query) {
+          request.query = query;
+        }
+        if (documentId) {
+          request.documentId = documentId;
+        }
+        if (operationName) {
+          request.operationName = operationName;
+        }
+        if (variables) {
+          request.variables = variables;
+        }
+        return await runGqlOk(
           authType,
           endpoint,
-          documentId,
-          query,
-          variables,
-          operationName
-        ).then(function (response) {
-          expectData(response, expected);
-        });
+          request,
+          expected,
+        );
       });
     }
   );
@@ -129,8 +118,6 @@ function getTestDescription(testRoot, fullDirName) {
   return segments.slice(rootIndex + 1, -1).join("/");
 }
 
-exports.runGqlOk = runGqlOk;
-exports.expectData = expectData;
 exports.deployAndRun = deployAndRun;
 exports.authTypes = authTypes;
 exports.getTestDescription = getTestDescription;

@@ -1,0 +1,4 @@
+configurationset:
+  - configuration:
+      name: pgdb
+      uri: STEPZEN_PG_DB_URI
