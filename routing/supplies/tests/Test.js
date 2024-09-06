@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("node:path");
 const {
   deployAndRun,
-  authTypes,
+  stepzen,
   getTestDescription,
 } = require("../../../tests/gqltest.js");
 
@@ -24,7 +24,6 @@ describe(testDescription, function () {
           distance: 17,
         },
       },
-      authType: authTypes.adminKey,
     },
     {
       label: "rain-or-shine",
@@ -37,7 +36,6 @@ describe(testDescription, function () {
           weather: "dry and sunny",
         },
       },
-      authType: authTypes.adminKey,
     },
     {
       label: "tyd",
@@ -49,7 +47,6 @@ describe(testDescription, function () {
           note: "Package TYD-789 is heading your way",
         },
       },
-      authType: authTypes.adminKey,
     },
     {
       label: "none",
@@ -58,8 +55,7 @@ describe(testDescription, function () {
       expected: {
         expected: null,
       },
-      authType: authTypes.adminKey,
     },
   ];
-  return deployAndRun(__dirname, tests);
+  return deployAndRun(__dirname, tests, stepzen.admin());
 });

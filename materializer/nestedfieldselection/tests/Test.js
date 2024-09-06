@@ -1,6 +1,6 @@
 const {
   deployAndRun,
-  authTypes,
+  stepzen,
   getTestDescription,
 } = require("../../../tests/gqltest.js");
 
@@ -24,8 +24,7 @@ describe(testDescription, function () {
             }
           }
         },
-      authType: authTypes.adminKey,
     },
   ]
-  return deployAndRun(__dirname, tests);
+  return deployAndRun(__dirname, tests, stepzen.admin());
 });

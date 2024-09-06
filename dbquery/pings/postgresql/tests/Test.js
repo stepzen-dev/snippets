@@ -1,6 +1,5 @@
 const {
   deployAndRun,
-  authTypes,
   getTestDescription,
 } = require("../../../../tests/gqltest.js");
 

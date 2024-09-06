@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("node:path");
 const {
   deployAndRun,
-  authTypes,
+  stepzen,
   getTestDescription,
 } = require("../../../tests/gqltest.js");
 
@@ -48,7 +48,6 @@ describe(testDescription, function () {
           ],
         },
       },
-      authType: authTypes.adminKey,
     },
     {
       label: "desc",
@@ -73,7 +72,6 @@ describe(testDescription, function () {
           ],
         },
       },
-      authType: authTypes.adminKey,
     },
     {
       label: "noop",
@@ -106,7 +104,6 @@ describe(testDescription, function () {
           ],
         },
       },
-      authType: authTypes.adminKey,
     },
     {
       label: "nothing",
@@ -116,7 +113,6 @@ describe(testDescription, function () {
       expected: {
         createAndSort: null,
       },
-      authType: authTypes.adminKey,
     },
     {
       label: "reRank field",
@@ -173,8 +169,7 @@ describe(testDescription, function () {
           ],
         },
       },
-      authType: authTypes.adminKey,
     },
   ];
-  return deployAndRun(__dirname, tests);
+  return deployAndRun(__dirname, tests, stepzen.admin());
 });
