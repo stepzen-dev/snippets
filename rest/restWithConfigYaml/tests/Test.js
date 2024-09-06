@@ -14,5 +14,5 @@ describe(testDescription, function () {
         expected: {rest: {args: {q: ["Joe Smith", "Jane Smith"],},url: "https://httpbingo.org/get?apikey=56hdlks45reghunq&q=Joe+Smith&q=Jane+Smith",},},
       },
     ]
-  return deployAndRun(__dirname, tests, stepzen.admin());
+  return deployAndRun(__dirname, tests, stepzen.admin);
 });

@@ -9,7 +9,7 @@
     "chain": "^0.2.1",
     "dotenv": "^16.0.3",
     "mocha": "^10.0.0",
-    "gqltest": "stepzen-dev/gqltest#cf5a6d21ac4693bd82ae5d2d71447be7900d33a9"
+    "gqltest": "stepzen-dev/gqltest#f951b93474db0a02798a1b9e00d54e252db4ca89"
   },
   "keywords": [],
   "author": ""

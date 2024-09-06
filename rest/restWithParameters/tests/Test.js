@@ -21,5 +21,5 @@ describe(testDescription, function () {
       expected: {restquery: {args: {q: ["Mike Jones", "Sally Jones"],v: null,}, url: "https://httpbingo.org/get?q=Mike+Jones&q=Sally+Jones",},},
     },
   ]
-  return deployAndRun(__dirname, tests, stepzen.admin());
+  return deployAndRun(__dirname, tests, stepzen.admin);
 });

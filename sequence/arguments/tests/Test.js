@@ -22,5 +22,5 @@ describe(testDescription, function () {
                  customer2: {city: "Santa Clara", name: "Jane Smith", weather: {temp: 15.777777777777779}}},
   },    
   ]
-  return deployAndRun(__dirname, tests, stepzen.admin());
+  return deployAndRun(__dirname, tests, stepzen.admin);
 });

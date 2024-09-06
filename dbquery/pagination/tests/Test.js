@@ -77,5 +77,5 @@ describe(testDescription, function () {
       },
     },
   ];
-  return deployAndRun(__dirname, tests, stepzen.admin());
+  return deployAndRun(__dirname, tests, stepzen.admin);
 });
