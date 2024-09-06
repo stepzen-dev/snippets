@@ -1,6 +1,6 @@
-# This is a blanket way to make all Query endpoints public, i.e. not requiring an API Key or JWT.
+# This is a blanket way to make all Query fields public, i.e. not requiring an API Key or JWT.
 # For example, you would typically do this for your product catalog queries.
-# Remember to test this not through a GraphQL client that does not automatically set an api or admin key.
+# Remember to test this through a GraphQL client that does not automatically set an api or admin key.
 access:
   policies:
     - type: Query
