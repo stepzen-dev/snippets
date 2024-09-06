@@ -47,7 +47,7 @@ function deployEndpoint(endpoint, dirname) {
 // as a test returning the response.
 // The test will fail if the request does not
 // have status 200 or has any GraphQL errors.
-async function runGqlOk(authType, endpoint, query, variables, operationName, expected) {
+async function runGqlOk(authType, endpoint, request, expected) {
   let headers = new GQLHeaders();
   switch (authType) {
     case authTypes.adminKey:
@@ -65,11 +65,7 @@ async function runGqlOk(authType, endpoint, query, variables, operationName, exp
     test: this,
     endpoint,
     headers,
-    request: {
-      query: query,
-      variables: variables,
-      operationName: operationName,
-    },
+    request,
     expected,
   })
 }
@@ -87,15 +83,26 @@ function deployAndRun(dirname, tests) {
 
   afterEach('log-failure', logOnFail)
   tests.forEach(
-    ({ label, query, variables, operationName, expected, authType }) => {
+    ({ label, documentId, query, variables, operationName, expected, authType }) => {
       it(label, async function () {
         this.timeout(4000); // Occasional requests take > 2s
+        let request = {}
+        if (query) {
+          request.query = query;
+        }
+        if (documentId) {
+          request.documentId = documentId;
+        }
+        if (operationName) {
+          request.operationName = operationName;
+        }
+        if (variables) {
+          request.variables = variables;
+        }
         return await runGqlOk(
           authType,
           endpoint,
-          query,
-          variables,
-          operationName,
+          request,
           expected,
         );
       });
