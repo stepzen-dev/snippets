@@ -64,7 +64,7 @@ https://london.us-east-a.ibm.stepzen.net/api/customer/graphql?documentId=sha256%
 ## Executable Documents
 
 A good practice is to ensure that a CI/CD process ensures that _executable documents_ declared as
-part of the schema using `@sdl(executables:)` are formatted consistentcy, using tooling such as `prettier`.
+part of the schema using `@sdl(executables:)` are formatted consistently, using tooling such as `prettier`.
 
 For example the simple _executable document_ shown above `{__typename}` stored in a document file
 and formatted will have contents (including a newline at the end):
