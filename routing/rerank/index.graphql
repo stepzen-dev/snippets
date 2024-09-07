@@ -3,102 +3,118 @@
 Interface JSONDocs represents a type that contains a single JSON field.
 """
 interface JSONDocs {
-    docs: JSON
+  docs: JSON
 }
 
 """
 Type Concrete implements JSONDocs
 """
 type Concrete implements JSONDocs {
-    docs: JSON
+  docs: JSON
 }
 
 type Query {
   """
   createAndSort is the main field that creates a Concrete `JSON` document that is an array of elements, each ranked in ascending, descending or random order depending on the `type` argument.
   """
-  createAndSort (count: Int!, type: String): JSONDocs
-    @sequence (steps: [
-        {query: "createDocs"}, 
-        {query: "reRank", arguments: {name: "type", argument: "type"}} 
-    ])
+  createAndSort(count: Int!, type: String): JSONDocs
+    @sequence(
+      steps: [
+        { query: "createDocs" }
+        { query: "reRank", arguments: { name: "type", argument: "type" } }
+      ]
+    )
   """
   createDocs computes a JSON document that is an array of `count` elements with randomly generated `distance`.
   """
-  createDocs (count: Int!): Concrete
-    @rest (endpoint: "stepzen:empty",
-    ecmascript: """
-    function transformREST (s) {
-        var count = get('count')
-        var output = []
-        var element = {}
+  createDocs(count: Int!): Concrete
+    @rest(
+      endpoint: "stepzen:empty"
+      ecmascript: """
+      function transformREST (s) {
+          var count = get('count')
+          var output = []
+          var element = {}
 
-        var seed = 1;
-        function random() {
-          var x = Math.sin(seed++) * 10000;
-          return x - Math.floor(x);
-        }
-        for (let i = 0; i < count; i++) {
-             element = {"distance": random(), "content": i.toString()}
-             output.push (element)
-        }
-        return {docs: output}
-            
-    }
-    """)
+          var seed = 1;
+          function random() {
+            var x = Math.sin(seed++) * 10000;
+            return x - Math.floor(x);
+          }
+          for (let i = 0; i < count; i++) {
+               element = {"distance": random(), "content": i.toString()}
+               output.push (element)
+          }
+          return {docs: output}
+
+      }
+      """
+    )
   """
   reRank is a field that reorders the elements in `docs` according to the requested `type` argument.  This fields is implemented by other fields that supply it based on the value of `type`.
-  """    
-  reRank (docs: JSON, type: String): JSONDocs
+  """
+  reRank(docs: JSON, type: String): JSONDocs
   """
   reRankAsc is a field that reorders the elements in `docs` in ascending order of their `distance` field.
-  """  
-  reRankAsc ( docs: JSON, type: String): Concrete
-    @supplies (query: "reRank", if: {src: "type === 'asc'"})
-    @rest (endpoint: "stepzen:empty",
-           transforms: [{
-            editor: """jsonata:
-            (
-              $docs := $get("docs");
-              {
-                "docs": $docs^(<distance)
-              }
-            )
-            """
-           }]
-           )
+  """
+  reRankAsc(docs: JSON, type: String): Concrete
+    @supplies(query: "reRank", if: { src: "type === 'asc'" })
+    @rest(
+      endpoint: "stepzen:empty"
+      transforms: [
+        {
+          editor: """
+          jsonata:
+          (
+            $docs := $get("docs");
+            {
+              "docs": $docs^(<distance)
+            }
+          )
+          """
+        }
+      ]
+    )
   """
   reRankDesc is a field that reorders the elements in `docs` in descending order of their `distance` field.
   """
-  reRankDesc (docs: JSON, type: String): Concrete
-    @supplies (query: "reRank", if: {src: "type === 'desc'"})
-    @rest (endpoint: "stepzen:empty",
-           transforms: [{
-            editor: """jsonata:
-            (
-              $docs := $get("docs");
-              {
-                "docs": $docs^(>distance)
-              }
-            )
-            """
-           }]
+  reRankDesc(docs: JSON, type: String): Concrete
+    @supplies(query: "reRank", if: { src: "type === 'desc'" })
+    @rest(
+      endpoint: "stepzen:empty"
+      transforms: [
+        {
+          editor: """
+          jsonata:
+          (
+            $docs := $get("docs");
+            {
+              "docs": $docs^(>distance)
+            }
+          )
+          """
+        }
+      ]
     )
   """
   reRankNoop is a field that skips reordering
   """
-  reRankNoop (docs: JSON, type: String): Concrete
-    @supplies (query: "reRank", if: {src: "type === 'noop'"})
-    @rest (endpoint: "stepzen:empty",
-           transforms: [{
-            editor: """jsonata:
-            (
-              $docs := $get("docs");
-              {
-                "docs": $docs
-              }
-            )
-            """
-           }]
+  reRankNoop(docs: JSON, type: String): Concrete
+    @supplies(query: "reRank", if: { src: "type === 'noop'" })
+    @rest(
+      endpoint: "stepzen:empty"
+      transforms: [
+        {
+          editor: """
+          jsonata:
+          (
+            $docs := $get("docs");
+            {
+              "docs": $docs
+            }
+          )
+          """
+        }
+      ]
     )
 }

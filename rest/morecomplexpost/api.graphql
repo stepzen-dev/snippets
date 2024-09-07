@@ -1,15 +1,14 @@
-# Here we create a `postbody` from the query argument 
+# Here we create a `postbody` from the query argument
 # using `GetJSON` which will return a JSON item associated
 # with one of the inputs.
 # `GetJSON` will return a null value if the city or name was not specified.
 # `GetJSON` is preferred for an 'Accept' header with an `application/JSON` value.
 # The syntax is `{{.GetJSON "name-of-the-argument"}}`
-# 
+#
 # You can also use `Get` which will return a string version
-# of the input--where possible--and is well suited for use in 
+# of the input--where possible--and is well suited for use in
 # XML, forms, etc.   However, `Get` gets more complicated
 # in terms of careful escaping. Wherever possible, use `GetJSON`.
-
 
 type Root {
   args: JSON
@@ -26,17 +25,17 @@ type Root {
 # that uses Go language templates and the custom
 # stepzen function "Get" and "GetJSON".
 type Query {
-    restquery(name:String!, city: String!): Root
-    @rest (endpoint: "https://httpbingo.org/post",
-            method: POST,
-            postbody: """ 
-            {"record": { "name": {{.GetJSON "name"}}, 
-                                       "city": "{{.GetJSON "city"}}"} } 
-            """
-            headers: [
-               {name: "Accept", value: "application/json"}
-               {name: "Content-Type", value: "application/json"}
-            ]
+  restquery(name: String!, city: String!): Root
+    @rest(
+      endpoint: "https://httpbingo.org/post"
+      method: POST
+      postbody: """
+      {"record": { "name": {{.GetJSON "name"}},
+                                 "city": "{{.GetJSON "city"}}"} }
+      """
+      headers: [
+        { name: "Accept", value: "application/json" }
+        { name: "Content-Type", value: "application/json" }
+      ]
     )
 }
-

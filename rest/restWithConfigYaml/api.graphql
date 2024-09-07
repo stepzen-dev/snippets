@@ -23,15 +23,15 @@ curl https://ACCOUNTNAME.stepzen.net/api/miscellaneous/__graphql \
    --header "Content-Type: application/json" \
    --data '{"query": "{rest(q: [\"Joe Smith\" \"Jane Smith\"]) { args { q  } url }}"}'
 """
-
 type Query {
-    rest(q:[String]): Root
+  rest(q: [String]): Root
     # Set a JSON query return type to avoid any type conflicts that you might have during testing.
     # You cannot subselect fields this way.
     # rest(q:[String]): JSON
-    @rest (endpoint: "https://httpbingo.org/get?apikey=$apikey",
-            method: GET,
-            headers: [{name: "Accept", value:"application/json"}],
-            configuration: "httpbin"
+    @rest(
+      endpoint: "https://httpbingo.org/get?apikey=$apikey"
+      method: GET
+      headers: [{ name: "Accept", value: "application/json" }]
+      configuration: "httpbin"
     )
 }

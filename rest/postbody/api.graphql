@@ -13,7 +13,7 @@ type Root {
 
 """
 Since we used `application/x-www-form-urlencoded` as a value for our `Content-Type` header, StepZen will
-encode the postbody as form-encoded and the httpbingo.org/post will return 
+encode the postbody as form-encoded and the httpbingo.org/post will return
 it in form. You'll see that `args` and `data` will be empty, and `json` will be null, when you run the following query.
 query MyQuery {
   restquery(name: "Joe Smith", city: "New York") {
@@ -26,21 +26,22 @@ query MyQuery {
 }
 """
 type Query {
-    restquery(name:String, city: String): Root
+  restquery(name: String, city: String): Root
     # Set a JSON query return type to avoid any type conflicts that you might have during testing.
     # You cannot subselect fields this way.
     # restquery(name:String, city: String): JSON
-    @rest (endpoint: "https://httpbingo.org/post",
-            method: POST,
-            headers: [{name: "Accept", value:"application/json"},
-                    {name: "Content-Type", value: "application/x-www-form-urlencoded"}],
-          
+    @rest(
+      endpoint: "https://httpbingo.org/post"
+      method: POST
+      headers: [
+        { name: "Accept", value: "application/json" }
+        { name: "Content-Type", value: "application/x-www-form-urlencoded" }
+      ]
     )
 }
 
-
 """
-When the 'Accept' header is `application/json`, StepZen will automatically populate the body.  
+When the 'Accept' header is `application/json`, StepZen will automatically populate the body.
 Note: if method POST is used, The default for `Content-Type` is `application/json`.
 
 Using the sample GraphQL query, data will show the contents of the postbody and json as transformed to JSON.
@@ -57,14 +58,14 @@ query MyQuery {
   }
 }
 """
-
 type Query {
-    restjsonbodyquery(name:String, city: String): Root
+  restjsonbodyquery(name: String, city: String): Root
     # Set a JSON query return type to avoid any type conflicts that you might have during testing.
     # You cannot subselect fields this way.
     # restjsonbodyquery(name:String, city: String): JSON
-    @rest (endpoint: "https://httpbingo.org/post",
-            method: POST,
-            headers: [{name: "Accept", value:"application/json"}]
+    @rest(
+      endpoint: "https://httpbingo.org/post"
+      method: POST
+      headers: [{ name: "Accept", value: "application/json" }]
     )
 }
