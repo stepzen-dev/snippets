@@ -4,11 +4,10 @@ const { URL } = require("url");
 const path = require("node:path");
 
 const {
-  executeOK,
-  logOnFail,
-} = require('gqltest/packages/gqltest/gqltest.js')
+  runtests,
+} = require('gqltest/packages/gqltest/gqltest.js');
 
-const stepzen = require('gqltest/packages/gqltest/stepzen.js');
+const stepzen = require("gqltest/packages/gqltest/stepzen.js");
 
 const endpoint = process.env.STEPZEN_ENDPOINT;
 
@@ -31,58 +30,23 @@ function deployEndpoint(endpoint, dirname) {
   console.log(stdout);
 }
 
-// Runs a GraphQL request against the endpoint
-// as a test returning the response.
-// The test will fail if the request does not
-// have status 200 or has any GraphQL errors.
-async function runGqlOk(endpoint, headers, request, expected) {
- await executeOK({
-    test: this,
-    endpoint,
-    headers: headers,
-    request,
-    expected,
-  })
-}
-
 // deploys graphql schema located in dirname to the test endpoint provided by the environment (process.env.STEPZEN_ENDPOINT),
 // and then runs through all fo the field selection tests.
 function deployAndRun(dirname, tests, headers) {
-  it("deploy", function () {
-    // deployEndpoint will try up to three times to deploy
-    // the schema with a backoff that can total four seconds.
-    // So set the timeout to be (3*10)+4 seconds to cover a worst case scenario.
-    this.timeout(34000);
-    return deployEndpoint(endpoint, dirname);
-  });
+  describe("deployAndRun", function () {
+    this.timeout(10000);
+    this.slow(1000);
+    it("deploy", function () {
+      // deployEndpoint will try up to three times to deploy
+      // the schema with a backoff that can total four seconds.
+      // So set the timeout to be (3*10)+4 seconds to cover a worst case scenario.
+      this.timeout(34000);
+      this.slow(5000);
+      return deployEndpoint(endpoint, dirname);
+    });
 
-  afterEach('log-failure', logOnFail)
-  tests.forEach(
-    ({ label, documentId, query, variables, operationName, expected, authType }) => {
-      it(label, async function () {
-        this.timeout(4000); // Occasional requests take > 2s
-        let request = {}
-        if (query) {
-          request.query = query;
-        }
-        if (documentId) {
-          request.documentId = documentId;
-        }
-        if (operationName) {
-          request.operationName = operationName;
-        }
-        if (variables) {
-          request.variables = variables;
-        }
-        return await runGqlOk(
-          endpoint,
-          headers,
-          request,
-          expected,
-        );
-      });
-    }
-  );
+    runtests("run", endpoint, headers, tests);
+  });
 }
 
 function getTestDescription(testRoot, fullDirName) {
@@ -96,4 +60,4 @@ function getTestDescription(testRoot, fullDirName) {
 exports.deployAndRun = deployAndRun;
 exports.getTestDescription = getTestDescription;
 
-exports.stepzen = stepzen
+exports.stepzen = stepzen;
