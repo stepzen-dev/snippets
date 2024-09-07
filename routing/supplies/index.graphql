@@ -84,7 +84,7 @@ type Query {
   tyd(id: ID!): ToYourDoor
     @supplies(
       query: "expected"
-      if: {src: "$contains(id, /^TYD-/)", language: JSONATA}
+      if: { src: "$contains(id, /^TYD-/)", language: JSONATA }
     )
     @rest(
       endpoint: "stepzen:empty"

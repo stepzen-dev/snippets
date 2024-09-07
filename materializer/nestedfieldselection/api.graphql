@@ -1,11 +1,11 @@
 # See preamble in README.md
 
 type Document {
-   docId: String
-   content(id: String!): Content
-     @materializer(query: "content", arguments:[{name: "id" argument:"id"}])
-   author: Author 
-   lastUpdate: Date
+  docId: String
+  content(id: String!): Content
+    @materializer(query: "content", arguments: [{ name: "id", argument: "id" }])
+  author: Author
+  lastUpdate: Date
 }
 
 type Content @mock {
@@ -15,36 +15,47 @@ type Content @mock {
 }
 
 type Query {
-  document:  Document
-       @rest(
-       endpoint: "stepzen:empty"
-       transforms: [{
-        editor: """jq: {"author": { "name":"Roy Derks", "country":"Netherlands"}}"""
-       }]
-       )
-  # Content is exposed here to keep the snippet self-contained, but would otherwise not be exposed as an operation   
-  content(id: String!): Content 
-      @connector(type:"echo")
+  document: Document
+    @rest(
+      endpoint: "stepzen:empty"
+      transforms: [
+        {
+          editor: """
+          jq: {"author": { "name":"Roy Derks", "country":"Netherlands"}}
+          """
+        }
+      ]
+    )
+  # Content is exposed here to keep the snippet self-contained, but would otherwise not be exposed as an operation
+  content(id: String!): Content @connector(type: "echo")
 }
 
 type Author {
-    name: String!
-    country: String
+  name: String!
+  country: String
 }
 
 type Query {
   book: Book
     @rest(
-       endpoint: "stepzen:empty"
-       transforms: [{
-        editor: """jq: {"refId": "27", "name": "Fullstack GraphQL"}"""
-       }]
+      endpoint: "stepzen:empty"
+      transforms: [
+        {
+          editor: """
+          jq: {"refId": "27", "name": "Fullstack GraphQL"}
+          """
+        }
+      ]
     )
 }
 
 type Book {
   refId: String!
   name: String
-  author: Author @materializer (query: "document {author}")
-  content: Content @materializer (query: "document {content}", arguments: {name: "id", field: "refId"})
-} 
+  author: Author @materializer(query: "document {author}")
+  content: Content
+    @materializer(
+      query: "document {content}"
+      arguments: { name: "id", field: "refId" }
+    )
+}

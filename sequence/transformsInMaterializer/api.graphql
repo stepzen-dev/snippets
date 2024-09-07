@@ -7,67 +7,69 @@
 # We use an intermediate type `Coord` to connect the two.
 
 type Weather {
-    temp: Float
+  temp: Float
 }
 type Coord {
-    lat: String
-    lon: String
+  lat: String
+  lon: String
 }
 type Customer {
-    name: String
-    city: String
+  name: String
+  city: String
 }
 type Query {
-    # Queries `weather`,`convertCityToLatLon`, and `customer` use an ecmascript return.
-    # See https://stepzen.com/docs/custom-graphql-directives/directives#ecmascript for more information on `ecmascript`.
-    # We are picturing a real-life scenario in which you call a weather API and a customer datasource using the `endpoint` argument. 
-    # See https://stepzen.com/docs/connecting-backends/how-to-connect-a-rest-service for more information on `@rest`. 
-    weather (lat: String, lon: String): Weather
-        @rest (endpoint: "stepzen:empty"
-            ecmascript: """
-            function transformREST(s) {
-                var lat = get('lat')
-                var lon = get('lon')
-                if (lat=='25.76' && lon=='-80.19')
-                    return (JSON.stringify({"temp":100.0}))
-                else
-                    return (JSON.stringify({"temp":60.4}))
-            }
-            """
-        )
-    convertCityToLatLon (city: String):Coord
-    @rest (endpoint: "stepzen:empty"
-            ecmascript: """
-            function transformREST(s) {
-                var city = get('city')
-                if (city == 'Miami')
-                    return (JSON.stringify({"lat":"25.76","lon":"-80.19"}))
-                else
-                    return (JSON.stringify({"lat":"37.2","lon":"-121.19"}))
-            }
-            """
-        )
-    # A sequence call that sequences the queries `converCityToLatLong` and `weather`.
-    # This enables a `city` argument to be used to fetch weather data by lat/lon.
-    weatherByCity (city: String): Weather
-        @sequence(steps:[{query: "convertCityToLatLon"}, {query: "weather"}])
+  # Queries `weather`,`convertCityToLatLon`, and `customer` use an ecmascript return.
+  # See https://stepzen.com/docs/custom-graphql-directives/directives#ecmascript for more information on `ecmascript`.
+  # We are picturing a real-life scenario in which you call a weather API and a customer datasource using the `endpoint` argument.
+  # See https://stepzen.com/docs/connecting-backends/how-to-connect-a-rest-service for more information on `@rest`.
+  weather(lat: String, lon: String): Weather
+    @rest(
+      endpoint: "stepzen:empty"
+      ecmascript: """
+      function transformREST(s) {
+          var lat = get('lat')
+          var lon = get('lon')
+          if (lat=='25.76' && lon=='-80.19')
+              return (JSON.stringify({"temp":100.0}))
+          else
+              return (JSON.stringify({"temp":60.4}))
+      }
+      """
+    )
+  convertCityToLatLon(city: String): Coord
+    @rest(
+      endpoint: "stepzen:empty"
+      ecmascript: """
+      function transformREST(s) {
+          var city = get('city')
+          if (city == 'Miami')
+              return (JSON.stringify({"lat":"25.76","lon":"-80.19"}))
+          else
+              return (JSON.stringify({"lat":"37.2","lon":"-121.19"}))
+      }
+      """
+    )
+  # A sequence call that sequences the queries `converCityToLatLong` and `weather`.
+  # This enables a `city` argument to be used to fetch weather data by lat/lon.
+  weatherByCity(city: String): Weather
+    @sequence(steps: [{ query: "convertCityToLatLon" }, { query: "weather" }])
 
-    customer (id: ID): Customer
-    @rest (endpoint: "stepzen:empty"
-            ecmascript: """
-            function transformREST(s) {
-                var id = get('id')
-                if (id==1)
-                    return (JSON.stringify({"name":"John Doe","city":"Miami"}))
-                else
-                    return (JSON.stringify({"name":"Jane Smith","city":"Santa Clara"}))
-            }
-            """
+  customer(id: ID): Customer
+    @rest(
+      endpoint: "stepzen:empty"
+      ecmascript: """
+      function transformREST(s) {
+          var id = get('id')
+          if (id==1)
+              return (JSON.stringify({"name":"John Doe","city":"Miami"}))
+          else
+              return (JSON.stringify({"name":"Jane Smith","city":"Santa Clara"}))
+      }
+      """
     )
 }
 
 # As a final step, use @materializer to connect the customer graph with the weather graph.
 extend type Customer {
-    weather: Weather
-    @materializer (query: "weatherByCity")
+  weather: Weather @materializer(query: "weatherByCity")
 }

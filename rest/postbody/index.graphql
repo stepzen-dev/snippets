@@ -1,3 +1,3 @@
-schema @sdl(files:[
-    "api.graphql"
-    ]){query: Query}
+schema @sdl(files: ["api.graphql"]) {
+  query: Query
+}

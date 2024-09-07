@@ -1,13 +1,13 @@
 """
 Explore an rest API using JSON as the return value as in `restJSONquery` below, then see what the
 REST API returned in context of how the StepZen services process the request.
- 
+
 Try issuing the following with name and/or city removed to see the effects.
 ```
 curl https://ACCOUNTNAME.stepzen.net/api/miscellaneous/__graphql \
     --header "Authorization: Apikey $(stepzen whoami --apikey)" \
     --header "Content-Type: application/json" \
-    --data '{"query": "{restJSONquery(name: \"Joe Smith\" city:\"New York\")}"}' 
+    --data '{"query": "{restJSONquery(name: \"Joe Smith\" city:\"New York\")}"}'
 ```
 
 StepZen services return diagnostics in the GraphQL response
@@ -17,21 +17,22 @@ curl https://ACCOUNTNAME.stepzen.net/api/miscellaneous/__graphql \
     --header "Authorization: Apikey $(stepzen whoami --adminkey)" \
     --header "Content-Type: application/json" \
     --header "StepZen-Debug-Level: 1" \
-    --data '{"query": "{restJSONquery(name: \"Joe Smith\" city:\"New York\")}"}' 
+    --data '{"query": "{restJSONquery(name: \"Joe Smith\" city:\"New York\")}"}'
 ```
 """
 type Query {
-    # Set a JSON query return type to avoid any type conflicts that you might have during testing.
-    # You cannot subselect fields this way.
-    restJSONquery(name:String, city: String): JSON
-    @rest (endpoint: "https://httpbingo.org/post",
-            method: POST,
-            postbody: """
-            {"record": { "name": {{.GetJSON "name"}}, "city": {{.GetJSON "city"}}} }
-            """
-            headers: [
-               {name: "Accept", value: "application/json"}
-               {name: "Content-Type", value: "application/json"}
-            ],
+  # Set a JSON query return type to avoid any type conflicts that you might have during testing.
+  # You cannot subselect fields this way.
+  restJSONquery(name: String, city: String): JSON
+    @rest(
+      endpoint: "https://httpbingo.org/post"
+      method: POST
+      postbody: """
+      {"record": { "name": {{.GetJSON "name"}}, "city": {{.GetJSON "city"}}} }
+      """
+      headers: [
+        { name: "Accept", value: "application/json" }
+        { name: "Content-Type", value: "application/json" }
+      ]
     )
 }
