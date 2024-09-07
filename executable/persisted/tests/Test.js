@@ -3,7 +3,7 @@ const path = require("node:path");
 
 const {
   deployAndRun,
-  authTypes,
+  stepzen,
   getTestDescription,
 } = require("../../../tests/gqltest.js");
 
@@ -27,7 +27,6 @@ describe(testDescription, function () {
           name: "Tromp",
         },
       },
-      authType: authTypes.adminKey,
     },
     {
       label: "CustomerName",
@@ -42,7 +41,6 @@ describe(testDescription, function () {
           email: "marciaschinner@kub.io",
         },
       },
-      authType: authTypes.adminKey,
     },
     {
       label: "Customer",
@@ -64,8 +62,7 @@ describe(testDescription, function () {
           },
         },
       },
-      authType: authTypes.adminKey,
     },
   ];
-  return deployAndRun(__dirname, tests);
+  return deployAndRun(__dirname, tests,stepzen.admin);
 });

@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("node:path");
 const {
   deployAndRun,
-  authTypes,
+  stepzen,
   getTestDescription,
 } = require("../../../tests/gqltest.js");
 
@@ -22,7 +22,6 @@ describe(testDescription, function () {
           name: "Leia Organa",
         },
       },
-      authType: authTypes.adminKey,
     },
     {
       label: "person",
@@ -33,7 +32,6 @@ describe(testDescription, function () {
           name: "Han Solo",
         },
       },
-      authType: authTypes.adminKey,
     },
     {
       label: "defaultHero",
@@ -44,7 +42,6 @@ describe(testDescription, function () {
           name: "R2-D2",
         },
       },
-      authType: authTypes.adminKey,
     },
     {
       label: "luke",
@@ -55,7 +52,6 @@ describe(testDescription, function () {
           name: "Luke Skywalker",
         },
       },
-      authType: authTypes.adminKey,
     },
     {
       label: "robot",
@@ -66,7 +62,6 @@ describe(testDescription, function () {
           name: "C-3PO",
         },
       },
-      authType: authTypes.adminKey,
     },
     {
       label: "robotDefault",
@@ -77,7 +72,6 @@ describe(testDescription, function () {
           name: "R2-D2",
         },
       },
-      authType: authTypes.adminKey,
     },
     {
       label: "humanName",
@@ -86,7 +80,6 @@ describe(testDescription, function () {
       expected: {
         humanName: "Leia Organa",
       },
-      authType: authTypes.adminKey,
     },
     {
       label: "droidFriends",
@@ -112,7 +105,6 @@ describe(testDescription, function () {
           },
         ],
       },
-      authType: authTypes.adminKey,
     },
     {
       label: "humanFriendsNames",
@@ -121,8 +113,7 @@ describe(testDescription, function () {
       expected: {
         humanFriendsNames: ["C-3PO", "Han Solo", "Luke Skywalker", "R2-D2"],
       },
-      authType: authTypes.adminKey,
     },
   ];
-  return deployAndRun(__dirname, tests);
+  return deployAndRun(__dirname, tests, stepzen.admin);
 });

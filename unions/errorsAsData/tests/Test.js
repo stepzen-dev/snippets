@@ -1,6 +1,6 @@
 const {
   deployAndRun,
-  authTypes,
+  stepzen,
   getTestDescription,
 } = require('../../../tests/gqltest.js');
 
@@ -18,7 +18,6 @@ describe(testDescription, function () {
           token: '1234567890',
         },
       },
-      authType: authTypes.adminKey,
     },
     {
       label: 'auth(incorrect)',
@@ -29,8 +28,7 @@ describe(testDescription, function () {
           message: 'Invalid credentials',
         },
       },
-      authType: authTypes.adminKey,
     },
   ];
-  return deployAndRun(__dirname, tests);
+  return deployAndRun(__dirname, tests, stepzen.admin);
 });

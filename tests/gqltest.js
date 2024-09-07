@@ -4,23 +4,11 @@ const { URL } = require("url");
 const path = require("node:path");
 
 const {
-  GQLHeaders,
   executeOK,
   logOnFail,
 } = require('gqltest/packages/gqltest/gqltest.js')
 
-const authTypes = {
-  adminKey: 1,
-  apiKey: 2,
-  jwt: 3,
-  noAuth: 4,
-};
-Object.freeze(authTypes);
-
-// We use admin key to test because there is a cache optimization for apikey's that is not conducive
-// to rapid deploy and run cycles that occur with this type of testing
-const adminKey = execSync(`stepzen whoami --adminkey`).toString().trim();
-const apiKey = execSync(`stepzen whoami --apikey`).toString().trim();
+const stepzen = require('gqltest/packages/gqltest/stepzen.js');
 
 const endpoint = process.env.STEPZEN_ENDPOINT;
 
@@ -47,24 +35,11 @@ function deployEndpoint(endpoint, dirname) {
 // as a test returning the response.
 // The test will fail if the request does not
 // have status 200 or has any GraphQL errors.
-async function runGqlOk(authType, endpoint, request, expected) {
-  let headers = new GQLHeaders();
-  switch (authType) {
-    case authTypes.adminKey:
-      headers.withAPIKey(adminKey);
-      break;
-    case authTypes.apiKey:
-      headers.withAPIKey(apiKey);
-      break;
-    //  Have not  implemented jwt yet
-    case authTypes.jwt:
-    case authTypes.noAuth:
-    default:
-  }
+async function runGqlOk(endpoint, headers, request, expected) {
  await executeOK({
     test: this,
     endpoint,
-    headers,
+    headers: headers,
     request,
     expected,
   })
@@ -72,7 +47,7 @@ async function runGqlOk(authType, endpoint, request, expected) {
 
 // deploys graphql schema located in dirname to the test endpoint provided by the environment (process.env.STEPZEN_ENDPOINT),
 // and then runs through all fo the field selection tests.
-function deployAndRun(dirname, tests) {
+function deployAndRun(dirname, tests, headers) {
   it("deploy", function () {
     // deployEndpoint will try up to three times to deploy
     // the schema with a backoff that can total four seconds.
@@ -100,8 +75,8 @@ function deployAndRun(dirname, tests) {
           request.variables = variables;
         }
         return await runGqlOk(
-          authType,
           endpoint,
+          headers,
           request,
           expected,
         );
@@ -119,5 +94,6 @@ function getTestDescription(testRoot, fullDirName) {
 }
 
 exports.deployAndRun = deployAndRun;
-exports.authTypes = authTypes;
 exports.getTestDescription = getTestDescription;
+
+exports.stepzen = stepzen
