@@ -28,7 +28,7 @@ Reshaping is combined with access control of GraphQL fields so that
 
 In all of the reshaping examples fields that are part of the reshaped api are accessible with no authorization.
 
-> **Note**
+> [!NOTE]
 > Any reshaped GraphQL schema can also be expanded with any StepZen GraphQL functionality, such as adding fields with `@materializer` or adding `@sequence` fields that invoked fields from reshaped and or original schema.
 
 ## Techniques

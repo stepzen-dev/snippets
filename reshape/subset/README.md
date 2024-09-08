@@ -87,4 +87,4 @@ stepzen request -f operations.graphql --operation-name=Human -H Authorization:
 stepzen request -f operations.graphql --operation-name=Version -H Authorization:
 ```
 
-> **Note** > `-H Authorization:` removes the authorization header automatically added by `stepzen request` to demonstrate the fields are public.
+> [!NOTE] > `-H Authorization:` removes the authorization header automatically added by `stepzen request` to demonstrate the fields are public.

@@ -11,7 +11,7 @@ This is achieved with a combination of:
 - Use of `@materializer` for the [new root operation type fields](exposed.graphql).
 - [Field based access control](config.yaml) to only expose the new fields.
 
-> **Note**
+> [!NOTE]
 > Even though this schema uses `@graphql` the techniques are independent of the data coming from a backend GraphQL endpoint, the reshaping is just against fields in the schema regardless of their source.
 
 ## Rename
@@ -59,7 +59,7 @@ the `city` field is a leaf `String`, rather than being buried in a `Location` ob
 
 [`Query.humanName`](exposed.graphql#L32-L35) uses the selection `human { name }` which selects just a `Human`'s name. It is effectively executing `query ($id:ID!) {human(id:$id) { name }}` when `humanName` is selected in an operation.
 
-[`Query.droidFriends`](exposed.graphql#L37-L40) uses the selection `droid { friends }` where `friends` type is a composite type, `[Character]`. Even though the selected single field `friends` is a composite type, it has no selection in its `@materializer`. Instead, when an operation is executed that selects `droidFriends`,  the selection against that field is applied to the selection of `friends`. For example the execution of this operation
+[`Query.droidFriends`](exposed.graphql#L37-L40) uses the selection `droid { friends }` where `friends` type is a composite type, `[Character]`. Even though the selected single field `friends` is a composite type, it has no selection in its `@materializer`. Instead, when an operation is executed that selects `droidFriends`, the selection against that field is applied to the selection of `friends`. For example the execution of this operation
 
 ```graphql
 query DroidFriends {
@@ -93,7 +93,7 @@ query DroidFriends {
 }
 ```
 
-> **Note** 
+> [!NOTE]
 > The selection in the client's operation (`DroidFriends` in this example) against an annotated field with a selection in its `@materializer` can be **any valid selection** against the type of the annotated field, which include selections of nested fields that themselves have `@materializer`, with or without selections.
 
 If anywhere in the selection any field is a list then the annotated field must have a type that is a list of the single field.
@@ -121,5 +121,4 @@ stepzen request -f operations.graphql --operation-name=DroidFriends -H Authoriza
 stepzen request -f operations.graphql --operation-name=HumanFriendsNames -H Authorization:
 ```
 
-> **Note** 
-> `-H Authorization:` removes the authorization header automatically added by `stepzen request` to demonstrate the fields are public.
+> [!NOTE] > `-H Authorization:` removes the authorization header automatically added by `stepzen request` to demonstrate the fields are public.
