@@ -14,9 +14,9 @@ want to share the endpoint to allow others to evaluate it by making GraphQL requ
 
 The most simple (but somewhat risky) approach is to share the account's apikey (`stepzen whoami --apikey`).
 
-The disadvantage with this is the admin key grants access to all endpoints within an account.
-Thus if you are working on different PoCs, by providing access to one you provide access to all
-which could leak information between different departments or clients.
+> [!WARNING]
+> The admin key grants access to all endpoints within an account. Thus if you are working on different PoCs, by providing access to one you provide access to all
+> which could leak information between different departments or clients.
 
 ### Obfuscated endpoints
 

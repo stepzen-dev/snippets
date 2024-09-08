@@ -4,6 +4,8 @@ One simple mechanism to share an IBM API Connect Essentials (StepZen) endpoint t
 to make the [endpoint open](../../protection/makeAllPublic/config.yaml) but
 deploy the schema with an obfuscated name.
 
+## Deploying
+
 For example, deploy this schema using a randomly generated name (Linux/MacOS):
 
 ```
@@ -24,8 +26,12 @@ This endpoint URL can now be handed out to allow others to evaluate the endpoint
 > [!WARNING]
 > Anyone with the URL has access to the endpoint, so this is security through obscurity.
 
-Using analytics the account owner can see activity with this specific endpoint,
+## Analytics
+
+Using the analytics dashboard the account owner can see activity with this specific endpoint,
 so be handing out individual endpoints the account owner can track who has evaluated the endpoint.
+
+## Single-use & deleting
 
 Thus one can extend thise concept to a "single-use" endpoint, for example creating an endpoint
 for a demo and then delete it when no longer required.
@@ -33,6 +39,8 @@ for a demo and then delete it when no longer required.
 ```
 stepzen delete --non-interactive pocs/FzOYquoOMuQzvQqsLSUfVuvQwfVwuOEhGOkGGpLDnuIzeJZCHQAfHbFMCCIQdmBe
 ```
+
+## Tracking
 
 By maintaining such endpoints in single folder, such as `pocs` or `single-use` you can use `stepzen list` to
 see which endpoints are still active.
@@ -44,7 +52,9 @@ see which endpoints are still active.
  pocs/FzOYquoOMuQzvQqsLSUfVuvQwfVwuOEhGOkGGpLDnuIzeJZCHQAfHbFMCCIQdmBe    Sep 8, 2024, 12:46 PM    Sep 8, 2024, 12:59 PM
 ```
 
-It is recommended to define a schema description so that this GraphQL introspection request can
+## Description
+
+It is recommended to define a [schema description](./index.graphql#L1-L6) so that this GraphQL introspection request can
 used to see the purpose of the obfuscated endpoint.
 
 ```
