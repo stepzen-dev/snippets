@@ -29,7 +29,7 @@ This endpoint URL can now be handed out to allow others to evaluate the endpoint
 ## Analytics
 
 Using the analytics dashboard the account owner can see activity with this specific endpoint,
-so be handing out individual endpoints the account owner can track who has evaluated the endpoint.
+so by handing out individual endpoints the account owner can track how extensively the endpoint has been evaluated.
 
 ## Single-use & deleting
 
@@ -52,7 +52,7 @@ see which endpoints are still active.
  pocs/FzOYquoOMuQzvQqsLSUfVuvQwfVwuOEhGOkGGpLDnuIzeJZCHQAfHbFMCCIQdmBe    Sep 8, 2024, 12:46 PM    Sep 8, 2024, 12:59 PM
 ```
 
-## Description
+## Schema description
 
 It is recommended to define a [schema description](./index.graphql#L1-L6) so that this GraphQL introspection request can
 used to see the purpose of the obfuscated endpoint.

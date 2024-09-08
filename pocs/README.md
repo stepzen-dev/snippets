@@ -28,3 +28,7 @@ The concept can include single-use or short-lived endpoints for a demos, or time
 > Obfuscated endpoints are public, but have a hard to guess endpoint URL so anyone with the URL has access to the API.
 
 See [obfuscated-endpoint-url](obfuscated-endpoint-url/README.md)
+
+### JWT
+
+_Coming Soon_!
