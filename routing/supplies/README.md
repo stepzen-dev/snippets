@@ -14,9 +14,11 @@ based upon a condition against its field arguments.
 ## Example
 
 The abstract field in `Query` is:
+
 ```graphql
 expected(id:ID):Delivery
 ```
+
 which given a tracking identifier returns when a package is expected.
 
 It is supplied by three fields, each with a condition.
@@ -29,7 +31,8 @@ It is supplied by three fields, each with a condition.
   tyd(id: ID!): ToYourDoor
     @supplies(query: "expected" if: {src: "$contains(id, /^TYD-/)", language: JSONATA})
 ```
-> **Note**
+
+> [!NOTE]
 > Implementation of the fields (`@rest`) have been omitted for brevity.
 
 The script `src` must be ECMAScript 5.1 or JSONata and the field's arguments
@@ -42,11 +45,12 @@ Thus in this example if the tracking identifier starts with `FP-` a call
 is made to the FastPackage REST api, if it starts with `ROS-` a call to
 the `RainOrShine` REST api is called, `TYD-` a call to the To Your Door API otherwise no call is made.
 
-> **Note**
+> [!NOTE]
 > The supplying fields can have any implementation, FastPackage could
 > be a GraphQL endpoint while RainOrShine a database query.
 
 ## Try it out
+
 Login to your StepZen account, deploy the schema and then issue requests.
 
 ```shell
