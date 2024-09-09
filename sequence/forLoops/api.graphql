@@ -7,58 +7,59 @@
 # The second query gets order details for each of these ids
 
 type Customer {
-    name: String
-    city: String
-    orderList: [ID]
+  name: String
+  city: String
+  orderList: [ID]
 }
 type Order {
-    id: ID
-    product: ID
+  id: ID
+  product: ID
 }
 type Query {
+  # Queries `customer`,`orderDetail`, and `echo` use an ecmascript return.
+  # See https://stepzen.com/docs/custom-graphql-directives/directives#ecmascript for more information on `ecmascript`.
+  # We are picturing a real-life scenario in which you call a customer datasource using the `endpoint` argument.
+  # See https://stepzen.com/docs/connecting-backends/how-to-connect-a-rest-service for more information on `@rest`.
 
-    # Queries `customer`,`orderDetail`, and `echo` use an ecmascript return.
-    # See https://stepzen.com/docs/custom-graphql-directives/directives#ecmascript for more information on `ecmascript`.
-    # We are picturing a real-life scenario in which you call a customer datasource using the `endpoint` argument. 
-    # See https://stepzen.com/docs/connecting-backends/how-to-connect-a-rest-service for more information on `@rest`. 
-
-    customer (id: ID): Customer
-    @rest (endpoint: "stepzen:empty"
-            ecmascript: """
-            function transformREST(s) {
-                var id = get('id')
-                if (id==1)
-                    return (JSON.stringify({"name":"John Doe","city":"Miami", "orderList":[1,3]}))
-                else
-                    return (JSON.stringify({"name":"Jane Smith","city":"Santa Clara", "orderList":[2,4]}))
-            }
-            """
+  customer(id: ID): Customer
+    @rest(
+      endpoint: "stepzen:empty"
+      ecmascript: """
+      function transformREST(s) {
+          var id = get('id')
+          if (id==1)
+              return (JSON.stringify({"name":"John Doe","city":"Miami", "orderList":[1,3]}))
+          else
+              return (JSON.stringify({"name":"Jane Smith","city":"Santa Clara", "orderList":[2,4]}))
+      }
+      """
     )
-    orderDetail(id: ID): Order
-    @rest (endpoint: "stepzen:empty"
-            ecmascript: """
-            function transformREST(s) {
-                var id = get('id')
-                return (JSON.stringify({"id":id, "product":id+10}))
-            }
-            """
+  orderDetail(id: ID): Order
+    @rest(
+      endpoint: "stepzen:empty"
+      ecmascript: """
+      function transformREST(s) {
+          var id = get('id')
+          return (JSON.stringify({"id":id, "product":id+10}))
+      }
+      """
     )
-    # This is a sequence. The first query in the sequence is an echo, generating a 'for loop'.
-    # The second query gets called for each entry in the 'for loop'.
+  # This is a sequence. The first query in the sequence is an echo, generating a 'for loop'.
+  # The second query gets called for each entry in the 'for loop'.
 
-    allOrders(ids: [ID]): [Order]
-    @sequence (steps:[{query: "echo"}, {query: "orderDetail"}])
+  allOrders(ids: [ID]): [Order]
+    @sequence(steps: [{ query: "echo" }, { query: "orderDetail" }])
 
-
-    echo(ids:[ID]):[ID]
-    @rest (endpoint: "stepzen:empty"
-            ecmascript: """
-            function transformREST(s){
-                var ids = get('ids')
-                return ids
-            }
-            """
-            )
+  echo(ids: [ID]): [ID]
+    @rest(
+      endpoint: "stepzen:empty"
+      ecmascript: """
+      function transformREST(s){
+          var ids = get('ids')
+          return ids
+      }
+      """
+    )
 }
 
 # Now that we have a query that can generate order details for all order ids in the list,
@@ -66,7 +67,9 @@ type Query {
 # We need to map the argument, as shown below.
 
 extend type Customer {
-    orderDetails: [Order]
-    @materializer (query: "allOrders", arguments:[{name:"ids", field:"orderList"}])
+  orderDetails: [Order]
+    @materializer(
+      query: "allOrders"
+      arguments: [{ name: "ids", field: "orderList" }]
+    )
 }
-

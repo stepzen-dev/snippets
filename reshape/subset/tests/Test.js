@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("node:path");
 const {
   deployAndRun,
-  authTypes,
+  stepzen,
   getTestDescription,
 } = require("../../../tests/gqltest.js");
 
@@ -23,14 +23,12 @@ describe(testDescription, function () {
           appearsIn: ["NEWHOPE", "EMPIRE", "JEDI"],
         },
       },
-      authType: authTypes.adminKey,
     },
     {
       label: "version",
       query: "{version { __typename}}",
       expected: { version: { __typename: "Version" } },
-      authType: authTypes.adminKey,
     },
   ];
-  return deployAndRun(__dirname, tests);
+  return deployAndRun(__dirname, tests, stepzen.admin);
 });

@@ -1,21 +1,22 @@
 type Customer {
-    name: String
-    city: String
+  name: String
+  city: String
 }
 type Query {
-    # An ecmascript generator of customer data.
-    # Of course, in real life you will call an API or a database. You can do that by changing the `endpoint` argument on the `@rest` directive. 
-    # https://stepzen.com/docs/connecting-backends/how-to-connect-a-rest-service
-    customer (id: ID): Customer
-    @rest (endpoint: "stepzen:empty"
-            ecmascript: """
-            function transformREST(s) {
-                var id = get('id')
-                if (id==1)
-                    return (JSON.stringify({"name":"John Doe","city":"Miami"}))
-                else
-                    return (JSON.stringify({"name":"Jane Smith","city":"Santa Clara"}))
-            }
-            """
+  # An ecmascript generator of customer data.
+  # Of course, in real life you will call an API or a database. You can do that by changing the `endpoint` argument on the `@rest` directive.
+  # https://stepzen.com/docs/connecting-backends/how-to-connect-a-rest-service
+  customer(id: ID!): Customer
+    @rest(
+      endpoint: "stepzen:empty"
+      ecmascript: """
+      function transformREST(s) {
+          var id = get('id')
+          if (id==1)
+              return (JSON.stringify({"name":"John Doe","city":"Miami"}))
+          else
+              return (JSON.stringify({"name":"Jane Smith","city":"Santa Clara"}))
+      }
+      """
     )
 }

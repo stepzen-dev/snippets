@@ -7,60 +7,64 @@
 # In the second query, we further transform the object to set the right fields.
 
 type Customer {
-    id: ID
-    fullName: String
-    age: Int
+  id: ID
+  fullName: String
+  age: Int
 }
 
 type Query {
-    # This query converts a structure {key1:value1,key2:value2,...}
-    # to [{"name":key1, "value": value1},{"name":key2, "value": value2},...].
-    customerAsNameValue: JSON
-    @rest (
-        # The `ecmascript` argument is great for writing filters.
-        # See https://stepzen.com/docs/custom-graphql-directives/directives#ecmascript for more information on `ecmascript`.
-        # We are picturing a real-life scenario in which you call a backend using the `endpoint` argument. 
-        # See https://stepzen.com/docs/connecting-backends/how-to-connect-a-rest-service for more information on `@rest`. 
-        endpoint: "stepzen:empty" 
-        ecmascript: """
-        function transformREST(s) {
-            return(JSON.stringify({"1":{"fullName":"John Doe", "age":23}, "2":{"fullName":"Jane Smith", age: 25}}))
-        }
-        """
-        # Then we transform it using `objectToArray`.
-        # The `pathpattern` contains only one entry, which means it is applied at the root.
-        # The pathpattern "<>*" means that at this place, one would find a sequence of zero or more object keys.
-        transforms: [{pathpattern: ["<>*"], editor: "objectToArray"}]
+  # This query converts a structure {key1:value1,key2:value2,...}
+  # to [{"name":key1, "value": value1},{"name":key2, "value": value2},...].
+  customerAsNameValue: JSON
+    @rest(
+      # The `ecmascript` argument is great for writing filters.
+      # See https://stepzen.com/docs/custom-graphql-directives/directives#ecmascript for more information on `ecmascript`.
+      # We are picturing a real-life scenario in which you call a backend using the `endpoint` argument.
+      # See https://stepzen.com/docs/connecting-backends/how-to-connect-a-rest-service for more information on `@rest`.
+      endpoint: "stepzen:empty"
+      ecmascript: """
+      function transformREST(s) {
+          return(JSON.stringify({"1":{"fullName":"John Doe", "age":23}, "2":{"fullName":"Jane Smith", age: 25}}))
+      }
+      """
+      # Then we transform it using `objectToArray`.
+      # The `pathpattern` contains only one entry, which means it is applied at the root.
+      # The pathpattern "<>*" means that at this place, one would find a sequence of zero or more object keys.
+      transforms: [{ pathpattern: ["<>*"], editor: "objectToArray" }]
     )
 
-    # This query first converts a structure {key1:value1,key2:value2,...}
-    # to [{"name":key1, "value": value1},{"name":key2, "value": value2},...].
-    # Then it applies a second transformation to set the right fields of the return type.
-    # In this case, the second transformation can also be done using the `setters` argument,
-    # as you can see in the commented-out portion.
-    # For more information on setters, see https://stepzen.com/docs/custom-graphql-directives/directives#setters.
-    customerAsCustomer: JSON
-    @rest (
-        # See https://stepzen.com/docs/custom-graphql-directives/directives#ecmascript for more information on using `ecmascript`.
-        endpoint: "stepzen:empty" 
-        ecmascript: """
-        function transformREST(s) {
-            return(JSON.stringify({"1":{"fullName":"John Doe", "age":23}, "2":{"fullName":"Jane Smith", age: 25}}))
+  # This query first converts a structure {key1:value1,key2:value2,...}
+  # to [{"name":key1, "value": value1},{"name":key2, "value": value2},...].
+  # Then it applies a second transformation to set the right fields of the return type.
+  # In this case, the second transformation can also be done using the `setters` argument,
+  # as you can see in the commented-out portion.
+  # For more information on setters, see https://stepzen.com/docs/custom-graphql-directives/directives#setters.
+  customerAsCustomer: JSON
+    @rest(
+      # See https://stepzen.com/docs/custom-graphql-directives/directives#ecmascript for more information on using `ecmascript`.
+      endpoint: "stepzen:empty"
+      ecmascript: """
+      function transformREST(s) {
+          return(JSON.stringify({"1":{"fullName":"John Doe", "age":23}, "2":{"fullName":"Jane Smith", age: 25}}))
+      }
+      """
+      # Transform the JSON using objectToArray.
+      # Here the `pathpattern` contains only one entry, which means it is applied at the root.
+      # The pathpattern "<>*" means that at this place, one would find a sequence of zero or more object keys.
+      # Then, do another transformation to convert the name, and value pair it to the right structure.
+      # For the second transformation, it also contains only one entry, which means it is applied at the root.
+      # The pathpattern "[]*" means at this place, one would find a sequence of zero or more objects.
+      # The jq expression says to treat that zero or more objects as an array and transform each element of the array.
+      # StepZen takes care of calling jq for each element.
+      transforms: [
+        { pathpattern: ["<>*"], editor: "objectToArray" }
+        # you could comment this out if you want to try setters instead
+        {
+          pathpattern: ["[]*"]
+          editor: "jq:.[]|{id:.name,fullName:.value.name,age:.value.age}"
         }
-        """
-        # Transform the JSON using objectToArray.
-        # Here the `pathpattern` contains only one entry, which means it is applied at the root.
-        # The pathpattern "<>*" means that at this place, one would find a sequence of zero or more object keys.
-        # Then, do another transformation to convert the name, and value pair it to the right structure.
-        # For the second transformation, it also contains only one entry, which means it is applied at the root.
-        # The pathpattern "[]*" means at this place, one would find a sequence of zero or more objects.
-        # The jq expression says to treat that zero or more objects as an array and transform each element of the array.
-        # StepZen takes care of calling jq for each element.
-        transforms: [{pathpattern: ["<>*"], editor: "objectToArray"}
-                    # you could comment this out if you want to try setters instead
-                    {pathpattern:["[]*"], editor:"jq:.[]|{id:.name,fullName:.value.name,age:.value.age}"}
-                    ]
-        # for the second transformation, you can use setters. Uncomment the next line and comment the second pathpattern line above to see how it operates.
-        # setters: [{field: "id", path: "name"}, {field:"fullName", path: "value.age"}, {field:"age", path:"value.fullName"}]
-   )
+      ]
+      # for the second transformation, you can use setters. Uncomment the next line and comment the second pathpattern line above to see how it operates.
+      # setters: [{field: "id", path: "name"}, {field:"fullName", path: "value.age"}, {field:"age", path:"value.fullName"}]
+    )
 }

@@ -1,0 +1,15 @@
+type Query {
+  """
+  Pings the configured database by running a SQL statement
+  that does not access any user tables or schema.
+  """
+  ping: Ping
+    @dbquery(
+      type: "postgresql"
+      query: "SELECT 'ok' AS status"
+      configuration: "pgdb"
+    )
+}
+type Ping {
+  status: String
+}
