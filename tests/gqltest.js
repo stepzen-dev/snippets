@@ -5,6 +5,7 @@ const path = require("node:path");
 
 const {
   runtests,
+  GQLHeaders,
 } = require('gqltest/packages/gqltest/gqltest.js');
 
 const stepzen = require("gqltest/packages/gqltest/stepzen.js");
@@ -59,5 +60,8 @@ function getTestDescription(testRoot, fullDirName) {
 
 exports.deployAndRun = deployAndRun;
 exports.getTestDescription = getTestDescription;
+exports.endpoint = endpoint;
 
+exports.GQLHeaders = GQLHeaders;
+exports.runtests = runtests;
 exports.stepzen = stepzen;
