@@ -35,13 +35,13 @@
 ## About the project
 
 This repo self-contained snippets that demonstrate use of custom directives and other techniques in
-IBM API Connect Essentuials (StepZen).
+IBM API Connect Essentials (StepZen).
 
 ## Getting Started
 
 Sign up for a free API Connect Essentials SaaS plan: https://www.ibm.com/account/reg/us-en/signup?formid=urx-52542
 
-Read: https://www.ibm.com/docs/en/api-connect/ace/saas?topic=understanding-api-connect-essentials
+Read: [understanding API Connect Essentials (StepZen)](https://www.ibm.com/docs/en/api-connect/ace/saas?topic=understanding-api-connect-essentials)
 
 [Install](https://www.ibm.com/docs/en/api-connect/ace/saas?topic=setting-up-your-environment#set-up-env__title__3) the StepZen command line interface.
 
@@ -51,11 +51,11 @@ Documentation: https://www.ibm.com/docs/en/api-connect/ace/saas
 
 The snippets are generally broken up into functional areas, with each folder covering a specific topic:
 
-### Directives
+### Custom Directives
 
 - [@dbquery](dbquery/README.md) - Use `@dbquery` for connecting to databases, including pagination and filtering.
 - [@materializer](materializer) - Use of `@materializer` to extend types by linking disparate backends into a single unified view.
-- [@rest] - Connects to REST APIs
+- @rest - Connects to REST APIs
   - [rest](rest/README.md) - Use of `@rest` for connecting to REST endpoints, including pagination.
   - [transforms](transforms/README.md) - How to transform REST API responses to match GraphQL types with `@rest`.
 - [@sequence](sequence/README.md) - Use of `@sequence` to resolve a field from multiple field resolutions, such as multiple backend calls.
