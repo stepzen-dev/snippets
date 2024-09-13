@@ -34,7 +34,7 @@
 
 ## About the project
 
-This repo self-contained snippets that demonstrate use of custom directives and other techniques in
+Code snippets that demonstrate use of custom directives and other techniques in
 IBM API Connect Essentials (StepZen).
 
 ## Getting Started
