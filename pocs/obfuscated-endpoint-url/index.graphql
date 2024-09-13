@@ -1,0 +1,22 @@
+"""
+Sample mocked Customer endpoint.
+"""
+schema {
+  query: Query
+}
+
+type Customer @mock {
+  id: ID!
+  name: String @mockfn(name: "LastName")
+  email: String @mockfn(name: "Email")
+  address: Address
+}
+
+type Address {
+  city: String @mockfn(name: "City")
+  zip: String @mockfn(name: "Zip")
+}
+
+type Query {
+  customer(id: ID): Customer
+}
