@@ -33,7 +33,7 @@ so by handing out individual endpoints the account owner can track how extensive
 
 ## Single-use & deleting
 
-Thus one can extend thise concept to a "single-use" endpoint, for example creating an endpoint
+Thus one can extend this concept to a "single-use" endpoint, for example creating an endpoint
 for a demo and then delete it when no longer required.
 
 ```
