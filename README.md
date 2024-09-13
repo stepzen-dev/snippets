@@ -27,93 +27,49 @@
 - [Explore the docs](https://stepzen.com/docs)
 - [View Demo](https://stepzen.com/developers/videos/graph-of-graphs)
 - [Report Bug](https://github.com/stepzen-dev/snippets/issues)
-- [Request Snippet](https://github.com/stepzen-dev/issues)
+- [Request Snippet](https://github.com/stepzen-dev/snippets/issues)
 - [Join our Discord Server](https://discord.com/invite/9k2VdPn2FR)
   </p>
 </div>
 
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-    </li>
-    <li><a href="#transforms">`@transforms`</a></li>
-    <li><a href="#sequence">`@sequence`</a></li>
-    <li><a href="#protection">protection</a></li>
-    <li><a href="#rest-calls-and-responses">`@rest` calls and responses</a></li>
-
-  </ol>
-</details>
-
 ## About the project
 
-This repo contains `.graphql` (and in some case, `config.yaml` files) for various "self-contained" example code for doing operations in StepZen.
+This repo self-contained snippets that demonstrate use of custom directives and other techniques in
+IBM API Connect Essentuials (StepZen).
 
 ## Getting Started
 
-[Install](https://stepzen.com/docs/quick-start/install-and-setup) the StepZen command line interface.
+Sign up for a free API Connect Essentials SaaS plan: https://www.ibm.com/account/reg/us-en/signup?formid=urx-52542
 
-To run these examples,
+Read: https://www.ibm.com/docs/en/api-connect/ace/saas?topic=understanding-api-connect-essentials
 
-- `git clone` this repo
-- Change to the right working directory.
-- run `stepzen start`
+[Install](https://www.ibm.com/docs/en/api-connect/ace/saas?topic=setting-up-your-environment#set-up-env__title__3) the StepZen command line interface.
 
-## transforms
+Documentation: https://www.ibm.com/docs/en/api-connect/ace/saas
 
-For more on what `transforms` is and how it operates within the custom `@rest` directive, [see our documentation](https://stepzen.com/docs/custom-graphql-directives/directives#transforms).
+## Snippets
 
-These are available in `/transforms`:
+The snippets are generally broken up into functional areas, with each folder covering a specific topic:
 
-- `/filter` shows how the response of a REST API can be filtered
-- `/combineintostring` shows how a new field in the return type can be created by concatenating some other fields (like address parts into one address)
-- `/jsonobjectToJsonarray` shows how an array of data (say coords) can be converted into an object, `{"lat":, "lon",..}` so that it can be fed into some other system that requires data to be expressed that way
-- `/jsonobjectToJsonarray` shows how an object (typically where each key is an id of a record) can be converted into an array (e.g., `{"1":{"name": "john"}, "2": "jane"}` can be converted to `[{"id":"1", "name": "john"}, {"id":"2", name: "jane"}]`), so that it can then behave well for GraphQL processing.
+### Directives
 
-## @sequence
+- [@dbquery](dbquery/README.md) - Use `@dbquery` for connecting to databases, including pagination and filtering.
+- [@materializer](materializer) - Use of `@materializer` to extend types by linking disparate backends into a single unified view.
+- [@rest] - Connects to REST APIs
+  - [rest](rest/README.md) - Use of `@rest` for connecting to REST endpoints, including pagination.
+  - [transforms](transforms/README.md) - How to transform REST API responses to match GraphQL types with `@rest`.
+- [@sequence](sequence/README.md) - Use of `@sequence` to resolve a field from multiple field resolutions, such as multiple backend calls.
+- @sdl
+  - [executable](executable) - How GraphQL _executable documents_ can be registered and used with a schema or endpoint.
+- @supplies
+  - [routing](routing)
 
-View the StepZen [documentation](https://stepzen.com/docs/custom-graphql-directives/directives#-sequence) on the custom directive `@sequence`.
+### General topics
 
-These are available in `/sequence`:
-
-- `/arguments` shows how query arguments get passed down a sequence
-- `/forLoops` shows how sequence acts as a nested for loop
-- `/transformsInMaterializer` shows how connecting two subgraphs can invoke transformations in between. For example, the `city` of a customer can be fed into a `weather` that takes `lat,lon` by calling some geocoding in the sequence
-- `/useOfJSON` shows how, in long sequences, a new type does not have to created for every step--treat everything as JSON up to the last step, and your type system stays clean.
-
-## @dbquery
-
-View the documentation for the [`@dbquery` custom directive](https://www.ibm.com/docs/en/api-connect/ace/saas?topic=directives-directive-dbquery) in the documentation.
-
-Uses a database filled with mock data.
-
-- `/pagination` shows how to implement connection model pagination for a database.
-
-## protection
-
-For more information on protecting your API, [see our documentation](https://stepzen.com/docs/access-control).
-
-In `/protection`, you will find several subdirectories. Each contains a `.graphql` file, and `index.graphql` file and a `config.yaml` settings (which enables you to get extremely granular (or coarse) with protecting who can call what query/mutation).
-
-- `/makeAllPublic` shows how you can easily make all queries public.
-- `/makeSomePublic` shows how you can make some public, and some private (which can still be accessed using your `admin` or `service` keys)
-
-## @rest calls and responses
-
-Where possible, we use [httpbingo.org](https://httpbingo.org) as our REST endpoint, since it allows us to mimic lots of REST capabilities.
-
-- `/restWithParameters` shows how GraphQL query arguments are automatically added to the REST call--there is nothing for you to do!
-- `/restWithConfigYaml` shows how REST query parameters can also be fetched from `config.yaml`--this allows you to keep your SDL code separate from your secrets.
-- `/postbody` shows how a POST body can be automatically filled with query arguments when the `Content-Type:application/x-www-form-urlencoded`. This is the easiest way to send postbodies down the REST API
-- `/morecomplexpost` shows how a POST body can be filled with query arguments using `{{.Get \"name-of-query-argument\"}}` when the `Content-Type:application/x-www-form-urlencoded`.
-
-## union types
-
-Union types are valuable when you have a field that can return one of several types.
-
-- `/errorsAsData` shows how to implement the "errors as data" pattern. This is useful when you want to return a field that can return either a value or an error.
+- [pocs](pocs) - Techniques that can be used during development of proof of concepts with StepZen.
+- [protection](protection/README.md) - How to protect or expose GraphQL endpoints including field based access rules.
+- [reshape](reshape/README.md) - How to reshape GraphQL schema elements.
+- [unions](unions/README.md) - Uses of the GraphQL `union` type.
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
