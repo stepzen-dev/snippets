@@ -3,7 +3,7 @@
 ## `@graphql`
 
 [`starwars.graphql`](starwars.graphql) is a strict subset of the schema exposed by the example endpoint
-`https://chester.stepzen.net/examples/starwars/__graphql` demonstrating that there's no need
+`https://stepzen-chester.us-east-a.ibm.stepzen.net/examples/starwars/__graphql` demonstrating that there's no need
 to include all the types and fields of the backend endpoint.
 
 In this case only information about human characters (type `Human`) is exposed
@@ -12,7 +12,7 @@ through the root operation type field `Query.human`.
 ## `@rest`
 
 [`version.graphql`](version.graphql) is a strict subset of a schema that matches the StepZen
-service version REST API `https://account.stepzen.net/version`.
+service version REST API `https://account.domain/version`.
 
 A GraphQL type matching the **full** REST API is:
 
