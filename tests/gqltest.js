@@ -4,23 +4,10 @@ const { URL } = require("url");
 const path = require("node:path");
 
 const {
-  GQLHeaders,
-  executeOK,
-  logOnFail,
-} = require('gqltest/packages/gqltest/gqltest.js')
+  runtests,
+} = require('gqltest/packages/gqltest/gqltest.js');
 
-const authTypes = {
-  adminKey: 1,
-  apiKey: 2,
-  jwt: 3,
-  noAuth: 4,
-};
-Object.freeze(authTypes);
-
-// We use admin key to test because there is a cache optimization for apikey's that is not conducive
-// to rapid deploy and run cycles that occur with this type of testing
-const adminKey = execSync(`stepzen whoami --adminkey`).toString().trim();
-const apiKey = execSync(`stepzen whoami --apikey`).toString().trim();
+const stepzen = require("gqltest/packages/gqltest/stepzen.js");
 
 const endpoint = process.env.STEPZEN_ENDPOINT;
 
@@ -43,71 +30,23 @@ function deployEndpoint(endpoint, dirname) {
   console.log(stdout);
 }
 
-// Runs a GraphQL request against the endpoint
-// as a test returning the response.
-// The test will fail if the request does not
-// have status 200 or has any GraphQL errors.
-async function runGqlOk(authType, endpoint, request, expected) {
-  let headers = new GQLHeaders();
-  switch (authType) {
-    case authTypes.adminKey:
-      headers.withAPIKey(adminKey);
-      break;
-    case authTypes.apiKey:
-      headers.withAPIKey(apiKey);
-      break;
-    //  Have not  implemented jwt yet
-    case authTypes.jwt:
-    case authTypes.noAuth:
-    default:
-  }
- await executeOK({
-    test: this,
-    endpoint,
-    headers,
-    request,
-    expected,
-  })
-}
-
 // deploys graphql schema located in dirname to the test endpoint provided by the environment (process.env.STEPZEN_ENDPOINT),
 // and then runs through all fo the field selection tests.
-function deployAndRun(dirname, tests) {
-  it("deploy", function () {
-    // deployEndpoint will try up to three times to deploy
-    // the schema with a backoff that can total four seconds.
-    // So set the timeout to be (3*10)+4 seconds to cover a worst case scenario.
-    this.timeout(34000);
-    return deployEndpoint(endpoint, dirname);
-  });
+function deployAndRun(dirname, tests, headers) {
+  describe("deployAndRun", function () {
+    this.timeout(10000);
+    this.slow(1000);
+    it("deploy", function () {
+      // deployEndpoint will try up to three times to deploy
+      // the schema with a backoff that can total four seconds.
+      // So set the timeout to be (3*10)+4 seconds to cover a worst case scenario.
+      this.timeout(34000);
+      this.slow(5000);
+      return deployEndpoint(endpoint, dirname);
+    });
 
-  afterEach('log-failure', logOnFail)
-  tests.forEach(
-    ({ label, documentId, query, variables, operationName, expected, authType }) => {
-      it(label, async function () {
-        this.timeout(4000); // Occasional requests take > 2s
-        let request = {}
-        if (query) {
-          request.query = query;
-        }
-        if (documentId) {
-          request.documentId = documentId;
-        }
-        if (operationName) {
-          request.operationName = operationName;
-        }
-        if (variables) {
-          request.variables = variables;
-        }
-        return await runGqlOk(
-          authType,
-          endpoint,
-          request,
-          expected,
-        );
-      });
-    }
-  );
+    runtests("run", endpoint, headers, tests);
+  });
 }
 
 function getTestDescription(testRoot, fullDirName) {
@@ -119,5 +58,6 @@ function getTestDescription(testRoot, fullDirName) {
 }
 
 exports.deployAndRun = deployAndRun;
-exports.authTypes = authTypes;
 exports.getTestDescription = getTestDescription;
+
+exports.stepzen = stepzen;

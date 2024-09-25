@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("node:path");
 const {
   deployAndRun,
-  authTypes,
+  stepzen,
   getTestDescription,
 } = require("../../../tests/gqltest.js");
 
@@ -27,7 +27,6 @@ describe(testDescription, function () {
           city: "Miami",
         },
       },
-      authType: authTypes.noAuth,
     },
     {
       label: "customer-2",
@@ -42,8 +41,7 @@ describe(testDescription, function () {
           city: "Santa Clara",
         },
       },
-      authType: authTypes.noAuth,
     },
   ];
-  return deployAndRun(__dirname, tests);
+  return deployAndRun(__dirname, tests, stepzen.public());
 });

@@ -12,81 +12,87 @@
 # We provide both examples below
 
 type Weather {
-    temp: Float
+  temp: Float
 }
 type Coord {
-    lat: String
-    lon: String
+  lat: String
+  lon: String
 }
 type Customer {
-    name: String
-    city: String
+  name: String
+  city: String
 }
 type Query {
+  # Queries `weather`,`convertCityOrLocaleToLatLon`, and `weatherByCityOrLocale` use an ecmascript return of weather by lat/lon and units (imperial or metric)
+  # which is included in the `@rest` directive.
+  # See https://stepzen.com/docs/custom-graphql-directives/directives#ecmascript for more information on `ecmascript`.
+  # We are picturing a real-life scenario in which you call a weather API using the `endpoint` argument.
+  # See https://stepzen.com/docs/connecting-backends/how-to-connect-a-rest-service for more information on `@rest`.
 
-    # Queries `weather`,`convertCityOrLocaleToLatLon`, and `weatherByCityOrLocale` use an ecmascript return of weather by lat/lon and units (imperial or metric)
-    # which is included in the `@rest` directive. 
-    # See https://stepzen.com/docs/custom-graphql-directives/directives#ecmascript for more information on `ecmascript`.
-    # We are picturing a real-life scenario in which you call a weather API using the `endpoint` argument. 
-    # See https://stepzen.com/docs/connecting-backends/how-to-connect-a-rest-service for more information on `@rest`. 
+  weather(lat: String, lon: String, units: String): Weather
+    @rest(
+      endpoint: "stepzen:empty"
+      ecmascript: """
+      function transformREST(s) {
+          var lat = get('lat')
+          var lon = get('lon')
+          var units = get('units')
+          var temp
+          if (lat==25.76 && lon==-80.19)
+              temp = 100.0
+          else
+              temp = 60.4
+          if (units=='metric')
+              temp = (temp-32)*5/9
+          return (JSON.stringify({temp:temp}))
+      }
+      """
+    )
+  convertCityOrLocaleToLatLon(cityOrLocale: String): Coord
+    @rest(
+      endpoint: "stepzen:empty"
+      ecmascript: """
+      function transformREST(s) {
+          var city = get('cityOrLocale')
+          if (city == 'Miami')
+              return (JSON.stringify({lat:25.76,lon:-80.19}))
+          else
+              return (JSON.stringify({lat:37.2,lon:-121.19}))
+      }
+      """
+    )
+  # Below is a sequence call that sequences `convertCityOrLocaleToLatLong` and `weather`.
+  # Now the `cityOrLocale` argument can fetch weather data by lat/lon.
+  # In the first step, the arguments are assigned directly from the sequence field's arguments.
+  # We have to use an `arguments` setting for the second step.
+  # but we need `units` in the second step.
+  # The argument named `units` in the `weather` step
+  # gets its value from the argument `units` in the sequence field
+  # The second step receives the arguments passed down to it,
+  # and it also receives the output of the first step by default.
+  # In this case, the first step returns a type `Coord`, and therefore `Coord`'s' fields `lat` and `lon` are
+  # available to the second step `weather`.
+  # For more information including examples, see https://stepzen.com/docs/features/sequencing-queries
 
-    weather (lat: String, lon: String, units: String): Weather
-        @rest (endpoint: "stepzen:empty"
-            ecmascript: """
-            function transformREST(s) {
-                var lat = get('lat')
-                var lon = get('lon')
-                var units = get('units')
-                var temp
-                if (lat==25.76 && lon==-80.19)
-                    temp = 100.0
-                else
-                    temp = 60.4
-                if (units=='metric')
-                    temp = (temp-32)*5/9
-                return (JSON.stringify({temp:temp}))
-            }
-            """
-        )
-    convertCityOrLocaleToLatLon (cityOrLocale: String):Coord
-    @rest (endpoint: "stepzen:empty"
-            ecmascript: """
-            function transformREST(s) {
-                var city = get('cityOrLocale')
-                if (city == 'Miami')
-                    return (JSON.stringify({lat:25.76,lon:-80.19}))
-                else
-                    return (JSON.stringify({lat:37.2,lon:-121.19}))
-            }
-            """
-        )
-    # Below is a sequence call that sequences `convertCityOrLocaleToLatLong` and `weather`.
-    # Now the `cityOrLocale` argument can fetch weather data by lat/lon.
-    # In the first step, the arguments are assigned directly from the sequence field's arguments.
-    # We have to use an `arguments` setting for the second step.
-    # but we need `units` in the second step.
-    # The argument named `units` in the `weather` step
-    # gets its value from the argument `units` in the sequence field
-    # The second step receives the arguments passed down to it,
-    # and it also receives the output of the first step by default.
-    # In this case, the first step returns a type `Coord`, and therefore `Coord`'s' fields `lat` and `lon` are
-    # available to the second step `weather`.
-    # For more information including examples, see https://stepzen.com/docs/features/sequencing-queries
-    
-    weatherByCityOrLocale (cityOrLocale: String, units: String): Weather
-        @sequence(steps:[{query: "convertCityOrLocaleToLatLon"}, 
-            {query: "weather", arguments: [{name: "units", argument: "units"}]}])
-    customer (id: ID): Customer
-    @rest (endpoint: "stepzen:empty"
-            ecmascript: """
-            function transformREST(s) {
-                var id = get('id')
-                if (id==1)
-                    return (JSON.stringify({name:'John Doe',city:'Miami'}))
-                else
-                    return (JSON.stringify({name:'Jane Smith',city:'Santa Clara'}))
-            }
-            """
+  weatherByCityOrLocale(cityOrLocale: String, units: String): Weather
+    @sequence(
+      steps: [
+        { query: "convertCityOrLocaleToLatLon" }
+        { query: "weather", arguments: [{ name: "units", argument: "units" }] }
+      ]
+    )
+  customer(id: ID): Customer
+    @rest(
+      endpoint: "stepzen:empty"
+      ecmascript: """
+      function transformREST(s) {
+          var id = get('id')
+          if (id==1)
+              return (JSON.stringify({name:'John Doe',city:'Miami'}))
+          else
+              return (JSON.stringify({name:'Jane Smith',city:'Santa Clara'}))
+      }
+      """
     )
 }
 
@@ -99,8 +105,12 @@ type Query {
 # Second, because units is not a field in the enclosing type, it needs to be added in the `arguments` argument.
 
 extend type Customer {
-    weather (units: String): Weather
-    @materializer (query: "weatherByCityOrLocale", arguments: [
-        {name: "cityOrLocale", field: "city"}
-        {name: "units", argument: "units"}])
+  weather(units: String): Weather
+    @materializer(
+      query: "weatherByCityOrLocale"
+      arguments: [
+        { name: "cityOrLocale", field: "city" }
+        { name: "units", argument: "units" }
+      ]
+    )
 }

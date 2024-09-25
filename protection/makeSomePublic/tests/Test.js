@@ -1,6 +1,6 @@
 const {
   deployAndRun,
-  authTypes,
+  stepzen,
   getTestDescription,
 } = require("../../../tests/gqltest.js");
 
@@ -14,7 +14,6 @@ describe(testDescription, function () {
       expected: {
         customer: { name: "John Doe", city: "Miami" },
       },
-      authType: authTypes.adminKey,
     },
     {
       label: "customer(2)",
@@ -22,7 +21,6 @@ describe(testDescription, function () {
       expected: {
         customer: { name: "Jane Smith", city: "Santa Clara" },
       },
-      authType: authTypes.adminKey,
     },
     {
       label: "customers",
@@ -33,8 +31,7 @@ describe(testDescription, function () {
           { name: "Jane Smith", city: "Santa Clara" },
         ],
       },
-      authType: authTypes.adminKey,
     },
   ];
-  return deployAndRun(__dirname, tests);
+  return deployAndRun(__dirname, tests, stepzen.admin);
 });

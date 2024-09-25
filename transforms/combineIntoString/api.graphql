@@ -1,32 +1,36 @@
 # Some data might be returned as separate strings, lik "street", "city", "state" etc.
 # You might want to convert it into one string, either as final output
-# or to feed it into a sequence that requires strings (for example, google APIs expect the entire address as a string). 
+# or to feed it into a sequence that requires strings (for example, google APIs expect the entire address as a string).
 
 type Customer {
-    name: String
-    address: String
+  name: String
+  address: String
 }
 
-    # Queries `customer` uses an ecmascript return,
-    # which is included in the `@rest` directive. 
-    # See https://stepzen.com/docs/custom-graphql-directives/directives#ecmascript for more information on `ecmascript`.
-    # We are picturing a real-life scenario in which you call a backend using the `endpoint` argument. 
-    # See https://stepzen.com/docs/connecting-backends/how-to-connect-a-rest-service for more information on `@rest`. 
-    
+# Queries `customer` uses an ecmascript return,
+# which is included in the `@rest` directive.
+# See https://stepzen.com/docs/custom-graphql-directives/directives#ecmascript for more information on `ecmascript`.
+# We are picturing a real-life scenario in which you call a backend using the `endpoint` argument.
+# See https://stepzen.com/docs/connecting-backends/how-to-connect-a-rest-service for more information on `@rest`.
+
 type Query {
-    customer: Customer
-    @rest (
-        endpoint: "stepzen:empty" 
-        ecmascript: """
-        function transformREST(s) {
-            return(JSON.stringify({"name":"John Doe", "street": "111 Main Street", "city": "Miami", "state": "Florida", "country": "US"}))
+  customer: Customer
+    @rest(
+      endpoint: "stepzen:empty"
+      ecmascript: """
+      function transformREST(s) {
+          return(JSON.stringify({"name":"John Doe", "street": "111 Main Street", "city": "Miami", "state": "Florida", "country": "US"}))
+      }
+      """
+      # Transform it using jq.
+      # Here the empty `pathpattern` argument means that the jq expression is applied at the root.
+      transforms: [
+        {
+          pathpattern: []
+          editor: """
+          jq:.|{name,address:(.street+", "+.city+", "+.state+", "+.country)}
+          """
         }
-        """
-        # Transform it using jq.
-        # Here the empty `pathpattern` argument means that the jq expression is applied at the root.
-        transforms: [{pathpattern: [], editor: """
-        jq:.|{name,address:(.street+", "+.city+", "+.state+", "+.country)}
-        """
-        }]
+      ]
     )
 }

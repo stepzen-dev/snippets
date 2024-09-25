@@ -1,5 +1,5 @@
 # Imported by
-# stepzen import graphql https://chester.stepzen.net/examples/starwars/__graphql --name=starwars
+# stepzen import graphql https://stepzen-chester.us-east-a.ibm.stepzen.net/examples/starwars/graphql --name=starwars
 #
 enum Episode {
   "Released in 1977."
@@ -61,7 +61,7 @@ executing the query’s top level selection set with the `Query` root object typ
 type Query {
   droid("id of the droid" id: ID!): Droid
     @graphql(
-      endpoint: "https://chester.stepzen.net/examples/starwars/__graphql"
+      endpoint: "https://stepzen-chester.us-east-a.ibm.stepzen.net/examples/starwars/__graphql"
     )
   hero(
     """
@@ -71,10 +71,10 @@ type Query {
     episode: Episode
   ): Character
     @graphql(
-      endpoint: "https://chester.stepzen.net/examples/starwars/__graphql"
+      endpoint: "https://stepzen-chester.us-east-a.ibm.stepzen.net/examples/starwars/__graphql"
     )
   human("id of the human" id: ID!): Human
     @graphql(
-      endpoint: "https://chester.stepzen.net/examples/starwars/__graphql"
+      endpoint: "https://stepzen-chester.us-east-a.ibm.stepzen.net/examples/starwars/__graphql"
     )
 }
