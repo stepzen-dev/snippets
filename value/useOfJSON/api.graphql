@@ -4,10 +4,10 @@
 type Query {
   # To sum a and b using the @value directive within src in JSONata,
   sum(a: Int!, b: Int!): Int! @value(script: {src: "a+b", language: JSONATA})
-  # To convert a string to lowercase format, you can utilize the lowercase() function in JSONata using @value
+  # To convert a string to lowercase format, use @value in JSONata
   lower(value: String): String
     @value(script: {src: "$lowercase(value)", language: JSONATA})
-  # To convert a string to lowercase format, you can utilize the lowercase() function in JSONata using @value
+  # To convert a string to uppercase format, use @value in JSONata
   upper(value: String): String
     @value(script: {src: "$uppercase(value)", language: JSONATA})
 
