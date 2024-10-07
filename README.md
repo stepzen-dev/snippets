@@ -63,6 +63,8 @@ The snippets are generally broken up into functional areas, with each folder cov
   - [executable](executable) - How GraphQL _executable documents_ can be registered and used with a schema or endpoint.
 - @supplies
   - [routing](routing)
+- @value
+  - [value](value)
 
 ### General topics
 
