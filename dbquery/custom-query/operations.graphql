@@ -1,0 +1,17 @@
+# Query to get a customer by ID
+query GetCustomerById {
+  getCustomerById(id: 1) {
+    id
+    name
+    email
+  }
+}
+
+# Query to search customers by name
+query SearchCustomersByName {
+  searchCustomersByName(name: "John") {
+    id
+    name
+    email
+  }
+}

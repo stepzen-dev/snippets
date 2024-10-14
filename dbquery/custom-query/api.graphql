@@ -1,0 +1,54 @@
+# This example shows how @dbquery is configured for custom SQL queries with Customer data.
+
+"""
+Sample Customer type.
+"""
+type Customer {
+  id: ID!
+  name: String
+  email: String
+}
+
+"""
+`Customer` queries a mock `Customer` object from a demo PostgreSQL database.
+The data is fetched using custom SQL queries.
+"""
+type Query {
+    # Fetches all customers.
+  getAllCustomers: [Customer]
+    @dbquery(
+      query: "SELECT id, name, email FROM customer"
+      type: "postgresql"
+      configuration: "postgresql_config"
+    )
+  # Fetches a customer by their ID.
+getCustomerById(id: Int!): Customer
+    @dbquery(
+      query: "SELECT id, name, email FROM customer WHERE id = $1"
+      type: "postgresql"
+      configuration: "postgresql_config"
+    )
+
+  
+  # Searches customers by name using a pattern match.
+  searchCustomersByName(name: String!): [Customer]
+    @dbquery(
+      query: "SELECT id, name, email FROM customer WHERE name LIKE '%' ||  $1 || '%'"
+      type: "postgresql"
+      configuration: "postgresql_config"
+    )
+}
+type Mutation {
+  # Updates a customer's email by their ID.
+  updateCustomerEmail(id: Int!, newEmail: String!): Customer
+    @dbquery(
+      query: """
+      UPDATE customer
+      SET email = $2
+      WHERE id = $1
+      RETURNING id, name, email
+      """
+      type: "postgresql"
+      configuration: "postgresql_config"
+    )
+}
