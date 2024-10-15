@@ -1,4 +1,4 @@
-# @dbquery Example Snippet
+# @dbquery SQL query Snippet
 
 This example demonstrates how to use the `@dbquery` directive with custom SQL queries for `Customer` data in StepZen.
 

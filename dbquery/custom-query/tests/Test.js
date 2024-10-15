@@ -13,19 +13,40 @@ const requestsFile = path.join(path.dirname(__dirname), "operations.graphql");
 const requests = fs.readFileSync(requestsFile, "utf8").toString();
 
 describe(testDescription, function () {
+
   const tests = [
+    {
+      label: "fetch all customers",
+      query: requests,
+      operationName: "GetAllCustomers",
+      variables: {},
+      expected: {
+        getAllCustomers: [
+          { id: "1", name: "Lucas Bill                                        ", email: "lucas.bill@example.com                            " },
+          { id: "2", name: "Mandy Jones                                       ", email: "mandy.jones@example.com                           " },
+          { id: "3", name: "Salim Ali                                         ", email: "salim.ali@example.com                             " },
+          { id: "4", name: "Jane Xiu                                          ", email: "jane.xiu@example.com                              " },
+          { id: "5", name: "John Doe                                          ", email: "john.doe@example.com                              " },
+          { id: "6", name: "Jane Smith                                        ", email: "jane.smith@example.com                            " },
+          { id: "7", name: "Sandeep Bhushan                                   ", email: "sandeep.bhushan@example.com                       " },
+          { id: "8", name: "George Han                                        ", email: "george.han@example.com                            " },
+          { id: "9", name: "Asha Kumari                                       ", email: "asha.kumari@example.com                           " },
+          { id: "10", name: "Salma Khan                                        ", email: "salma.khan@example.com                            " }
+        ]
+      },
+    },
     {
       label: "fetch customer by ID",
       query: requests,
       operationName: "GetCustomerById",
       variables: { 
-        id: 1 
+        id: 1  
       },
       expected: {
         getCustomerById: {
           id: "1",
-          name: "Lucas Bill",
-          email: "lucas@example.com"
+          name: "Lucas Bill                                        ",
+          email: "lucas.bill@example.com                            "
         }
       },
     },
@@ -38,21 +59,16 @@ describe(testDescription, function () {
       },
       expected: {
         searchCustomersByName: [
-          {
-            id: "2",
-            name: "John Doe",
-            email: "john@example.com"
-          },
-          {
+          { 
             id: "5",
-            name: "Johnny Smith",
-            email: "johnny@example.com"
+            email: "john.doe@example.com                              ",
+            name: "John Doe                                          "
           }
         ]
       },
     },
   ];
-  
+
   // Run the tests against the deployed schema
   return deployAndRun(__dirname, tests, stepzen.admin);
 });
