@@ -12,43 +12,42 @@ type Customer {
 """
 `Customer` queries a mock `Customer` object from a demo PostgreSQL database.
 The data is fetched using custom SQL queries.
+
+Table structure for 'customer':
+
+  CREATE TABLE customer (
+    id SERIAL PRIMARY KEY,          -- Unique identifier with sequence
+    name CHARACTER(50) NOT NULL,    -- Customer's name, max 50 characters
+    email CHARACTER(50) NOT NULL,   -- Customer's email, max 50 characters, must be unique
+    CONSTRAINT customer_email_key UNIQUE (email)  -- Unique constraint on email
+  );
+
+  Foreign key references:
+    - customeraddress(customerid) references customer(id)
+    - "order"(customerid) references customer(id)
 """
 type Query {
-    # Fetches all customers.
+  # Fetches all customers.
   getAllCustomers: [Customer]
     @dbquery(
-      query: "SELECT id, name, email FROM customer"
-      type: "postgresql"
-      configuration: "postgresql_config"
-    )
-  # Fetches a customer by their ID.
-getCustomerById(id: Int!): Customer
-    @dbquery(
-      query: "SELECT id, name, email FROM customer WHERE id = $1"
-      type: "postgresql"
+      query: "SELECT id, name, email FROM customer",
+      type: "postgresql",
       configuration: "postgresql_config"
     )
 
-  
+  # Fetches a customer by their ID.
+  getCustomerById(id: Int!): Customer
+    @dbquery(
+      query: "SELECT id, name, email FROM customer WHERE id = $1",
+      type: "postgresql",
+      configuration: "postgresql_config"
+    )
+
   # Searches customers by name using a pattern match.
   searchCustomersByName(name: String!): [Customer]
     @dbquery(
-      query: "SELECT id, name, email FROM customer WHERE name LIKE '%' ||  $1 || '%'"
-      type: "postgresql"
-      configuration: "postgresql_config"
-    )
-}
-type Mutation {
-  # Updates a customer's email by their ID.
-  updateCustomerEmail(id: Int!, newEmail: String!): Customer
-    @dbquery(
-      query: """
-      UPDATE customer
-      SET email = $2
-      WHERE id = $1
-      RETURNING id, name, email
-      """
-      type: "postgresql"
+      query: "SELECT id, name, email FROM customer WHERE name LIKE '%' || $1 || '%'",
+      type: "postgresql",
       configuration: "postgresql_config"
     )
 }
