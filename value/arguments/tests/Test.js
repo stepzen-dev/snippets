@@ -24,14 +24,6 @@ const {
         query: '{pi}',
         expected: {pi:3.14159},
       },
-      { label: "return direction static value",
-        query: '{direction}',
-        expected: {direction:'EAST'},
-      },
-      { label: "return customer(3) with  @override ",
-        query: '{override_value(id:3){name}}',
-        expected: {override_value:{name:"mark"}},
-      }
     ]
     return deployAndRun(__dirname, tests, stepzen.admin);
   });

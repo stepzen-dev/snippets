@@ -2,13 +2,6 @@
 # To establish a constant value within a type or query, we can utilize this directive.
 # If no arguments are provided (@value) then the value is null.
 
-enum Direction {
-  NORTH
-  EAST
-  SOUTH
-  WEST
-}
-
 type Customer {
   name: String!
   city: String!
@@ -33,12 +26,4 @@ type Query {
     )
     # To pass a constant value directly in a query and return the result
     pi:Float! @value(const:3.14159)
-
-    # return single emu value
-    direction: Direction @value(script: {src: "\"EAST\""})
-
-   # @override with @value
-   override_value(id: ID): Customer
-    @override(from: "elsewhere")
-    @value(script: {src: "Object({name: 'mark'})"})
 }
