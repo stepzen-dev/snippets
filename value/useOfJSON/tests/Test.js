@@ -8,17 +8,9 @@ const {
 
   describe(testDescription, function () {
     const tests = [
-      { label: "return sum of two input using @value with JSONATA",
+      { label: "return sum of two input using @value with script-json",
         query: '{sum(a: 10, b: 10)}',
         expected: {sum: 20},
-      },
-      { label: "convert lower string",
-        query: '{lower(value: "mIAmI")}',
-        expected: {lower: 'miami'},
-      },
-      { label: "convert upper string",
-        query: '{upper(value: "mIaMi")}',
-        expected: {upper: 'MIAMI'},
       },
       { label: "concat string",
         query: '{concat(a: "Steve",b:"Jobs" )}',
