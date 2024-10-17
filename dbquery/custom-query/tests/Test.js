@@ -18,7 +18,7 @@ describe(testDescription, function () {
     {
       label: "fetch all customers",
       query: requests,
-      operationName: "GetAllCustomers",
+      operationName: "Customers",
       variables: {},
       expected: {
         getAllCustomers: [
@@ -38,7 +38,7 @@ describe(testDescription, function () {
     {
       label: "fetch customer by ID",
       query: requests,
-      operationName: "GetCustomerById",
+      operationName: "Customer",
       variables: { 
         id: 1  
       },
@@ -48,23 +48,6 @@ describe(testDescription, function () {
           name: "Lucas Bill                                        ",
           email: "lucas.bill@example.com                            "
         }
-      },
-    },
-    {
-      label: "search customers by name pattern",
-      query: requests,
-      operationName: "SearchCustomersByName",
-      variables: {
-        name: "John"
-      },
-      expected: {
-        searchCustomersByName: [
-          { 
-            id: "5",
-            email: "john.doe@example.com                              ",
-            name: "John Doe                                          "
-          }
-        ]
       },
     },
   ];

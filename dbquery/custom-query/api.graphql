@@ -22,13 +22,10 @@ Table structure for 'customer':
     CONSTRAINT customer_email_key UNIQUE (email)  -- Unique constraint on email
   );
 
-  Foreign key references:
-    - customeraddress(customerid) references customer(id)
-    - "order"(customerid) references customer(id)
 """
 type Query {
   # Fetches all customers.
-  getAllCustomers: [Customer]
+  customers: [Customer]
     @dbquery(
       query: "SELECT id, name, email FROM customer",
       type: "postgresql",
@@ -36,17 +33,9 @@ type Query {
     )
 
   # Fetches a customer by their ID.
-  getCustomerById(id: Int!): Customer
+  customer(id: Int!): Customer
     @dbquery(
       query: "SELECT id, name, email FROM customer WHERE id = $1",
-      type: "postgresql",
-      configuration: "postgresql_config"
-    )
-
-  # Searches customers by name using a pattern match.
-  searchCustomersByName(name: String!): [Customer]
-    @dbquery(
-      query: "SELECT id, name, email FROM customer WHERE name LIKE '%' || $1 || '%'",
       type: "postgresql",
       configuration: "postgresql_config"
     )

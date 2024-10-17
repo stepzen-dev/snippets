@@ -1,24 +1,15 @@
-# Query to get a customer by ID
-query GetCustomerById {
-  getCustomerById(id: 1) {
+# Retrieve a specific customer by ID
+query Customer {
+  customer(id: 1) {
     id
     name
     email
   }
 }
 
-# Query to search customers by name
-query SearchCustomersByName {
-  searchCustomersByName(name: "John") {
-    id
-    name
-    email
-  }
-}
-
-# Query to get all customers
-query GetAllCustomers {
-  getAllCustomers {
+# Retrieve all customers in the system
+query Customers {
+  customers {
     id
     name
     email
