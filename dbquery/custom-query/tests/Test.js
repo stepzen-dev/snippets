@@ -21,7 +21,7 @@ describe(testDescription, function () {
       operationName: "Customers",
       variables: {},
       expected: {
-        getAllCustomers: [
+        customers: [
           { id: "1", name: "Lucas Bill                                        ", email: "lucas.bill@example.com                            " },
           { id: "2", name: "Mandy Jones                                       ", email: "mandy.jones@example.com                           " },
           { id: "3", name: "Salim Ali                                         ", email: "salim.ali@example.com                             " },
@@ -43,7 +43,7 @@ describe(testDescription, function () {
         id: 1  
       },
       expected: {
-        getCustomerById: {
+        customer: {
           id: "1",
           name: "Lucas Bill                                        ",
           email: "lucas.bill@example.com                            "
