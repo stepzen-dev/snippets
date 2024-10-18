@@ -10,4 +10,3 @@ View the [documentation](https://www.ibm.com/docs/en/api-connect/ace/saas?topic=
 ## Snippets
 
 - [arguments](arguments) shows how sets the element to a constant value
-- [useOfJSON](useOfJSON) shows how to use script-jsonata language inside `@value` directive
