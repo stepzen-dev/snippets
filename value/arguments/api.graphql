@@ -26,4 +26,18 @@ type Query {
     )
     # To pass a constant value directly in a query and return the result
     pi:Float! @value(const:3.14159)
+
+  # To sum a and b using the @value directive within src in jsonata,
+  sum(a: Int!, b: Int!): Int! @value(script: {src: "a+b", language: JSONATA})
+
+    # To concatenate strings using @value in jsonata
+  concat(a: String, b: String): String
+    @value(
+      script: {
+        src: """
+        $join([a,b], "-")
+        """
+        language: JSONATA
+      }
+    )
 }
