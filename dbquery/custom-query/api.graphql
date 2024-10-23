@@ -1,19 +1,22 @@
 # This example shows how @dbquery is configured for custom SQL queries with Customer data.
 
 """
-Sample Customer type.
+Represents a customer in the system, stored in the 'customer' table of a PostgreSQL database.
+Each customer has an ID, name, and email. The 'Customer' type maps directly to the
+corresponding table fields.
 """
 type Customer {
-  id: ID!
-  name: String
-  email: String
+    id: ID!
+    name: String
+    email: String
 }
 
 """
-`Customer` queries a mock `Customer` object from a demo PostgreSQL database.
-The data is fetched using custom SQL queries.
+Defines the root-level queries for fetching customer data.
+These queries use the `@dbquery` directive to execute custom SQL queries.
+The SQL queries include parameter markers, which correspond to the GraphQL field arguments.
 
-Table structure for 'customer':
+The 'customer' table in PostgreSQL has the following structure:
 
   CREATE TABLE customer (
     id SERIAL PRIMARY KEY,          -- Unique identifier with sequence
@@ -21,22 +24,49 @@ Table structure for 'customer':
     email CHARACTER(50) NOT NULL,   -- Customer's email, max 50 characters, must be unique
     CONSTRAINT customer_email_key UNIQUE (email)  -- Unique constraint on email
   );
-
+These queries demonstrate basic SQL interactions with this table.
 """
 type Query {
-  # Fetches all customers.
-  customers: [Customer]
-    @dbquery(
-      query: "SELECT id, name, email FROM customer",
-      type: "postgresql",
-      configuration: "postgresql_config"
-    )
+    """
+    Fetches a list of all customers from the database.
 
-  # Fetches a customer by their ID.
-  customer(id: Int!): Customer
-    @dbquery(
-      query: "SELECT id, name, email FROM customer WHERE id = $1",
-      type: "postgresql",
-      configuration: "postgresql_config"
-    )
+    The custom SQL query retrieves the `id`, `name`, and `email` fields from the 'customer' table.
+
+    **@dbquery Directive Usage**:
+    - `query`: This is the SQL query that will be executed. Here, it fetches all records from the 'customer' table.
+    - `type`: Specifies the type of database being queried. In this case, it’s a PostgreSQL database.
+    - `configuration`: References the database configuration (connection details) in StepZen.
+
+    This query does not take any arguments, and hence there are no parameter markers in the SQL query.
+    The SQL query is static, always returning all customers from the database.
+    """
+    customers: [Customer]
+        @dbquery(
+            query: "SELECT id, name, email FROM customer"
+            type: "postgresql"
+            configuration: "postgresql_config"
+        )
+
+    """
+    Fetches a single customer by their ID from the database.
+
+    **Field Argument to Parameter Marker Mapping**:
+    - The `id` argument provided in the GraphQL query maps to the `$1` marker in the SQL query.
+    - SQL queries typically use numbered markers (e.g., `$1`, `$2`, etc.) for parameterized inputs. The number refers to the position of the argument in the query.
+    - When a query is executed, the value passed to the `id` argument in GraphQL (via variables) will replace the `$1` marker in the SQL query.
+
+    **@dbquery Directive Usage**:
+    - `query`: This is the SQL query that will be executed. Here, the customer data is fetched based on the provided `id` value.
+      - The `$1` marker is a placeholder for the value of the `id` argument, which is passed as a variable when executing the query.
+    - `type`: Specifies the type of database being queried (PostgreSQL).
+    - `configuration`: References the database configuration (connection details) in StepZen.
+
+    This query requires an `id` argument as input, which is passed as a variable from the GraphQL query. The variable's value is used to fetch the corresponding customer from the database.
+    """
+    customer(id: Int!): Customer
+        @dbquery(
+            query: "SELECT id, name, email FROM customer WHERE id = $1"
+            type: "postgresql"
+            configuration: "postgresql_config"
+        )
 }

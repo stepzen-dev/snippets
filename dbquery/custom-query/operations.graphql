@@ -1,6 +1,6 @@
-# Retrieve a specific customer by ID
-query Customer {
-  customer(id: 1) {
+# Retrieve a specific customer by ID using a variable
+query Customer($id: Int!) {
+  customer(id: $id) {
     id
     name
     email
