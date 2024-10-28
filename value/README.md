@@ -9,4 +9,4 @@ View the [documentation](https://www.ibm.com/docs/en/api-connect/ace/saas?topic=
 
 ## Snippets
 
-- [arguments](arguments) shows how sets the element to a constant value
+- [constants](constants) shows how sets the element to a constant value
