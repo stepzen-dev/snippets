@@ -37,7 +37,7 @@ type Query {
     - `type`: Specifies the type of database being queried. In this case, it’s a PostgreSQL database.
     - `configuration`: References the database configuration (connection details) in StepZen.
 
-    This query does not take any arguments, and hence there are no parameter markers in the SQL query.
+    This field does not take any arguments, and hence there are no parameter markers in the SQL query.
     The SQL query is static, always returning all customers from the database.
     """
     customers: [Customer]
@@ -51,9 +51,8 @@ type Query {
     Fetches a single customer by their ID from the database.
 
     **Field Argument to Parameter Marker Mapping**:
-    - The `id` argument provided in the GraphQL query maps to the `$1` marker in the SQL query.
-    - SQL queries typically use numbered markers (e.g., `$1`, `$2`, etc.) for parameterized inputs. The number refers to the position of the argument in the query.
-    - When a query is executed, the value passed to the `id` argument in GraphQL (via variables) will replace the `$1` marker in the SQL query.
+    - Maps the `id` argument to the `$1` marker in the SQL query, allowing dynamic ID-based retrieval.
+    - `$1` serves as a placeholder, which will be replaced by the provided `id` value during execution.
 
     **@dbquery Directive Usage**:
     - `query`: This is the SQL query that will be executed. Here, the customer data is fetched based on the provided `id` value.
@@ -61,7 +60,7 @@ type Query {
     - `type`: Specifies the type of database being queried (PostgreSQL).
     - `configuration`: References the database configuration (connection details) in StepZen.
 
-    This query requires an `id` argument as input, which is passed as a variable from the GraphQL query. The variable's value is used to fetch the corresponding customer from the database.
+    This field requires an `id` argument as input, which is passed as a variable from the GraphQL request. The variable's value is used to fetch the corresponding customer from the database.
     """
     customer(id: Int!): Customer
         @dbquery(

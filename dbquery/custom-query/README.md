@@ -45,7 +45,7 @@ This allows you to fetch exactly the data you need, based on the custom SQL quer
 
 ## Try it Out!
 
-Deploy the schema from `dbquery/pagination` relative to the repository's root directory:
+Deploy the schema from `dbquery/custom-query` relative to the repository's root directory:
 
 ```
 stepzen deploy
