@@ -1,0 +1,17 @@
+# Retrieve a specific customer by ID using a variable
+query Customer($id: Int!) {
+  customer(id: $id) {
+    id
+    name
+    email
+  }
+}
+
+# Retrieve all customers in the system
+query Customers {
+  customers {
+    id
+    name
+    email
+  }
+}
