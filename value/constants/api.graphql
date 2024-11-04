@@ -1,0 +1,59 @@
+# A `@value` directive defines a value that can be applied in various contexts
+# To establish a constant value for a field, we can utilize this directive.
+# If no arguments are provided (@value) then the value is null.
+
+type Customer {
+  name: String!
+  city: String!
+}
+
+# To establish a constant value for the state, utilize `@value` and provide the constant value.
+# xid will always resolve to null.
+# joinDate  returns a constant value using the @value annotation.
+# createdDate  returns a constant value using the @value annotation.
+extend type Customer{
+  state:String @value(const:"Florida")
+  xid:ID @value
+  joinDate: Date @value(const: "2024-02-24")
+  createdDate: DateTime @value(const: "2024-02-24T07:20:50.52Z")
+}
+
+
+type Query {
+   # set the default value
+   customer(id: ID): Customer
+   @value(
+      script: {
+        src: """
+        Object({name:'John Doe',city:'Miami'})
+        """
+        language: ECMASCRIPT
+      }
+    )
+
+
+    # To concatenate strings using @value in jsonata
+  concat(a: String, b: String): String
+    @value(
+      script: {
+        src: """
+        $join([a,b], "-")
+        """
+        language: JSONATA
+      }
+    )
+}
+
+# JSON scalars with @value
+extend type Query {
+  json_string: JSON @value(const: "goodbye")
+  json_list: JSON @value(const: [2, "hi"])
+}
+
+# Constant scalar values
+type Query {
+  returnBoolean: Boolean @value(const: true)
+  integer: Int @value(const: 94)
+  float: Float @value(const: 241.8)
+}
+
