@@ -20,9 +20,6 @@ extend type Customer{
 
 
 type Query {
-   # return null value
-   emptyCustomer(id: ID): Customer
-
    # set the default value
    customer(id: ID): Customer
    @value(

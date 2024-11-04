@@ -8,11 +8,7 @@ const {
 
   describe(testDescription, function () {
     const tests = [
-      { label: "emptyCustomer with return null",
-        query: '{emptyCustomer(id:1){name city }}',
-        expected: {emptyCustomer: null},
-      },
-      { label: "customer(1)",
+      { label: "customer(1) return default name and city ",
         query: '{customer(id:1){name city }}',
         expected: {customer: {name:'John Doe',city:'Miami'}},
       },
