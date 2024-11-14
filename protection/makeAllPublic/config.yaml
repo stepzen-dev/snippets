@@ -1,10 +1,8 @@
-# This is a blanket way to make all endpoints public, i.e. not requiring an API Key or JWT.
+# This is a blanket way to make all Query fields public, i.e. not requiring an API Key or JWT.
 # For example, you would typically do this for your product catalog queries.
-# Remember to test this not through the localhost proxy 
-# that automatically sets the Apikey to be the admin key and bypasses these permissions,
-# but use separate a GraphQL or API client to check these.
-ruleset:
-  - query: "[ALL]"
-    rules:
-      - predicate: true
-        action: allow
+# Remember to test this through a GraphQL client that does not automatically set an api or admin key.
+access:
+  policies:
+    - type: Query
+      policyDefault:
+        condition: true # allow all fields in Query with no authorization
