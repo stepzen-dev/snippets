@@ -1,0 +1,101 @@
+type Customer {
+  id: ID!
+  name: String
+  email: String
+  street: String
+  city: String
+  region: String
+}
+
+"""
+`CustomerConnection` is the connection type for `Customer` pagination.
+"""
+type CustomerConnection {
+  edges: [CustomerEdge]
+  pageInfo: PageInfo!
+}
+
+"""
+`CustomerEdge` provides access to the node and its cursor.
+"""
+type CustomerEdge {
+  node: Customer
+  cursor: String
+}
+
+input StringFilter {
+  eq: String
+  ne: String
+}
+
+input CustomerFilter {
+  name: StringFilter
+  email: StringFilter
+  city: StringFilter
+}
+
+type _RegionsList {
+  regions: [String]!
+}
+
+extend type Query {
+  # customers is the exposed field that limits the caller to regions
+  # based upon the regions claim in the request's JWT.
+  customers(first: Int! = 10, filter: CustomerFilter): [Customer]
+    @sequence(
+      steps: [
+        { query: "_regions" }
+        {
+          query: "_customers_flatten"
+          arguments: [
+            { name: "first", argument: "first" }
+            { name: "filter", argument: "filter" }
+          ]
+        }
+      ]
+    )
+
+  # extracts the regions visible to the request from the JWT.
+  _regions: _RegionsList
+    @value(
+      script: {
+        src: """
+        {"regions": `$jwt`.regions }
+        """
+        language: JSONATA
+      }
+    )
+
+  # this flattens the customer connection pagination structure
+  # into a simple list of Customer objects.
+  # This is needed as @sequence is not supported for connection types.
+  _customers_flatten(
+    first: Int! = 10
+    filter: CustomerFilter
+    regions: [String]!
+  ): [Customer] @materializer(query: "_customers { edges { node }}")
+
+  # Standard paginated field for a customers table in a database.
+  # Additional regions argument that is used to limit customer
+  # visibility based upon the 'regions' claim in a JWT.
+  # The regions allows a list of regions and uses SQL ANY to match rows.
+  _customers(
+    first: Int! = 10
+    after: String! = ""
+    filter: CustomerFilter
+    regions: [String]!
+  ): CustomerConnection
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      query: """
+      SELECT C.id, C.name, C.email, A.street, A.city, A.countryregion AS region
+        FROM customer C, address A, customeraddress CA
+        WHERE
+          CA.customerid = C.id AND
+          CA.addressid = A.id AND
+          A.countryregion = ANY(CAST($1 AS VARCHAR ARRAY))
+      """
+      configuration: "postgresql_config"
+    )
+}
