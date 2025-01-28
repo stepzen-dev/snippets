@@ -64,8 +64,10 @@ type Query {
           editor: "jq:.[]|{id:.name,fullName:.value.fullName,age:.value.age}"
         }
       ]
+
       # for the second transformation, you can use setters. Uncomment the next line and comment the second pathpattern line above to see how it operates.
-      # In order to make this to work, change the return type from JSON to [Customer]
+      # In order to make this to work, change the return type from JSON to [Customer].
+
       # setters: [
       #   { field: "id", path: "name" }
       #   { field: "fullName", path: "value.fullName" }
