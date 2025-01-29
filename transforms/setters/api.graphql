@@ -1,4 +1,4 @@
-# We first transform the JSON result object from REST API the Graphql structure 
+# We first transform the JSON result object from REST API the Graphql structure
 # and then map the JSON response to the fields corresponding to the GraphQL type.
 
 type Customer {

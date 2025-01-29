@@ -6,7 +6,6 @@ const {
 testDescription = getTestDescription("snippets", __dirname);
 
 describe(testDescription, function () {
-  const tests = [
-  ]
+  const tests = [];
   return deployAndRun(__dirname, tests);
 });
