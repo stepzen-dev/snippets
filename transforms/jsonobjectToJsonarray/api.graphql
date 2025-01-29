@@ -61,10 +61,17 @@ type Query {
         # you could comment this out if you want to try setters instead
         {
           pathpattern: ["[]*"]
-          editor: "jq:.[]|{id:.name,fullName:.value.name,age:.value.age}"
+          editor: "jq:.[]|{id:.name,fullName:.value.fullName,age:.value.age}"
         }
       ]
+
       # for the second transformation, you can use setters. Uncomment the next line and comment the second pathpattern line above to see how it operates.
-      # setters: [{field: "id", path: "name"}, {field:"fullName", path: "value.age"}, {field:"age", path:"value.fullName"}]
+      # In order to make this to work, change the return type from JSON to [Customer].
+
+      # setters: [
+      #   { field: "id", path: "name" }
+      #   { field: "fullName", path: "value.fullName" }
+      #   { field: "age", path: "value.age" }
+      # ]
     )
 }
