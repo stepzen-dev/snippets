@@ -33,9 +33,9 @@ type Query {
 
       # mapping from JSON response values to the fields of the GraphQL result.
       setters: [
-        { field: "cId", path: "id" } # cId mapped to 'id'
-        { field: "cName", path: "name" } # cName mapped to 'name'
-        { field: "cAddress", path: "address" } # cAddress mapped to 'address'
+        { field: "cId", path: "id" } # JSON response field 'id' is mapped to GraphQL 'cId'
+        { field: "cName", path: "name" } # JSON response field 'name' is mapped to GraphQL 'cName'
+        { field: "cAddress", path: "address" } # JSON response  field 'address' mapped to GraphQL 'cAddress'
       ]
     )
 }
