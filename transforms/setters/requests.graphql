@@ -3,10 +3,8 @@ query CustomerByID($id: ID!) {
   customerByID(id: $id) {
     cAddress {
       city
-      country
       state
-      street
-      postalCode
+      country
     }
     cId
     cName
