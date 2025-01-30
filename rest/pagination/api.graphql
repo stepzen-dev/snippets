@@ -125,7 +125,7 @@ type Query {
 
   Typically the `endpoint` argument of `@rest` would have query
   parameters that set the pagination arguments expected by the
-  REST API from the field arguments `first` ( ) and `after` (offset defaults to 0 if empty),
+  REST API from the field arguments `first` and `after` (offset defaults to 0 if empty),
   for example: `?limt=$first&offset=$after`.
   """
   customersOffset(first: Int!, after: String = ""): CustomerConnection
@@ -157,7 +157,7 @@ type Query {
         // Since this is OFFSET pagination
         // "after" is decoded by StepZen from the opaque string value
         // and passed into @rest as a integer offset value,
-        // with the first page being 1.
+        // with the offset of the first record being zero.
         const limit = get('first');
         const offset = get('after');
 
