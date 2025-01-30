@@ -1,0 +1,14 @@
+# maps some of JSON response values to the fields of the GraphQL result.
+query CustomerByID($id: ID!) {
+  customerByID(id: $id) {
+    cAddress {
+      city
+      country
+      state
+      street
+      postalCode
+    }
+    cId
+    cName
+  }
+}
