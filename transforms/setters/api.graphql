@@ -18,7 +18,7 @@ type Query {
   # ecmascript generates customer data to simulate a REST api with a JSON response.
   # To verify with a real data source (API or a database) it is required to change the `endpoint` argument on the `@rest` directive.
   # https://stepzen.com/docs/connecting-backends/how-to-connect-a-rest-service
-  customerByID(id: ID!): Customer
+  customer(id: ID!): Customer
     @rest(
       endpoint: "stepzen:empty"
       ecmascript: """

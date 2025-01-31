@@ -19,7 +19,7 @@ describe(testDescription, function () {
       operationName: "CustomerByID",
       variables: { id: 1 },
       expected: {
-        customerByID: {
+        customer: {
           address: {
             city: "Raleigh",
             country: "USA",
@@ -36,7 +36,7 @@ describe(testDescription, function () {
       operationName: "CustomerByID",
       variables: { id: 100 },
       expected: {
-        customerByID: {
+        customer: {
           address: {
             city: "Hyderabad",
             country: "India",
