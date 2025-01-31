@@ -100,6 +100,61 @@ describe(testDescription, function () {
         nCustomers: generateNodes(1, 5).map(edge => edge.node),
       },
     },
+    {
+      label: "customersOffset-1-10",
+      query: requests,
+      operationName: 'CustomersOffset',
+      variables: { first: 10 },
+      expected: {
+        customersOffset: {
+          edges: generateNodes(1, 10),
+          pageInfo: {
+            endCursor:
+              "eyJjIjoiTzpRdWVyeTpjdXN0b21lcnNPZmZzZXQiLCJvIjo5fQ==",
+            hasNextPage: false,
+          },
+        },
+      },
+    },
+    {
+      label: "customersOffset-10-20",
+      query: requests,
+      operationName: 'CustomersOffset',
+      variables: { 
+        first: 10,
+        after: "eyJjIjoiTzpRdWVyeTpjdXN0b21lcnNPZmZzZXQiLCJvIjo5fQ=="
+      },
+      expected: {
+        customersOffset: {
+          edges: generateNodes(11, 20),
+          pageInfo: {
+            endCursor:
+              "eyJjIjoiTzpRdWVyeTpjdXN0b21lcnNPZmZzZXQiLCJvIjoxOX0=",
+            hasNextPage: false,
+          },
+        },
+      },
+    },
+    {
+      label: "customersOffset-21-23",
+      query: requests,
+      operationName: 'CustomersOffset',
+      variables: {
+        first: 10,
+        after:
+          "eyJjIjoiTzpRdWVyeTpjdXN0b21lcnNPZmZzZXQiLCJvIjoxOX0=",
+      },
+      expected: {
+        customersOffset: {
+          edges: generateNodes(21, 23),
+          pageInfo: {
+            endCursor:
+              "eyJjIjoiTzpRdWVyeTpjdXN0b21lcnNPZmZzZXQiLCJvIjoyMn0=",
+            hasNextPage: false,
+          },
+        },
+      },
+    },
   ];
   return deployAndRun(__dirname, tests, stepzen.admin);
 });

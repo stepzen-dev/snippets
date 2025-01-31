@@ -60,7 +60,27 @@ The field `Query.customersPageNumber` is an example of `PAGE_NUMBER` pagination.
 
 ## OFFSET pagination
 
-TODO
+A REST API using the OFFSET style pagination typically takes two arguments, limit and offset,
+and returns a list of values and metadata indicating the total number of records. The response layout
+varies, but is similar to:
+
+```json
+{
+  "meta": {
+    "records": 8
+  },
+  "values": [
+    {
+      "name": "Bob"
+    },
+    {
+      "name": "Charlie"
+    }
+  ]
+}
+```
+
+The field `Query.customersOffset` is an example of `OFFSET` pagination.
 
 ## NEXT_CURSOR pagination
 
