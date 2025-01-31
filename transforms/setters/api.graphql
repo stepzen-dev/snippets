@@ -1,9 +1,9 @@
-# This example demonstartes mapping a JSON response to the fields of the GraphQL.
+# This example illustrates how to map a JSON response to the fields of a GraphQL object.
 
 type Customer {
-  cId: ID
-  cName: String
-  cAddress: Address
+  id: ID
+  name: String
+  address: Address
 }
 
 type Address {
@@ -25,17 +25,17 @@ type Query {
       function transformREST() {
           var id = get('id')
           if (id==1)
-            return ({"address":{"city":"Raleigh","country":"USA","postalCode":"54321","state":"NC","street":"101 Main St"},"id":"12345","name":"John Doe"})
+            return ({"location":{"address":{"city":"Raleigh","country":"USA","postalCode":"54321","state":"NC","street":"101 Main St"}},"customerId":"12345","customerName":"John Doe"})
           else
-            return ({"address":{"city":"Hyderabad","country":"India","postalCode":"654231","state":"TS","street":"J.N.T.U Colony"},"id":"21345","name":"Siddarth A"})
+            return ({"location":{"address":{"city":"Hyderabad","country":"India","postalCode":"654231","state":"TS","street":"J.N.T.U Colony"}},"customerId":"21345","customerName":"Siddarth A"})
       }
       """
 
       # mapping from JSON response values to the fields of the GraphQL result.
       setters: [
-        { field: "cId", path: "id" } # JSON response field 'id' is mapped to GraphQL 'cId'
-        { field: "cName", path: "name" } # JSON response field 'name' is mapped to GraphQL 'cName'
-        { field: "cAddress", path: "address" } # JSON response  field 'address' mapped to GraphQL 'cAddress'
+        { field: "id", path: "customerId" } # JSON response field 'customerId' is mapped to GraphQL 'id'
+        { field: "name", path: "customerName" } # JSON response field 'customerName' is mapped to GraphQL 'name'
+        { field: "address", path: "location.address" } # JSON response nested field 'location.address' mapped to GraphQL 'address'
       ]
     )
 }

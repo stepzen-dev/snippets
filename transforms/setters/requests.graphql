@@ -1,12 +1,12 @@
 # maps some of JSON response values to the fields of the GraphQL result.
 query CustomerByID($id: ID!) {
   customerByID(id: $id) {
-    cAddress {
+    address {
       city
       state
       country
     }
-    cId
-    cName
+    id
+    name
   }
 }

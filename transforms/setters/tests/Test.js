@@ -20,13 +20,13 @@ describe(testDescription, function () {
       variables: { id: 1 },
       expected: {
         customerByID: {
-          cAddress: {
+          address: {
             city: "Raleigh",
             country: "USA",
             state: "NC",
           },
-          cId: "12345",
-          cName: "John Doe",
+          id: "12345",
+          name: "John Doe",
         },
       },
     },
@@ -37,13 +37,13 @@ describe(testDescription, function () {
       variables: { id: 100 },
       expected: {
         customerByID: {
-          cAddress: {
+          address: {
             city: "Hyderabad",
             country: "India",
             state: "TS",
           },
-          cId: "21345",
-          cName: "Siddarth A",
+          id: "21345",
+          name: "Siddarth A",
         },
       },
     },
