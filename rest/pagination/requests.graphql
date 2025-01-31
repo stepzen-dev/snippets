@@ -15,6 +15,23 @@ query CustomersPageNumber($first: Int!, $after: String) {
   }
 }
 
+# Page through customers from a REST API using page numbers
+query CustomersOffset($first: Int!, $after: String) {
+  customersOffset(first: $first, after: $after) {
+    edges {
+      node {
+        id
+        name
+        email
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}
+
 # Return the first customer (using a reshape version of a paginated field)
 query FirstCustomer {
   firstCustomer {
