@@ -1,0 +1,41 @@
+# This example illustrates how to map a JSON response to the fields of a GraphQL object.
+
+type Customer {
+  id: ID
+  name: String
+  address: Address
+}
+
+type Address {
+  city: String
+  country: String
+  state: String
+  street: String
+  postalCode: String
+}
+
+type Query {
+  # ecmascript generates customer data to simulate a REST api with a JSON response.
+  # To verify with a real data source (API or a database) it is required to change the `endpoint` argument on the `@rest` directive.
+  # https://stepzen.com/docs/connecting-backends/how-to-connect-a-rest-service
+  customer(id: ID!): Customer
+    @rest(
+      endpoint: "stepzen:empty"
+      ecmascript: """
+      function transformREST() {
+          var id = get('id')
+          if (id==1)
+            return ({"location":{"address":{"city":"Raleigh","country":"USA","postalCode":"54321","state":"NC","street":"101 Main St"}},"customerId":"12345","customerName":"John Doe"})
+          else
+            return ({"location":{"address":{"city":"Hyderabad","country":"India","postalCode":"654231","state":"TS","street":"J.N.T.U Colony"}},"customerId":"21345","customerName":"Siddarth A"})
+      }
+      """
+
+      # mapping from JSON response values to the fields of the GraphQL result.
+      setters: [
+        { field: "id", path: "customerId" } # JSON response field 'customerId' is mapped to GraphQL 'id'
+        { field: "name", path: "customerName" } # JSON response field 'customerName' is mapped to GraphQL 'name'
+        { field: "address", path: "location.address" } # JSON response nested field 'location.address' mapped to GraphQL 'address'
+      ]
+    )
+}

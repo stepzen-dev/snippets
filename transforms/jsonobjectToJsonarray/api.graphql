@@ -58,20 +58,10 @@ type Query {
       # StepZen takes care of calling jq for each element.
       transforms: [
         { pathpattern: ["<>*"], editor: "objectToArray" }
-        # you could comment this out if you want to try setters instead
         {
           pathpattern: ["[]*"]
           editor: "jq:.[]|{id:.name,fullName:.value.fullName,age:.value.age}"
         }
       ]
-
-      # for the second transformation, you can use setters. Uncomment the next line and comment the second pathpattern line above to see how it operates.
-      # In order to make this to work, change the return type from JSON to [Customer].
-
-      # setters: [
-      #   { field: "id", path: "name" }
-      #   { field: "fullName", path: "value.fullName" }
-      #   { field: "age", path: "value.age" }
-      # ]
     )
 }
