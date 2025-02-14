@@ -9,5 +9,5 @@ type Query {
   """
   Fetch the StepZen version.
   """
-  version: Version @rest(endpoint: "https://perftest.stepzen.net/version")
+  version: Version @rest(endpoint: "https://stepzen-chester.us-east-a.ibm.stepzen.net/version")
 }
