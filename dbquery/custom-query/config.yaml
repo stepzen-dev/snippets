@@ -1,4 +1,4 @@
 configurationset:
   - configuration:
       name: postgresql_config
-      uri: postgresql://postgresql.introspection.stepzen.net/introspection?user=testUserIntrospection&password=HurricaneStartingSample1934
+      uri: postgresql://postgresqlaws.introspection.stepzen.net/introspection?user=testUserIntrospection&password=HurricaneStartingSample1934
