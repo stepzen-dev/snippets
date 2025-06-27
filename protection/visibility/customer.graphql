@@ -17,5 +17,5 @@ type Customer @mock {
 
 type Order @mock {
   date: Date! @mockfn(name: "PastDate", values: 5)
-  cost: Float!
+  cost: Int! @mockfn(name: "NumberRange", values: [1, 500])
 }
