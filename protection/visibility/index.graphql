@@ -1,0 +1,7 @@
+schema
+  @sdl(
+    files: "customer.graphql"
+    visibility: { expose: true, types: "Query", fields: "customer" }
+  ) {
+  query: Query
+}
