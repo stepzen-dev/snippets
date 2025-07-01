@@ -1,0 +1,111 @@
+# Sample operations to test the @inject directive functionality
+
+# Query with explicit userId (overrides injected default)
+query UserOrdersExplicit($userId: ID!) {
+  orders(userId: $userId, limit: 5) {
+    id
+    customerName
+    total
+    status
+    region
+  }
+}
+
+# Query using injected default user context
+query UserOrdersDefault {
+  orders(limit: 5) {
+    id
+    customerName
+    total
+    status
+    region
+  }
+}
+
+# Product query with explicit userId
+query UserProductsExplicit($userId: ID!, $category: String) {
+  products(userId: $userId, category: $category) {
+    id
+    name
+    category
+    price
+    region
+    inStock
+  }
+}
+
+# Product query using injected default context
+query UserProductsDefault($category: String) {
+  products(category: $category) {
+    id
+    name
+    category
+    price
+    region
+    inStock
+  }
+}
+
+# Recommendations with explicit userId
+query UserRecommendationsExplicit($userId: ID!, $count: Int) {
+  recommendations(userId: $userId, count: $count) {
+    productId
+    productName
+    score
+    reason
+  }
+}
+
+# Recommendations using injected default context
+query UserRecommendationsDefault($count: Int) {
+  recommendations(count: $count) {
+    productId
+    productName
+    score
+    reason
+  }
+}
+
+# Combined query demonstrating multiple injected operations with default user context
+query UserDashboardDefault {
+  orders(limit: 3) {
+    id
+    customerName
+    total
+    status
+  }
+  products(category: "electronics") {
+    id
+    name
+    price
+    inStock
+  }
+  recommendations(count: 3) {
+    productId
+    productName
+    score
+    reason
+  }
+}
+
+# Combined query with explicit userId (shows override capability)
+query UserDashboardExplicit($userId: ID!) {
+  orders(userId: $userId, limit: 3) {
+    id
+    customerName
+    total
+    status
+  }
+  products(userId: $userId, category: "electronics") {
+    id
+    name
+    price
+    inStock
+  }
+  recommendations(userId: $userId, count: 3) {
+    productId
+    productName
+    score
+    reason
+  }
+}
