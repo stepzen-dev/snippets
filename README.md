@@ -54,6 +54,7 @@ The snippets are generally broken up into functional areas, with each folder cov
 ### Custom Directives
 
 - [@dbquery](dbquery/README.md) - Use `@dbquery` for connecting to databases, including pagination and filtering.
+- [@inject](injection/README.md) - Use `@inject` for dependency injection, extracting context variables and making them available to multiple fields.
 - [@materializer](materializer) - Use of `@materializer` to extend types by linking disparate backends into a single unified view.
 - @rest - Connects to REST APIs
   - [rest](rest/README.md) - Use of `@rest` for connecting to REST endpoints, including pagination.
