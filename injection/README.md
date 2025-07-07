@@ -13,8 +13,8 @@ The `@inject` directive enables dependency injection in GraphQL schemas by allow
 ## Schema Structure
 
 ```graphql
-# Extract expansion variables from X into any selection of `Query.*`
-_inject_x: JSON
+# Inject electronic product (JSON) data as expansion variables available to any Query field
+_inject_electronic_products: JSON
   @inject(on: [{ expose: true, types: "Query", fields: ".*" }])
   @materializer(
     query: "products"
