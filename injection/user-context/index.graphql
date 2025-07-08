@@ -1,0 +1,19 @@
+schema
+  @sdl(
+    files: ["api.graphql"]
+    # Visibility controls how fields are exposed to GraphQL introspection
+    # and field references through @materializer, @inject, etc.
+    #
+    # Only expose the main query fields that users should interact with.
+    # The _inject_user_context field is hidden from external schema but
+    # still accessible for injection into the target fields.
+    visibility: [
+      {
+        expose: true
+        types: "Query"
+        fields: "orders|products|recommendations"
+      }
+    ]
+  ) {
+  query: Query
+}
