@@ -7,3 +7,4 @@ For more information on protecting your API, [see our documentation](https://www
 - [makeAllPublic](makeAllPublic) shows how you can easily make all `Query` fields public, thus resulting in a public endpoint.
 - [makeSomePublic](makeSomePublic) shows how you can make fields public, and some private (which can still be accessed using your `admin` or `service` keys).
 - [simpleABACSample](simpleABACSample) shows how to control access to fields using JWT claims.
+- [visbility](visibility) shows use of schema controlled visibility of fields.

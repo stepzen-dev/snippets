@@ -1,0 +1,219 @@
+# A simple user context injection example to demonstrate the @inject directive.
+# This shows how user context can be (extracted and) injected into multiple operations.
+
+type Order {
+  id: ID!
+  customerName: String!
+  total: Float!
+  status: String!
+  region: String!
+}
+
+type Product {
+  id: ID!
+  name: String!
+  category: String!
+  price: Float!
+  region: String!
+  inStock: Boolean!
+}
+
+type Recommendation {
+  productId: ID!
+  productName: String!
+  score: Float!
+  reason: String!
+}
+
+type Query {
+  """
+  default user context becomes available as expansion variables to any field matching the visibility pattern.
+  """
+  _inject_user_context: JSON
+    @inject(
+      on: [
+        {
+          expose: true
+          types: "Query"
+          fields: "orders|products|recommendations"
+        }
+      ]
+    )
+    @value(
+      script: {
+        language: ECMASCRIPT
+        src: """
+        function getValue() {
+          // In real applications, this could come from headers or other sources.
+          return {
+            "preferred_region": "US_WEST",
+            "currency": "USD",
+            "role": "premium",
+            "language": "en",
+            "default_user_id": "1"
+          };
+        }
+        getValue()
+        """
+      }
+    )
+
+  """
+  Get orders filtered by user's preferred region and role.
+  Uses injected expansion variables: preferred_region, role, default_user_id etc.,
+  """
+  orders(userId: ID, limit: Int = 10): [Order]
+    @rest(
+      endpoint: "stepzen:empty"
+      ecmascript: """
+      function transformREST(s) {
+        // Access injected expansion variables
+        var region = get('preferred_region');
+        var role = get('role');
+        var defaultUserId = get('default_user_id');
+        var userId = get('userId') || defaultUserId;
+        var limit = get('limit');
+
+        // Mock orders data
+        var allOrders = [
+          {id: "1", customerName: "Acme Corp", total: 1500.0, status: "completed", region: "US_WEST", userId: "1"},
+          {id: "2", customerName: "Tech Solutions", total: 850.0, status: "pending", region: "US_EAST", userId: "2"},
+          {id: "3", customerName: "Euro Marketing", total: 1200.0, status: "completed", region: "EU_WEST", userId: "2"},
+          {id: "4", customerName: "Asia Dynamics", total: 2500.0, status: "processing", region: "ASIA", userId: "3"},
+          {id: "5", customerName: "West Coast Inc", total: 1800.0, status: "completed", region: "US_WEST", userId: "1"},
+          {id: "6", customerName: "London Ltd", total: 950.0, status: "pending", region: "EU_WEST", userId: "2"}
+        ];
+
+        // Filter by user ID first
+        var userOrders = allOrders.filter(function(order) {
+          return order.userId === userId;
+        });
+
+        // Filter by user's preferred region
+        var filteredOrders = userOrders.filter(function(order) {
+          return order.region === region;
+        });
+
+        // Role-based filtering
+        if (role === "standard") {
+          filteredOrders = filteredOrders.filter(function(order) {
+            return order.status === "completed";
+          });
+        }
+
+        // Apply limit
+        if (limit && limit > 0) {
+          filteredOrders = filteredOrders.slice(0, limit);
+        }
+
+        return JSON.stringify(filteredOrders);
+      }
+      """
+    )
+
+  """
+  Get products available in user's region with currency conversion.
+  Uses injected expansion variables: preferred_region, currency etc.,
+  """
+  products(userId: ID, category: String): [Product]
+    @rest(
+      endpoint: "stepzen:empty"
+      ecmascript: """
+      function transformREST(s) {
+        var region = get('preferred_region');
+        var currency = get('currency');
+        var defaultUserId = get('default_user_id');
+        var userId = get('userId') || defaultUserId;
+        var category = get('category');
+
+        // Mock products data
+        var allProducts = [
+          {id: "p1", name: "Laptop Pro", category: "electronics", price: 1299.99, region: "US_WEST", inStock: true},
+          {id: "p2", name: "Office Chair", category: "furniture", price: 299.99, region: "US_WEST", inStock: true},
+          {id: "p3", name: "EU Laptop", category: "electronics", price: 1199.99, region: "EU_WEST", inStock: true},
+          {id: "p4", name: "EU Desk", category: "furniture", price: 399.99, region: "EU_WEST", inStock: false},
+          {id: "p5", name: "Asia Tablet", category: "electronics", price: 599.99, region: "ASIA", inStock: true},
+          {id: "p6", name: "Monitor 4K", category: "electronics", price: 499.99, region: "US_WEST", inStock: true}
+        ];
+
+        // Filter by user's preferred region
+        var filteredProducts = allProducts.filter(function(product) {
+          return product.region === region;
+        });
+
+        // Filter by category if provided
+        if (category) {
+          filteredProducts = filteredProducts.filter(function(product) {
+            return product.category === category;
+          });
+        }
+
+        // Convert currency for EUR users
+        if (currency === "EUR") {
+          filteredProducts = filteredProducts.map(function(product) {
+            return Object.assign({}, product, {
+              price: Math.round(product.price * 0.85 * 100) / 100
+            });
+          });
+        }
+
+        return JSON.stringify(filteredProducts);
+      }
+      """
+    )
+
+  """
+  Get personalized product recommendations based on user context.
+  Uses injected expansion variables: preferred_region, role, language etc.,
+  """
+  recommendations(userId: ID, count: Int = 5): [Recommendation]
+    @rest(
+      endpoint: "stepzen:empty"
+      ecmascript: """
+      function transformREST(s) {
+        var region = get('preferred_region');
+        var role = get('role');
+        var language = get('language');
+        var defaultUserId = get('default_user_id');
+        var userId = get('userId') || defaultUserId;
+        var count = get('count') || 5;
+
+        // Mock recommendations based on region (from injected context)
+        var recommendations = [];
+
+        if (region === "US_WEST") {
+          recommendations = [
+            {productId: "p1", productName: "Laptop Pro", score: 0.95, reason: "Popular in your region"},
+            {productId: "p6", productName: "Monitor 4K", score: 0.88, reason: "Great for productivity"},
+            {productId: "p2", productName: "Office Chair", score: 0.82, reason: "Highly rated locally"}
+          ];
+        } else if (region === "EU_WEST") {
+          recommendations = [
+            {productId: "p3", productName: "EU Laptop", score: 0.92, reason: "EU optimized model"},
+            {productId: "p4", productName: "EU Desk", score: 0.79, reason: "Matches local preferences"},
+            {productId: "p7", productName: "EU Monitor", score: 0.85, reason: "Energy efficient"}
+          ];
+        } else if (region === "ASIA") {
+          recommendations = [
+            {productId: "p5", productName: "Asia Tablet", score: 0.90, reason: "Regional bestseller"},
+            {productId: "p8", productName: "Wireless Mouse", score: 0.84, reason: "Compact design"},
+            {productId: "p9", productName: "Keyboard Pro", score: 0.81, reason: "Multi-language support"}
+          ];
+        }
+
+        // Premium users get enhanced recommendations (from injected context)
+        if (role === "premium") {
+          recommendations.forEach(function(rec) {
+            rec.score += 0.05;
+            rec.reason = "Premium: " + rec.reason;
+          });
+        }
+
+        // Limit count
+        recommendations = recommendations.slice(0, count);
+
+        return JSON.stringify(recommendations);
+      }
+      """
+    )
+}

@@ -1,0 +1,21 @@
+type Query {
+  customer(email: String!): Customer
+
+  orders(customer_id: ID!): [Order]
+}
+
+type Customer @mock {
+  id: ID!
+  name: String! @mockfn(name: "LastName")
+  email: String!
+  orders: [Order]
+    @materializer(
+      query: "orders"
+      arguments: { name: "customer_id", field: "id" }
+    )
+}
+
+type Order @mock {
+  date: Date! @mockfn(name: "PastDate", values: 5)
+  cost: Int! @mockfn(name: "NumberRange", values: [1, 500])
+}
