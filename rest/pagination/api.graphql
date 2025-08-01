@@ -145,13 +145,13 @@ type Query {
       resultroot: "values[]"
 
       # Ecmascript (with empty endpoint) is used to mimic the response from a REST api.
-      # Note ECMAScript is only used to generate a mock response with customer objects and page number metadata,
+      # Note ECMAScript is only used to generate a mock response with customer objects and offset metadata,
       # using @rest against a real endpoint would not typically require any ECMAScript.
       endpoint: "stepzen:empty"
       ecmascript: """
       function transformREST() {
         // A total of 23 items will be returned
-        const totalItems = 23;
+        const records = 23;
 
         // Pagination field arguments
         // Since this is OFFSET pagination
@@ -161,12 +161,9 @@ type Query {
         const limit = get('first');
         const offset = get('after');
 
-        // metadata - total number of records
-        const records = Math.ceil(totalItems / limit)
-
         // generate customers for nodes based on the limit and offset values
         const startIndex = offset+1 || 1;
-        const endIndex = Math.min(startIndex + limit, totalItems+1);
+        const endIndex = Math.min(startIndex + limit, records+1);
         var customers = []
         for (let i = startIndex; i < endIndex; i++) {
             customers.push({
@@ -180,7 +177,7 @@ type Query {
         // when pagination is through an offset.
         // @rest must be configured to match the REST response layout.
         //
-        // pagination setters defines that the page count
+        // pagination setters defines that total number of records
         // is taken from meta.records
         //
         // resultroot corresponds to the location that contains the
