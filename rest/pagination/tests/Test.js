@@ -111,7 +111,7 @@ describe(testDescription, function () {
           pageInfo: {
             endCursor:
               "eyJjIjoiTzpRdWVyeTpjdXN0b21lcnNPZmZzZXQiLCJvIjo5fQ==",
-            hasNextPage: false,
+            hasNextPage: true,
           },
         },
       },
@@ -130,7 +130,7 @@ describe(testDescription, function () {
           pageInfo: {
             endCursor:
               "eyJjIjoiTzpRdWVyeTpjdXN0b21lcnNPZmZzZXQiLCJvIjoxOX0=",
-            hasNextPage: false,
+            hasNextPage: true,
           },
         },
       },

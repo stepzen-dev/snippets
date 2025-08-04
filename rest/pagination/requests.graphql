@@ -15,7 +15,7 @@ query CustomersPageNumber($first: Int!, $after: String) {
   }
 }
 
-# Page through customers from a REST API using page numbers
+# Page through customers from a REST API using offset
 query CustomersOffset($first: Int!, $after: String) {
   customersOffset(first: $first, after: $after) {
     edges {
