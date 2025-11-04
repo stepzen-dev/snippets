@@ -95,27 +95,16 @@ An AI model can use this tool by:
 2. **Structured Input Validation**: The GraphQL schema ensures that inputs are properly validated.
 3. **Documentation**: The descriptions serve as both documentation for developers and instructions for AI models.
 
-## Testing
+### Testing as an MCP Tool
 
-You can test this tool by:
+To test this as an MCP tool with AI models:
 
-1. Deploying the schema to StepZen using the command `stepzen deploy`
-2. Making requests to the MCP endpoint with tool calls
-3. Verifying that the tool returns properly structured weather data.
+1. Deploy the schema to StepZen using the command `stepzen deploy`
+2. [Connect Claude Desktop](https://modelcontextprotocol.io/docs/develop/connect-local-servers) to your StepZen MCP endpoint
+3. The tool will appear as `weather-lookup` and can be called by the AI model
 
+**Example**: Interaction between MCP and the Claude UI.
 
+<img width="563" height="360" alt="Image" src="https://github.com/user-attachments/assets/7da0cd20-2469-45cd-8a17-0891a1a03dec" />
 
-Sydney, defaults to 3 days
- 
-curl \
-   --header "Authorization: Apikey $(stepzen whoami --apikey)" \
-   --header "Content-Type: application/json" \
- 'https://changjaeto.us-east-a.ibm.stepzen.net/api/miscellaneous/graphql?documentId=sha256:1bc7a3eefaa1f9dc0a3bbe2eba6cdcbf393aac3b1273a036b885ac1407eac11a&operationName=WeatherForecast&variables=%7B%22city%22%3A%20%22Sydney%22%7D'
-
-
-Sydney, 1 day
-
-curl \
-   --header "Authorization: Apikey $(stepzen whoami --apikey)" \
-   --header "Content-Type: application/json" \
- 'https://changjaeto.us-east-a.ibm.stepzen.net/api/miscellaneous/graphql?documentId=sha256:1bc7a3eefaa1f9dc0a3bbe2eba6cdcbf393aac3b1273a036b885ac1407eac11a&operationName=WeatherForecast&variables=%7B%22city%22%3A%20%22Sydney%22%2C%20%22days%22%3A%201%7D'
+<img width="502" height="588" alt="Image" src="https://github.com/user-attachments/assets/cf499b7e-a3fe-433c-b837-bdde25441739" />
