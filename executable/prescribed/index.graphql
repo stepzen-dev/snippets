@@ -1,15 +1,17 @@
 schema
+  # Load the persisted operations document that contains the WeatherForecast operation
   @sdl(
     files: []
     executables: [{ document: "operations.graphql", persist: true }]
   )
+  # Define a prescribed tool that maps to the WeatherForecast operation in the persisted document
   @tool(name: "weather-lookup", prescribed: "WeatherForecast") {
   query: Query
 }
 
 type Query {
   # Get weather forecast for a specific city
-  weatherForecast(city: String!, days: Int = 3): WeatherForecast
+  weatherForecast(city: String!, days: Int = 1): WeatherForecast
     @value(
       script: {
         src: """
@@ -49,8 +51,8 @@ type Query {
             }
           };
 
-          // Default to 3 days if not specified or out of range
-          const daysToForecast = days < 1 || days > 7 ? 3 : days;
+          // Default to 1 day if not specified or out of range
+          const daysToForecast = days < 1 || days > 7 ? 1 : days;
 
           const normalizedCity = city.toLowerCase();
           const cityData = cities[normalizedCity] || {

@@ -5,8 +5,8 @@ This operation provides a multi-day weather forecast including temperature, cond
 query WeatherForecast(
   """The name of the city to get weather forecast for"""
   $city: String!, 
-  """Number of days to forecast (1-7), defaults to 3 days"""
-  $days: Int = 3
+  """Number of days to forecast (1-7), defaults to current day"""
+  $days: Int = 1
 ) {
   weatherForecast(city: $city, days: $days) {
     city {
@@ -15,7 +15,6 @@ query WeatherForecast(
       timezone
     }
     forecast {
-      date
       high {
         celsius
         fahrenheit
