@@ -1,6 +1,6 @@
 # Prescribed Tools
 
-A **prescribed tool** is a tool that maps to a specific [GraphQL operation](https://spec.graphql.org/September2025/#sec-Language.Operations) in a [persisted document](https://spec.graphql.org/September2025/#sec-Persisted-Documents). The `@tool(prescribed:)` argument links the tool definition to an operation name in a persisted document. This approach provides a structured way to expose specific GraphQL operations as tools that can be called by AI models.
+A **prescribed tool** is a tool that maps to a specific [GraphQL operation](https://spec.graphql.org/September2025/#sec-Language.Operations) in a [persisted document](https://github.com/stepzen-dev/snippets/tree/main/executable/persisted). The `@tool(prescribed:)` argument links the tool definition to an operation name in a persisted document. This approach provides a structured way to expose specific GraphQL operations as tools that can be called by AI models.
 
 This sample demonstrates how to use the `@tool` directive to create prescribed tools for MCP (Model Context Protocol).
 
