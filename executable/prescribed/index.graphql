@@ -1,0 +1,185 @@
+schema
+  # Load the persisted operations document that contains the WeatherForecast operation
+  @sdl(
+    files: []
+    executables: [{ document: "operations.graphql", persist: true }]
+  )
+  # Define a prescribed tool that maps to the WeatherForecast operation in the persisted document
+  @tool(name: "weather-lookup", prescribed: "WeatherForecast") {
+  query: Query
+}
+
+type Query {
+  # Get weather forecast for a specific city
+  weatherForecast(city: String!, days: Int = 1): WeatherForecast
+    @value(
+      script: {
+        src: """
+        function weatherForecast() {
+          const cities = {
+            "new york": {
+              name: "New York",
+              country: "United States",
+              latitude: 40.7128,
+              longitude: -74.0060,
+              timezone: "America/New_York",
+              population: 8804190
+            },
+            "london": {
+              name: "London",
+              country: "United Kingdom",
+              latitude: 51.5074,
+              longitude: -0.1278,
+              timezone: "Europe/London",
+              population: 8982000
+            },
+            "tokyo": {
+              name: "Tokyo",
+              country: "Japan",
+              latitude: 35.6762,
+              longitude: 139.6503,
+              timezone: "Asia/Tokyo",
+              population: 13960000
+            },
+            "sydney": {
+              name: "Sydney",
+              country: "Australia",
+              latitude: -33.8688,
+              longitude: 151.2093,
+              timezone: "Australia/Sydney",
+              population: 5312000
+            }
+          };
+
+          // Default to 1 day if not specified or out of range
+          const daysToForecast = days < 1 || days > 7 ? 1 : days;
+
+          const normalizedCity = city.toLowerCase();
+          const cityData = cities[normalizedCity] || {
+            name: city,
+            country: "Unknown",
+            latitude: 0,
+            longitude: 0,
+            timezone: "UTC",
+            population: null
+          };
+
+          // Fixed forecast patterns for each city
+          const forecastPatterns = {
+            "new york": [
+              { conditions: "Partly Cloudy", high: 22, low: 15, precipitation: 20, humidity: 65, windSpeed: 12, windDirection: "NW" },
+              { conditions: "Sunny", high: 24, low: 16, precipitation: 5, humidity: 55, windSpeed: 8, windDirection: "W" },
+              { conditions: "Cloudy", high: 20, low: 14, precipitation: 30, humidity: 70, windSpeed: 15, windDirection: "NE" },
+              { conditions: "Rain", high: 18, low: 12, precipitation: 75, humidity: 85, windSpeed: 18, windDirection: "E" },
+              { conditions: "Partly Cloudy", high: 23, low: 16, precipitation: 15, humidity: 60, windSpeed: 10, windDirection: "SW" },
+              { conditions: "Sunny", high: 25, low: 17, precipitation: 0, humidity: 50, windSpeed: 7, windDirection: "W" },
+              { conditions: "Thunderstorm", high: 21, low: 15, precipitation: 90, humidity: 90, windSpeed: 25, windDirection: "S" }
+            ],
+            "london": [
+              { conditions: "Cloudy", high: 16, low: 10, precipitation: 40, humidity: 75, windSpeed: 14, windDirection: "SW" },
+              { conditions: "Rain", high: 15, low: 9, precipitation: 65, humidity: 80, windSpeed: 16, windDirection: "W" },
+              { conditions: "Partly Cloudy", high: 17, low: 11, precipitation: 25, humidity: 70, windSpeed: 12, windDirection: "NW" },
+              { conditions: "Cloudy", high: 16, low: 10, precipitation: 35, humidity: 75, windSpeed: 13, windDirection: "SW" },
+              { conditions: "Rain", high: 14, low: 8, precipitation: 70, humidity: 85, windSpeed: 18, windDirection: "W" },
+              { conditions: "Partly Cloudy", high: 18, low: 12, precipitation: 20, humidity: 65, windSpeed: 11, windDirection: "NW" },
+              { conditions: "Sunny", high: 19, low: 13, precipitation: 10, humidity: 60, windSpeed: 9, windDirection: "N" }
+            ],
+            "tokyo": [
+              { conditions: "Sunny", high: 26, low: 19, precipitation: 5, humidity: 60, windSpeed: 10, windDirection: "E" },
+              { conditions: "Partly Cloudy", high: 25, low: 18, precipitation: 15, humidity: 65, windSpeed: 12, windDirection: "SE" },
+              { conditions: "Cloudy", high: 23, low: 17, precipitation: 30, humidity: 70, windSpeed: 14, windDirection: "S" },
+              { conditions: "Rain", high: 22, low: 16, precipitation: 60, humidity: 80, windSpeed: 16, windDirection: "SW" },
+              { conditions: "Partly Cloudy", high: 24, low: 18, precipitation: 20, humidity: 65, windSpeed: 11, windDirection: "E" },
+              { conditions: "Sunny", high: 27, low: 20, precipitation: 5, humidity: 55, windSpeed: 9, windDirection: "NE" },
+              { conditions: "Cloudy", high: 24, low: 18, precipitation: 25, humidity: 68, windSpeed: 13, windDirection: "SE" }
+            ],
+            "sydney": [
+              { conditions: "Sunny", high: 28, low: 20, precipitation: 10, humidity: 60, windSpeed: 15, windDirection: "NE" },
+              { conditions: "Partly Cloudy", high: 27, low: 19, precipitation: 15, humidity: 65, windSpeed: 14, windDirection: "E" },
+              { conditions: "Sunny", high: 29, low: 21, precipitation: 5, humidity: 55, windSpeed: 13, windDirection: "NE" },
+              { conditions: "Partly Cloudy", high: 26, low: 19, precipitation: 20, humidity: 70, windSpeed: 16, windDirection: "SE" },
+              { conditions: "Cloudy", high: 24, low: 18, precipitation: 35, humidity: 75, windSpeed: 18, windDirection: "S" },
+              { conditions: "Rain", high: 22, low: 17, precipitation: 70, humidity: 85, windSpeed: 20, windDirection: "SW" },
+              { conditions: "Partly Cloudy", high: 25, low: 18, precipitation: 25, humidity: 70, windDirection: "W", windSpeed: 17 }
+            ]
+          };
+
+          // Get pattern for city or use default
+          const pattern = forecastPatterns[normalizedCity] || forecastPatterns["new york"];
+
+          // Generate forecast for the requested number of days
+          const forecast = [];
+          const today = new Date();
+
+          for (let i = 0; i < daysToForecast; i++) {
+            const forecastDate = new Date();
+            forecastDate.setDate(today.getDate() + i);
+
+            const dayPattern = pattern[i % pattern.length];
+
+            forecast.push({
+              date: forecastDate.toISOString().split('T')[0],
+              sunrise: "06:25 AM",
+              sunset: "06:35 PM",
+              high: {
+                celsius: dayPattern.high,
+                fahrenheit: Math.round(dayPattern.high * 9 / 5 + 32)
+              },
+              low: {
+                celsius: dayPattern.low,
+                fahrenheit: Math.round(dayPattern.low * 9 / 5 + 32)
+              },
+              conditions: dayPattern.conditions,
+              precipitation: dayPattern.precipitation,
+              humidity: dayPattern.humidity,
+              windSpeed: dayPattern.windSpeed,
+              windDirection: dayPattern.windDirection
+            });
+          }
+
+          return {
+            city: cityData,
+            forecast: forecast,
+          };
+        }
+        weatherForecast()
+        """
+      }
+    )
+}
+
+type WeatherForecast {
+  city: City!
+  forecast: [DailyForecast!]!
+  lastUpdated: DateTime
+}
+
+type City {
+  name: String!
+  country: String!
+  latitude: Float!
+  longitude: Float!
+  timezone: String!
+  population: Int
+}
+
+type DailyForecast {
+  date: Date!
+  sunrise: String!
+  sunset: String!
+  high: Temperature!
+  low: Temperature!
+  conditions: String!
+  precipitation: Float!
+  humidity: Int!
+  windSpeed: Float!
+  windDirection: String!
+}
+
+type Temperature {
+  celsius: Float!
+  fahrenheit: Float!
+}
+
+scalar Date
+scalar DateTime

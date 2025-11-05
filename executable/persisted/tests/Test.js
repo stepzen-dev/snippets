@@ -9,9 +9,6 @@ const {
 
 testDescription = getTestDescription("snippets", __dirname);
 
-const requestsFile = path.join(path.dirname(__dirname), "operations.graphql");
-const requests = fs.readFileSync(requestsFile, "utf8").toString();
-
 describe(testDescription, function () {
   const tests = [
     {

@@ -1,0 +1,33 @@
+"""
+Get detailed weather forecast for a specific city
+This operation provides a multi-day weather forecast including temperature, conditions, and other meteorological data
+"""
+query WeatherForecast(
+  """The name of the city to get weather forecast for"""
+  $city: String!, 
+  """Number of days to forecast (1-7), defaults to current day"""
+  $days: Int = 1
+) {
+  weatherForecast(city: $city, days: $days) {
+    city {
+      name
+      country
+      timezone
+    }
+    forecast {
+      high {
+        celsius
+        fahrenheit
+      }
+      low {
+        celsius
+        fahrenheit
+      }
+      conditions
+      precipitation
+      humidity
+      windSpeed
+      windDirection
+    }
+  }
+}
