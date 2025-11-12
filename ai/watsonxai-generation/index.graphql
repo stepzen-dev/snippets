@@ -1,0 +1,13 @@
+"""
+Snippet demonstrating calling Watsonx.AI's generation endpoint.
+"""
+schema
+  @sdl(
+    files: ["watsonx-ai.graphql", "ibm-iam.graphql"]
+    # Only expose wxai_ fields
+    visibility: { expose: true, types: "Query", fields: "wxai_.*" }
+    # ensure the operation remains valid
+    executables: { document: "op.graphql" }
+  ) {
+  query: Query
+}

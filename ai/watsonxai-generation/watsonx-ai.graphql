@@ -1,0 +1,98 @@
+extend type Query {
+  """
+  Infers the next tokens for a given deployed model from the `input` text.
+  """
+  wxai_generation(
+    input: String
+    model_id: String! = "ibm/granite-3-8b-instruct"
+    parameters: WXAI_GenerationParameters
+  ): WXAI_GenerationResponse
+    @sequence(
+      steps: [
+        { query: "ibm_iam_token" }
+        {
+          query: "_wxai_generation"
+          arguments: [
+            { name: "token", field: "§0" }
+            { name: "input", argument: "input" }
+            { name: "model_id", argument: "model_id" }
+            { name: "parameters", argument: "parameters" }
+          ]
+        }
+      ]
+    )
+
+  """
+  Calls the generation endpoint.
+  """
+  _wxai_generation(
+    token: Secret!
+    input: String
+    model_id: String
+    parameters: WXAI_GenerationParameters
+  ): WXAI_GenerationResponse
+    @rest(
+      method: POST
+      endpoint: "$url;"
+      path: "/ml/v1/text/generation?version=$version"
+      headers: [{ name: "authorization", value: "Bearer $token" }]
+      ecmascript: """
+      function bodyPOST(s) {
+          let body = JSON.parse(s)
+          body.project_id = get("project_id")
+          return JSON.stringify(body)
+      }
+      """
+      configuration: "watsonx-service"
+    )
+}
+
+"""
+The parameters for the model of a generative AI request. See https://cloud.ibm.com/apidocs/watsonx-ai#text-generation for more details.
+"""
+input WXAI_GenerationParameters {
+  """
+  The temperature specifies the amount of variation in the generation process when using sampling mode.
+  """
+  temperature: Float = 0
+  """
+  The strategy the model uses to choose the tokens in the generated output.
+  """
+  decoding_method: String
+  """
+  The minimum number of new tokens to be generated.
+  """
+  min_new_tokens: Int
+  """
+  The maximum number of new tokens to be generated.
+  """
+  max_new_tokens: Int = 20
+  """
+  The repetition penalty lowers the probability scores of tokens that have already been generated or belong to the context.
+  """
+  repetition_penalty: Float
+  """
+  A string of one or more characters which will stop the text generation if/when they appear in the generated output.
+  """
+  stop_sequences: [String]
+}
+
+"""
+Response of IBM Generative AI watsonx.ai `generation` endpoint
+"""
+type WXAI_GenerationResponse {
+  created_at: DateTime
+  model_id: String
+  model_version: String
+  results: [WXAI_GenerationResult]
+}
+
+"""
+A result in the response of IBM Generative AI watsonx.ai `generation` endpoint
+"""
+type WXAI_GenerationResult {
+  generated_text: String
+  generated_token_count: Int
+  input_token_count: Int
+  stop_reason: String
+}
