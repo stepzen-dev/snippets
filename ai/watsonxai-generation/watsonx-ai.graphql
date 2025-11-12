@@ -78,7 +78,7 @@ input WXAI_GenerationParameters {
 }
 
 """
-Response of IBM Generative AI watsonx.ai `generation` endpoint
+Response of IBM watsonx.ai `generation` endpoint
 """
 type WXAI_GenerationResponse {
   created_at: DateTime
@@ -88,7 +88,7 @@ type WXAI_GenerationResponse {
 }
 
 """
-A result in the response of IBM Generative AI watsonx.ai `generation` endpoint
+A result in the response of IBM watsonx.ai `generation` endpoint
 """
 type WXAI_GenerationResult {
   generated_text: String

@@ -1,8 +1,8 @@
-# Watsonx.AI generation.
+# watsonx.ai generation.
 
 ## Overview
 
-Creates a field `Query.wxai_generation` that invokes a Watsonx.AI generation endpoint to infer the next text from an input.
+Creates a field `Query.wxai_generation` that invokes a watsonx.ai generation endpoint to infer the next text from an input.
 
 This provides a simple example of calling an LLM from a GraphQL endpoint.
 
@@ -10,11 +10,21 @@ An IBM Cloud IAM token is used for authorization, taken from the [ibm-iam snippe
 
 ## Try it out
 
-Deploy the schema with this values set in `.env` for your Watsonx.AI project.
+### Deploying
 
+Deploy the schema with this values set in `.env` for your watsonx.ai project.
+
+```
 STEPZEN_IBM_IAM_APIKEY=
 STEPZEN_WATSONXAI_URL=
 STEPZEN_WATSONXAI_PROJECTID=
+```
+
+These can be obtained from the watsonx dashboard:
+
+<img width="362" height="452" alt="image" src="https://github.com/user-attachments/assets/1eaa1671-2e2c-4a34-8ae7-1fd42ce9887e" />
+
+### Sample request
 
 Then you can use `stepzen request` and the provided operation to ask simple questions:
 

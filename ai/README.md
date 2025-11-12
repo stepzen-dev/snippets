@@ -13,3 +13,4 @@ Articles:
 Snippets:
 
 - [Prescribed tools](../executable/prescribed/) - Demonstrates creation of MCP tools from persisted GraphQL operations.
+- [watsonx.AI generation](watsonxai-generation/) - Demonstrates invoking an LLM through watsonx.AI
