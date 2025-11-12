@@ -1,0 +1,48 @@
+schema @sdl(files: ["ibm-iam.graphql"]) {
+  query: Query
+}
+
+"""
+Example use of `Query.ibm_iam_token`.
+
+First fetches a token and then executes a REST request using the token.
+"""
+type Query {
+  """
+  IBM Cloud account usage.
+  """
+  usage(
+    """
+    IBM Cloud account ID.
+    """
+    account: String!
+    """
+    Billing month with format `yyyy-mm`
+    """
+    month: String!
+  ): JSON
+    @sequence(
+      steps: [
+        { query: "ibm_iam_token" }
+        {
+          query: "_usage"
+          arguments: [
+            { name: "token", field: "§0" }
+            { name: "account", argument: "account" }
+            { name: "month", argument: "month" }
+          ]
+        }
+      ]
+    )
+
+  """
+  Fetch requesst against the usage endpoint.
+
+  https://cloud.ibm.com/apidocs/metering-reporting#get-account-usage
+  """
+  _usage(token: Secret!, account: String!, month: String!): JSON
+    @rest(
+      endpoint: "https://billing.cloud.ibm.com/v4/accounts/$account/usage/$month"
+      headers: { name: "Authorization", value: "Bearer $token" }
+    )
+}

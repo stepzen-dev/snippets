@@ -1,0 +1,5 @@
+configurationset:
+- configuration:
+    endpoint: https://iam.cloud.ibm.com/identity/token
+    apikey: STEPZEN_IBM_IAM_APIKEY
+    name: ibm-iam
