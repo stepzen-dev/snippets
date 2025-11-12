@@ -1,6 +1,6 @@
 # AI related snippets
 
-# MCP
+## MCP
 
 Every API Connect for GraphQL deployed schema has an MCP `/mcp` endpoint
 in addition to its `/graphql` endpoint.
@@ -13,4 +13,7 @@ Articles:
 Snippets:
 
 - [Prescribed tools](../executable/prescribed/) - Demonstrates creation of MCP tools from persisted GraphQL operations.
-- [watsonx.AI generation](watsonxai-generation/) - Demonstrates invoking an LLM through watsonx.AI
+
+## AI snippets
+
+- [watsonx.AI generation](watsonxai-generation/) - Demonstrates invoking an LLM through watsonx.AI within a GraphQL endpoint.
