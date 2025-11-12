@@ -10,6 +10,8 @@ of an `@rest` field in the sequence.
 An example (`Query.usage`) is provided of accessing the IBM Cloud billing usage endpoint using
 a `@sequence` to fetch a token and then make the REST request.
 
+The same technique can be used with any IAM system.
+
 ## Try it out
 
 The schema must be deployed with the environment variable `STEPZEN_IBM_IAM_APIKEY` set
