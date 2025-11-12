@@ -1,0 +1,13 @@
+query AskWatsonxAI($question: String!) {
+  wxai_generation(input: $question) {
+    created_at
+    model_id
+    model_version
+    results {
+      generated_text
+      generated_token_count
+      input_token_count
+      stop_reason
+    }
+  }
+}

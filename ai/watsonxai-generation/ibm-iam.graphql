@@ -1,0 +1,33 @@
+extend type Query {
+  """
+  Obtain an IBM Cloud bearer token.
+
+  Uses the [IBM Cloud API Key](https://cloud.ibm.com/docs/account?topic=account-userapikey&interface=ui#userapikey)
+  or [service ID's API Key](https://cloud.ibm.com/docs/account?topic=account-serviceidapikeys&interface=ui)
+  to [generate an IAM Token](https://cloud.ibm.com/docs/account?topic=account-iamtoken_from_apikey#iamtoken_from_apikey)
+  """
+  ibm_iam_token: Secret
+    @rest(
+      endpoint: "$endpoint"
+      method: POST
+      contenttype: "x-www-form-urlencoded"
+      postbody: """
+      grant_type=urn:ibm:params:oauth:grant-type:apikey&apikey={{ .Get "apikey"}}
+      """
+      ecmascript: """
+      function transformREST(body) {
+        switch (status) {
+          case 200:
+            return body
+          case 401:
+          case 400: // returned for apikey not found
+            throw new Error('unauthorized');
+          default:
+            throw new Error('unknown error');
+        }
+      }
+      """
+      setters: { path: "access_token" }
+      configuration: "ibm-iam"
+    )
+}
