@@ -1,0 +1,35 @@
+# Makefile to build and validate a pair of *example* self-signed certificates for *simple* tests
+
+# enable to debug ssl server
+# DEBUG:=-debug
+all: client.crt server.crt env
+
+#  server.crt client.key server.key
+client.crt:
+	openssl req -x509 -newkey rsa:4096 -keyout client.key -out client.crt -sha256 -days 7650  \
+           -subj "/C=US/ST=Florida/L=Jacksonville/O=LOCALCLIENT/OU=Com/CN=localhost" -nodes \
+           -addext "subjectAltName = DNS:localhost, DNS:myalt, DNS:host.docker.internal"
+
+server.crt:
+	openssl req -x509 -newkey rsa:4096 -keyout server.key -out server.crt -sha256 -days 7650 \
+           -subj "/C=US/ST=California/L=San Jose/O=LOCALSERVER/OU=Com/CN=localhost" -nodes \
+           -addext "subjectAltName = DNS:localhost, DNS:host.docker.internal"
+
+run_validation_server_self_sign_mtls: server.crt client.crt
+	openssl s_server -accept 9443 -cert server.crt -key server.key -Verify 2 -CAfile client.crt $(DEBUG) -www
+
+run_validation_client_self_sign_mtls: client.crt
+	curl  --cert client.crt  --key client.key --cacert server.crt https://localhost:9443 -debug
+
+run_validation_server_self_sign: server.crt
+	openssl s_server -accept 8443 -cert server.crt -key server.key $(DEBUG) -www 
+
+clean:
+	rm -f server.crt server.key client.crt client.key
+
+env:	../.env
+
+../.env: client.crt server.crt
+	( echo STEPZEN_CLIENT_CRT=\""`cat client.crt`"\"; \
+	  echo STEPZEN_CLIENT_KEY=\""`cat client.key`"\"; \
+	   echo STEPZEN_SERVER_CRT=\""`cat server.crt`"\") > ../.env

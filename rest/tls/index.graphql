@@ -1,0 +1,4 @@
+schema @sdl(files: ["tls.graphql"]) {
+  query: Query
+}
+
