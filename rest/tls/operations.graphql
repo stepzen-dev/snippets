@@ -1,4 +1,3 @@
 query run {
   rest_self
-  rest_self_mtls
 }

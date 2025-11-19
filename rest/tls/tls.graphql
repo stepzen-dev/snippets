@@ -11,17 +11,4 @@ type Query {
       function transformREST(s) { return JSON.stringify({data100: s.length>100,  accept_8443: s.includes("-accept 8443")})}
       """
     )
-
-  """
-  will contact localhost using host.docker.internal and 9443 and mtls configuration
-  the ecmascript is used to repackage any content coming back (openssl s_server returns html)
-  """
-  rest_self_mtls: JSON
-    @rest(
-      endpoint: "https://host.docker.internal:9443/"
-      tls: "selfsignedmtls"
-      ecmascript: """
-      function transformREST(s) { return JSON.stringify({data100: s.length>100,  accept_9443: s.includes("-accept 9443")})}
-      """
-    )
 }

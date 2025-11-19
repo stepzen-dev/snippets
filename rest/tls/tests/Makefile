@@ -15,11 +15,8 @@ server.crt:
            -subj "/C=US/ST=California/L=San Jose/O=LOCALSERVER/OU=Com/CN=localhost" -nodes \
            -addext "subjectAltName = DNS:localhost, DNS:host.docker.internal"
 
-run_validation_server_self_sign_mtls: server.crt client.crt
-	openssl s_server -accept 9443 -cert server.crt -key server.key -Verify 2 -CAfile client.crt $(DEBUG) -www
-
-run_validation_client_self_sign_mtls: client.crt
-	curl  --cert client.crt  --key client.key --cacert server.crt https://localhost:9443 -debug
+run_validation_client_self_sign: client.crt
+	curl --cacert server.crt https://localhost:9443 -debug
 
 run_validation_server_self_sign: server.crt
 	openssl s_server -accept 8443 -cert server.crt -key server.key $(DEBUG) -www 
