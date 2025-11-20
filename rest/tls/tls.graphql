@@ -6,9 +6,17 @@ type Query {
   rest_self: JSON
     @rest(
       endpoint: "https://host.docker.internal:8443/"
+      # alternate endpoint settings for different container toolsets
+      # endpoint: "https://localhost:8443/"
+      # endpoint: "https://host.rancher-desktop.internal:8443/"
       tls: "selfsign"
       ecmascript: """
-      function transformREST(s) { return JSON.stringify({data100: s.length>100,  accept_8443: s.includes("-accept 8443")})}
+      function transformREST(s) {
+         return JSON.stringify(
+             {data100: s.length>100,
+             accept_8443: s.includes("-accept 8443")
+         })
+      }
       """
     )
 }

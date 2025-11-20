@@ -1,13 +1,13 @@
 # TLS
 
 
-For more inforamtion on using TLS in your REST apis and other services [see our documentation](https://www.ibm.com/docs/en/api-connect-graphql/saas?topic=directives-directive-rest#tls-string__title__1).
+For more information on using TLS in your REST apis and other services [see our documentation](https://www.ibm.com/docs/en/api-connect-graphql/saas?topic=directives-directive-rest#tls-string__title__1).
 
 [Environment](https://www.ibm.com/docs/en/api-connect-graphql/saas?topic=environment-tls-configuration-properties).  Check that the revision is newer than : 2025-11-18.
 
 ## Using `@rest(tls:)`
 
-This examples demonstrates a number of StepZen capabilities:
+This examples demonstrates a number of API Connect for GraphQL capabilities:
 - Use of `@rest(tls:)`
 - stepzen service
 - Simple ecmascript capability for reshaping data.
@@ -20,7 +20,7 @@ that refers to a configuration in the `config.yaml`
 
 When the tls entry is given the name of a configuration entry, you can provide
 - `ca` - the server `ca` or `ca` chain (starting with the leaf certificate)
-- 'cert` - the client certificate
+- `cert` - the client certificate
 - `key` - the client certifcate key
 The data should be in PEM format.
 
@@ -49,18 +49,21 @@ Two safe approaches are to set the environment variables from secrets or to have
 
 See tricks below for some possible hurdles.
 
-
 ### Running a test
 
 Testing mTLS or self-signed certificates locally is best done using local API Connect for GraphQL.
 In the following, we'll generate the certificates using openssl, use openssl to for trivialself-signed cert servers
 and use the stepzen cli local service mode as a client.
 
+Note: if you are not using Docker, see Tricks and hints/Container tools.
+
 #### Steps
 ```
 stepzen service start
 stepzen login --config ~/.stepzen/stepzen-config.local.yaml
 (cd tests; make env)
+# WARNING: if you are not using Docker, please see 
+# Tricks and hints/Container tools
 stepzen deploy
 
 # start trivial local TLS server using openssl
@@ -77,7 +80,17 @@ stepzen service stop
 ```
 
 
-### Tricks
+## Tricks and hints
+
+### Container tools 
+
+API Connect for GraphQL local services runs inside of a container using Docker, Podman, or other container runtime toolset.   Each of these have a slightly different method whereby containers can access the host machine's localhost.  The details of these are varied depending upon the actual toolset.
+
+By default,  `rest_self` uses `host.docker.internal` which works in most modern Docker environments.
+
+For Podman, you may need to change this to `host.containers.internal` or `localhost` depending on your podman defaults.   You may also need to modify your podman default configuration to allow for such access.
+
+### env variables
 
 You can set `STEPZEN_*` env variables in .env or using export.
 
