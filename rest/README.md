@@ -11,3 +11,4 @@ Where possible, we use [httpbingo.org](https://httpbingo.org) as our REST endpoi
 - [postbody](postbody) shows how a POST body can be automatically filled with field arguments with `Content-Type:application/x-www-form-urlencoded`. This is the easiest way to send postbodies down the REST API
 - [restWithConfigYaml](restWithConfigYaml) shows how REST query parameters can also be fetched from `config.yaml`--this allows you to keep your SDL code separate from your secrets.
 - [restWithParameters](restWithParameters) shows how GraphQL field arguments are automatically added to the REST call--there is nothing for you to do!
+- [tls](tls) shows how to use `@rest(tls:)` using the local stepzen service 

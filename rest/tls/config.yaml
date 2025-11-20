@@ -1,0 +1,9 @@
+configurationset:
+  - configuration:
+      name: selfsign
+      ca: STEPZEN_SERVER_CRT
+  - configuration:
+      name: selfsignedmtls
+      ca: STEPZEN_SERVER_CRT
+      cert: STEPZEN_CLIENT_CRT
+      key: STEPZEN_CLIENT_KEY
