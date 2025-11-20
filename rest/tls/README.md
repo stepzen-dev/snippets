@@ -3,8 +3,6 @@
 
 For more information on using TLS in your REST apis and other services [see our documentation](https://www.ibm.com/docs/en/api-connect-graphql/saas?topic=directives-directive-rest#tls-string__title__1).
 
-[Environment](https://www.ibm.com/docs/en/api-connect-graphql/saas?topic=environment-tls-configuration-properties).  Check that the revision is newer than : 2025-11-18.
-
 ## Using `@rest(tls:)`
 
 This examples demonstrates a number of API Connect for GraphQL capabilities:
