@@ -1,5 +1,13 @@
 extend type Query {
   """
+  Extract IBM IAM token and inject it into wxai_generation for authentication.
+  This makes the access_token available as an expansion variable.
+  """
+  _inject_ibm_iam_token: JSON
+    @inject(on: [{ expose: true, types: "Query", fields: "wxai_generation" }])
+    @materializer(query: "ibm_iam_token")
+
+  """
   Infers the next tokens for a given deployed model from the `input` text.
   """
   wxai_generation(
@@ -7,39 +15,16 @@ extend type Query {
     model_id: String! = "ibm/granite-3-8b-instruct"
     parameters: WXAI_GenerationParameters
   ): WXAI_GenerationResponse
-    @sequence(
-      steps: [
-        { query: "ibm_iam_token" }
-        {
-          query: "_wxai_generation"
-          arguments: [
-            { name: "token", field: "§0" }
-            { name: "input", argument: "input" }
-            { name: "model_id", argument: "model_id" }
-            { name: "parameters", argument: "parameters" }
-          ]
-        }
-      ]
-    )
-
-  """
-  Calls the generation endpoint.
-  """
-  _wxai_generation(
-    token: Secret!
-    input: String
-    model_id: String
-    parameters: WXAI_GenerationParameters
-  ): WXAI_GenerationResponse
     @rest(
       method: POST
       endpoint: "$url;"
       path: "/ml/v1/text/generation?version=$version"
-      headers: [{ name: "authorization", value: "Bearer $token" }]
+      headers: [{ name: "authorization", value: "Bearer $access_token" }]
       ecmascript: """
       function bodyPOST(s) {
           let body = JSON.parse(s)
           body.project_id = get("project_id")
+          body.model_id = get("model_id")
           return JSON.stringify(body)
       }
       """

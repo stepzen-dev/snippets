@@ -8,3 +8,4 @@ configurationset:
     version: '2024-06-28'
     url: STEPZEN_WATSONXAI_URL
     project_id: STEPZEN_WATSONXAI_PROJECTID
+    model_id: "ibm/granite-3-8b-instruct"
