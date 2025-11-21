@@ -6,7 +6,7 @@ extend type Query {
   or [service ID's API Key](https://cloud.ibm.com/docs/account?topic=account-serviceidapikeys&interface=ui)
   to [generate an IAM Token](https://cloud.ibm.com/docs/account?topic=account-iamtoken_from_apikey#iamtoken_from_apikey)
   """
-  ibm_iam_token: JSON
+  ibm_iam_token: Secret
     @rest(
       endpoint: "$endpoint"
       method: POST
@@ -27,6 +27,7 @@ extend type Query {
         }
       }
       """
+      setters: { path: "access_token" }
       configuration: "ibm-iam"
     )
 }
