@@ -12,7 +12,7 @@ extend type Query {
   """
   wxai_generation(
     input: String
-    model_id: String! = "ibm/granite-3-8b-instruct"
+    model_id: String = "ibm/granite-3-8b-instruct"
     parameters: WXAI_GenerationParameters
   ): WXAI_GenerationResponse
     @rest(
@@ -24,7 +24,6 @@ extend type Query {
       function bodyPOST(s) {
           let body = JSON.parse(s)
           body.project_id = get("project_id")
-          body.model_id = get("model_id")
           return JSON.stringify(body)
       }
       """
