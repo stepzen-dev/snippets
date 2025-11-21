@@ -1,3 +1,5 @@
-schema @sdl(files: ["tls.graphql"]) {
+schema
+  @sdl(files: ["tls.graphql"])
+  @rest(name: "commonserver", endpoint: "$url;", tls: "myserver" configuration: "myserver") {
   query: Query
 }
