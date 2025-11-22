@@ -186,19 +186,6 @@ notice the '\n'.  If you see spaces you've done something wrong upsteram.
 `STEPZEN_SERVER_URL` is used by the stepzen cli to identify the API Connect for GraphQL server and should be avoided to prevent stepzen cli issues.
 
 Here's a full list of stepzen cli special variables you should avoid using.
-```
-STEPZEN_ENABLE_PERF
-STEPZEN_DISABLE_ANALYTICS
-STEPZEN_INTERACTIVE
-STEPZEN_CONFIG_FILE
-STEPZEN_DOCKER_IMAGE
-STEPZEN_DOCKER_TAG
-STEPZEN_DEPLOYMENT_TYPE
-STEPZEN_ZENCTL_API_URL
-STEPZEN_JSON2SDL_SERVER_URL
-STEPZEN_CONFIG_CONTENT
-STEPZEN_SEGMENT_PRODUCT
-```
 
 ### Debugging
 You can debug using stepzen request by adding `-H "stepzen-debug-level: 1"`
