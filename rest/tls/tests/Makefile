@@ -1,5 +1,11 @@
 # Makefile to build and validate a pair of *example* self-signed certificates for *simple* tests
 
+# alternate endpoint settings for different container toolsets
+# hostname: "https://host.docker.internal:8443"
+# hostname: "https://localhost:8443"
+# hostname: "https://host.rancher-desktop.internal:8443"
+SERVER_URL:=https://host.docker.internal:8443
+
 # enable to debug ssl server
 # DEBUG:=-debug
 all: client.crt server.crt env
@@ -27,6 +33,7 @@ clean:
 env:	../.env
 
 ../.env: client.crt server.crt
-	( echo STEPZEN_CLIENT_CRT=\""`cat client.crt`"\"; \
+	( echo STEPZEN_SERVICE_URL=\"$(SERVER_URL)\"; \
+          echo STEPZEN_CLIENT_CRT=\""`cat client.crt`"\"; \
 	  echo STEPZEN_CLIENT_KEY=\""`cat client.key`"\"; \
 	   echo STEPZEN_SERVER_CRT=\""`cat server.crt`"\") > ../.env

@@ -1,9 +1,13 @@
+# provide values through environment variables to mimimize secret exposure and
+# adhere to clean ci/cd process.  env variables/secrets should be injected
 configurationset:
   - configuration:
-      name: selfsign
+      name: myserver
       ca: STEPZEN_SERVER_CRT
+      url: STEPZEN_SERVICE_URL
   - configuration:
-      name: selfsignedmtls
+      name: mymtlsserver
       ca: STEPZEN_SERVER_CRT
       cert: STEPZEN_CLIENT_CRT
       key: STEPZEN_CLIENT_KEY
+      url: STEPZEN_SERVICE_URL
