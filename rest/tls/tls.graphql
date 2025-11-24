@@ -1,15 +1,18 @@
 type Query {
   """
+  typically, there will be a common set of server configurations that are shared among many
+  different `@rest` calls, so we actually specify the `@rest(tls:)` in a schema level
+  `@rest` definition called `commonserver` in index.graphql
+  
+  `@rest(use:"commonserver")` picks up the `@rest(tls:)` and the `@rest(endpoint:)`
+  
   will contact localhost using host.docker.internal and 8443 and selfsign configuration
   the ecmascript is used to repackage any content coming back (openssl s_server returns html)
   """
   rest_self: JSON
     @rest(
-      endpoint: "https://host.docker.internal:8443/"
-      # alternate endpoint settings for different container toolsets
-      # endpoint: "https://localhost:8443/"
-      # endpoint: "https://host.rancher-desktop.internal:8443/"
-      tls: "selfsign"
+      use: "commonserver"
+      path: "/path"
       ecmascript: """
       function transformREST(s) {
          return JSON.stringify(
