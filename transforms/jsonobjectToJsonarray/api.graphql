@@ -65,3 +65,96 @@ type Query {
       ]
     )
 }
+
+
+# following are some JSONata examples
+# that replicate the object to array functionality or allow you to go directly to the customer
+# object in several different ways.
+
+extend type Query {
+
+  # This replicates object2array
+  customerAsNameValue_1: JSON
+    @rest(
+      # See https://stepzen.com/docs/custom-graphql-directives/directives#ecmascript for more information on using `ecmascript`.
+      endpoint: "stepzen:empty"
+      ecmascript: """
+      function transformREST(s) {
+          return(JSON.stringify({"1":{"fullName":"John Doe", "age":23}, "2":{"fullName":"Jane Smith", age: 25}}))
+      }
+      """
+      # Transform the JSON using objectToArray.
+      transforms: [
+        {
+          editor: """
+          jsonata:$each($, function($value, $key) {
+          { "name": $key, "value": $value }
+          })
+          """
+        }
+      ]
+    )
+
+  customerAsCustomer_1: JSON
+    @rest(
+      # See https://stepzen.com/docs/custom-graphql-directives/directives#ecmascript for more information on using `ecmascript`.
+      endpoint: "stepzen:empty"
+      ecmascript: """
+      function transformREST(s) {
+          return(JSON.stringify({"1":{"fullName":"John Doe", "age":23}, "2":{"fullName":"Jane Smith", age: 25}}))
+      }
+      """
+      # Transform the JSON using objectToArray.
+      transforms: [
+        {
+          editor: """
+          jsonata:$each($, function($value, $key) {
+            { "id": $key, "fullName": $value.fullName, "age": $value.age }
+          })
+          """
+        }
+      ]
+    )
+
+  customerAsCustomer_2: JSON
+    @rest(
+      # See https://stepzen.com/docs/custom-graphql-directives/directives#ecmascript for more information on using `ecmascript`.
+      endpoint: "stepzen:empty"
+      ecmascript: """
+      function transformREST(s) {
+          return(JSON.stringify({"1":{"fullName":"John Doe", "age":23}, "2":{"fullName":"Jane Smith", age: 25}}))
+      }
+      """
+      # Transform the JSON using objectToArray.
+      transforms: [
+        # this will transform into customers directly using the object transform operator
+        # to merge a short key (named as id) fragment with the key's value.
+        {
+          editor: """
+          jsonata:$each($, function($value, $key) {
+            $value ~> |$| { "id": $key } |
+          })
+          """
+        }
+      ]
+    )
+
+  customerAsCustomer_3: JSON
+    @rest(
+      # See https://stepzen.com/docs/custom-graphql-directives/directives#ecmascript for more information on using `ecmascript`.
+      endpoint: "stepzen:empty"
+      ecmascript: """
+      function transformREST(s) {
+          return(JSON.stringify({"1":{"fullName":"John Doe", "age":23}, "2":{"fullName":"Jane Smith", age: 25}}))
+      }
+      """
+      # Transform the JSON using objectToArray.
+      transforms: [
+        # this will transform into customers directly using the object transform operator
+        # to merge a short key (named as id) fragment with the key's value.
+        {
+          editor: """jsonata:$each($, function($value, $key) { $merge([$value, {"id": $key}]) })"""
+        }
+      ]
+    )
+}
