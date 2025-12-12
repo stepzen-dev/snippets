@@ -26,3 +26,17 @@ type Query {
       """
     )
 }
+
+# jsonata transforms provdes an alternate method for filtering
+# customer_1 uses the [ ... ] filter to return all "customers" ($) that
+# contain name = the argument name
+# jsonata has quirks: if you leave out the outer []
+
+extend type Query {
+  customer_1(name: String!): [Customer]
+    @rest(
+      endpoint: "https://sample-api.us-east-a.apiconnect.automation.ibm.com/api/customers"
+      transforms: [ { editor:"""jsonata:$[name = $get("name") ]"""} 
+])
+      
+}
