@@ -7,10 +7,11 @@ type Customer {
   id: ID
   name: String
 }
+
 type Query {
-  customer(name: String): [Customer]
+  customer(name: String!): [Customer]
     @rest(
-      endpoint: "https://json2api-customers-zlwadjbovq-uc.a.run.app/customers"
+      endpoint: "https://sample-api.us-east-a.apiconnect.automation.ibm.com/api/customers"
       ecmascript: """
       function transformREST(s) {
           var name = get('name')
