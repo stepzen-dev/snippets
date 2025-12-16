@@ -26,6 +26,11 @@ the starting point).
 type CustomerConnection {
   edges: [CustomerEdge]
   pageInfo: PageInfo!
+
+  """
+  Total number of edges, may be `null` if the value cannot be determined.
+  """
+  totalEdges: Int
 }
 
 """
