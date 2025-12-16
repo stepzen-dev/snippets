@@ -28,7 +28,7 @@ type CustomerConnection {
   pageInfo: PageInfo!
 
   """
-  Total number of edges, may be `null` if the value cannot be determined.
+  Total number of edges, will be `null` if the value cannot be determined.
   """
   totalEdges: Int
 }
