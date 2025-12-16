@@ -11,5 +11,6 @@ query Customers($first: Int!, $after: String = "") {
       endCursor
       hasNextPage
     }
+    totalEdges
   }
 }

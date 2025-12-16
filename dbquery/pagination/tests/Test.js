@@ -41,7 +41,8 @@ describe(testDescription, function () {
           pageInfo: {
             hasNextPage: true,
             endCursor: CURSOR
-          }
+          },
+          totalEdges: 10
         }
       },
     },
@@ -72,7 +73,8 @@ describe(testDescription, function () {
           pageInfo: {
             endCursor: "eyJjIjoiTDpRdWVyeTpjdXN0b21lcnMiLCJvIjozfQ==",
             hasNextPage: true
-          }
+          },
+          totalEdges: 10
         }
       },
     },
