@@ -14,3 +14,21 @@ query Customers($first: Int!, $after: String = "") {
     totalEdges
   }
 }
+
+# Lookup customers with filtering.
+query Lookup($first: Int, $after: String = "", $f: CustomerFilter) {
+  lookup(first: $first, after: $after, filter: $f) {
+    edges {
+      node {
+        id
+        name
+        email
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+    totalEdges
+  }
+}

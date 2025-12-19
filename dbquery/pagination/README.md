@@ -14,7 +14,6 @@ To run these examples,
 
 This example uses a demo database filled with mock data, you can inspect the `config.yaml` file to find the credentials for this database.
 
-
 ## GraphQL pagination
 
 StepZen supports pagination through the standard [GraphQL Cursor Connection Specification](https://relay.dev/graphql/connections.htm).
@@ -63,4 +62,51 @@ Fetch the next five, the value of `after` is taken from the `endCursor` field of
 stepzen request -f operations.graphql --operation-name=Customers --var first=5 --var after="eyJjIjoiTDpRdWVyeTpjdXN0b21lcnMiLCJvIjo0fQ=="
 ```
 
+## GraphQL filtering
 
+Filtering using a "MongoDB" inspired style for GraphQL is supported with `@dbquery` and is typically
+used with pagination, though it can be used alone. [Reference](https://www.ibm.com/docs/en/api-connect-graphql/saas?topic=directives-directive-dbquery#filtering__title__1)
+
+The field `Query.lookup` in [`filter.graphql`](./filter.graphql) is similar to `Query.customers` but adds a `filter` argument.
+
+This filter value would return all names that start with "S":
+
+```json
+{ "name": { "like": "S%" } }
+```
+
+This returns two customers using an OR clause:
+
+```json
+{
+  "or": {
+    "name": { "eq": "John Doe" },
+    "email": { "eq": "jane.smith@example.com" }
+  }
+}
+```
+
+### Examples
+
+With no filter all customers are returned (subject to pagination)
+
+```
+stepzen request -f operations.graphql --operation-name=Lookup
+```
+
+With a filter then only matching customers are returned.
+
+```
+stepzen request -f operations.graphql --operation-name=Lookup --var 'f={ "name": { "like": "S%" } }'
+```
+
+```
+stepzen request -f operations.graphql --operation-name=Lookup --var first=5 --var 'f={
+  "or": {
+    "name": { "eq": "John Doe" },
+    "email": { "eq": "jane.smith@example.com" }
+  }
+}'
+```
+
+Also note that `totalEdges` returns the number of customers (edges) in the connection subject to the filter.

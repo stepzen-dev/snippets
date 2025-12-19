@@ -1,3 +1,7 @@
-schema @sdl(files: ["api.graphql"]) {
+schema @sdl(files: ["api.graphql", "filter.graphql"]) {
   query: Query
 }
+
+# this validates that the executable document is valid for the schema.
+# If the schema and document become out of sync then deployment will fail.
+extend schema @sdl(executables: { document: "operations.graphql" })

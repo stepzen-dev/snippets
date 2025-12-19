@@ -1,0 +1,37 @@
+# This shows how filtering is supported with @dbquery
+
+input CustomerFilter {
+  id: ID
+  name: StringFilter
+  email: StringFilter
+  or: CustomerFilter
+}
+
+input StringFilter {
+  eq: String
+  ne: String
+  like: String
+  ilike: String
+  gt: String
+  le: String
+}
+
+extend type Query {
+  """
+  `lookup` pages through mock `Customer` objects in a demo PostgreSQL database.
+  The data is exposed using standard GraphQL pagination using the connection model.
+  The filter argument provides a standard approach to filtering regardless of
+  the backend and in this case is dynamically translated to SQL predicates in the `WHERE` clause.
+  """
+  lookup(
+    first: Int! = 10
+    after: String! = ""
+    filter: CustomerFilter
+  ): CustomerConnection
+    @dbquery(
+      type: "postgresql"
+      table: "customer"
+      schema: "public"
+      configuration: "postgresql_config"
+    )
+}
